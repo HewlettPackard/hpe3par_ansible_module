@@ -1,0 +1,9 @@
+volume_name: "my_ansible_volume"
+cpg: "FC_r1"
+size: 1024
+size_unit: 'GiB'
+wait_for_task_to_end: True
+new_name: "my_ansible_volume_renamed"
+snap_cpg: "FC_r1"
+autolun: False
+lunid: 110

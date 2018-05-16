@@ -1,0 +1,13 @@
+storage_system_ip: 'x.x.x.x'
+storage_system_username: 'username'
+storage_system_password: 'password'
+volume_name: 'demo_ansible_volume'
+size: 1024
+size_unit: 'MiB'
+cpg: 'FC_r1'
+host_name: 'demo_ansible_host'
+host_persona: 'WINDOWS_SERVER'
+host_iscsi_names: ['iqn.1991-05.com.microsoft:ssmcdev689']
+host_domain: 'SAPLVM'
+autolun: False
+lunid: 110

@@ -1,0 +1,19 @@
+- hosts: localhost
+  tasks:
+    - name: Load Storage System Vars
+      include_vars: 'properties/storage_system_properties.yml'
+      
+    - name: Create Flash Cache
+      hpe3par_flash_cache: 
+        storage_system_ip="{{ storage_system_ip }}"
+        storage_system_username="{{ storage_system_username }}"
+        storage_system_password="{{ storage_system_password }}"
+        state=present 
+        size_in_gib=64
+
+    - name: Delete Flash Cache
+      hpe3par_flash_cache:
+        storage_system_ip="{{ storage_system_ip }}"
+        storage_system_username="{{ storage_system_username }}"
+        storage_system_password="{{ storage_system_password }}"
+        state=absent 

@@ -1,0 +1,103 @@
+- hosts: localhost
+  tasks:
+  
+    - name: Load Storage System Vars
+      include_vars: 'properties/storage_system_properties.yml'
+      
+    - name: Load Volume Vars
+      include_vars: 'properties/volume_properties.yml'
+      
+    - name: Load Volume Vars
+      include_vars: 'properties/volumeset_properties.yml'
+      
+    - name: Load Host Vars
+      include_vars: 'properties/host_properties.yml'
+
+    - name: Load Hostset Vars
+      include_vars: 'properties/hostset_properties.yml'
+
+    - name: Delete VLUN 
+      hpe3par_vlun: 
+        storage_system_ip="{{ storage_system_ip }}"
+        storage_system_username="{{ storage_system_username }}"
+        storage_system_password="{{ storage_system_password }}"
+        state=unexport_volume_to_host 
+        volume_name="{{ volume_name }}"
+        host_name="{{ host_name }}" 
+        lunid=110
+        
+    - name: Remove hosts from Hostset "{{ hostsetset_name }}"
+      hpe3par_hostset: 
+        storage_system_ip="{{ storage_system_ip }}"
+        storage_system_username="{{ storage_system_username }}"
+        storage_system_password="{{ storage_system_password }}"
+        state=remove_hosts
+        hostset_name="{{ hostset_name }}"
+        setmembers="{{ remove_host_setmembers }}"
+     
+    - name: Delete Hostset "{{ hostset_name }}"
+      hpe3par_hostset: 
+        storage_system_ip="{{ storage_system_ip }}"
+        storage_system_username="{{ storage_system_username }}"
+        storage_system_password="{{ storage_system_password }}"
+        state=absent
+        hostset_name="{{ hostset_name }}"
+        
+    - name: Delete Host "{{ new_name }}"
+      hpe3par_host:
+        storage_system_ip="{{ storage_system_ip }}"
+        storage_system_username="{{ storage_system_username }}"
+        storage_system_password="{{ storage_system_password }}"
+        state=absent 
+        host_name="{{ host_name }}"
+        
+    - name: Delete Host "{{ new_name }}"
+      hpe3par_host:
+        storage_system_ip="{{ storage_system_ip }}"
+        storage_system_username="{{ storage_system_username }}"
+        storage_system_password="{{ storage_system_password }}"
+        state=absent 
+        host_name="{{ item }}"
+      with_items: "{{ ['host_ansible_1', 'host_ansible_2', 'host_ansible_3'] }}"
+      
+    - name: Remove volumes from Volumeset "{{ volumeset_name }}"
+      hpe3par_volumeset: 
+        storage_system_ip="{{ storage_system_ip }}"
+        storage_system_username="{{ storage_system_username }}"
+        storage_system_password="{{ storage_system_password }}"
+        state=remove_volumes 
+        volumeset_name="{{ volumeset_name }}"
+        setmembers="{{ remove_vol_setmembers }}"
+     
+    - name: Delete Volumeset "{{ volumeset_name }}"
+      hpe3par_volumeset: 
+        storage_system_ip="{{ storage_system_ip }}"
+        storage_system_username="{{ storage_system_username }}"
+        storage_system_password="{{ storage_system_password }}"
+        state=absent
+        volumeset_name="{{ volumeset_name }}"
+        
+    - name: Delete Volume "{{ volume_name }}"
+      hpe3par_volume:
+        storage_system_ip="{{ storage_system_ip }}"
+        storage_system_username="{{ storage_system_username }}"
+        storage_system_password="{{ storage_system_password }}"
+        state=absent 
+        volume_name="{{ item }}"
+      with_items: "{{ ['volume_ansible_1', 'volume_ansible_2', 'volume_ansible_3'] }}"
+      
+    - name: Delete Volume "{{ volume_name }}"
+      hpe3par_volume:
+        storage_system_ip="{{ storage_system_ip }}"
+        storage_system_username="{{ storage_system_username }}"
+        storage_system_password="{{ storage_system_password }}"
+        state=absent 
+        volume_name="{{ volume_name }}"
+        
+    - name: Delete CPG "ansible_auto_CreateCPG-001"
+      hpe3par_cpg:
+        storage_system_ip="15.212.192.252"
+        storage_system_username="chefsuper"
+        storage_system_password="chefSUPER"
+        state=absent 
+        cpg_name="ansible_auto_CreateCPG-001"

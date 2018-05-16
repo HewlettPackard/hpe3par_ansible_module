@@ -1,0 +1,126 @@
+- hosts: localhost
+  tasks:
+    - name: Load Storage System Vars
+      include_vars: 'properties/storage_system_properties.yml'
+      
+    - name: Load Volume Vars
+      include_vars: 'properties/volume_properties.yml'
+      
+    - name: Load Volume Vars
+      include_vars: 'properties/volumeset_properties.yml'
+      
+    - name: Load Host Vars
+      include_vars: 'properties/host_properties.yml'
+
+    - name: Load Hostset Vars
+      include_vars: 'properties/hostset_properties.yml'
+
+    - name: Create CPG ansible_auto_CreateCPG-001
+      hpe3par_cpg: 
+        storage_system_ip="15.212.192.252"
+        storage_system_username="chefsuper"
+        storage_system_password="chefSUPER"
+        state=present 
+        cpg_name="ansible_auto_CreateCPG-001"
+        domain="Chef_Test"
+        growth_increment=32768
+        growth_increment_unit="MiB"
+        growth_limit=65536
+        growth_limit_unit="MiB"
+        growth_warning=51200
+        growth_warning_unit="MiB"
+        raid_type="R6"
+        set_size=8
+        high_availability="MAG"
+        disk_type="FC"
+        
+    - name: Create Volume "{{ volume_name }}"
+      hpe3par_volume: 
+        storage_system_ip="{{ storage_system_ip }}"
+        storage_system_username="{{ storage_system_username }}"
+        storage_system_password="{{ storage_system_password }}"
+        state=present 
+        volume_name="{{ volume_name }}"
+        cpg="{{ cpg }}"
+        size="{{ size }}"
+        snap_cpg="FC_r1"
+      
+    - name: Create Volume "{{ volume_name }}"
+      hpe3par_volume: 
+        storage_system_ip="{{ storage_system_ip }}"
+        storage_system_username="{{ storage_system_username }}"
+        storage_system_password="{{ storage_system_password }}"
+        state=present 
+        volume_name="{{ item }}"
+        cpg="{{ cpg }}"
+        size="{{ size }}"
+      with_items: "{{ ['volume_ansible_1', 'volume_ansible_2', 'volume_ansible_3'] }}"
+      
+    - name: Create volume set "{{ volumeset_name }}"
+      hpe3par_volumeset: 
+        storage_system_ip="{{ storage_system_ip }}"
+        storage_system_username="{{ storage_system_username }}"
+        storage_system_password="{{ storage_system_password }}"
+        state=present 
+        volumeset_name="{{ volumeset_name }}"
+        setmembers="{{ add_vol_setmembers }}"
+        
+    - name: Add volumes to Volumeset "{{ volumeset_name }}"
+      hpe3par_volumeset: 
+        storage_system_ip="{{ storage_system_ip }}"
+        storage_system_username="{{ storage_system_username }}"
+        storage_system_password="{{ storage_system_password }}"
+        state=add_volumes 
+        volumeset_name="{{ volumeset_name }}"
+        setmembers="{{ add_vol_setmembers2 }}"
+      
+    - name: Create Host "{{ host_name }}"
+      hpe3par_host: 
+        storage_system_ip="{{ storage_system_ip }}"
+        storage_system_username="{{ storage_system_username }}"
+        storage_system_password="{{ storage_system_password }}"
+        state=present 
+        host_name="{{ host_name }}"
+      
+    - name: Create Host "{{ host_name }}"
+      hpe3par_host: 
+        storage_system_ip="{{ storage_system_ip }}"
+        storage_system_username="{{ storage_system_username }}"
+        storage_system_password="{{ storage_system_password }}"
+        state=present 
+        host_name="{{ item }}"   
+      with_items: "{{ ['host_ansible_1', 'host_ansible_2', 'host_ansible_3'] }}"
+      
+    - name: Create host set "{{ hostset_name }}"
+      hpe3par_hostset: 
+        storage_system_ip="{{ storage_system_ip }}"
+        storage_system_username="{{ storage_system_username }}"
+        storage_system_password="{{ storage_system_password }}"
+        state=present 
+        hostset_name="{{ hostset_name }}"
+        setmembers="{{ add_host_setmembers }}"
+        
+    - name: Add hosts to Hostset "{{ hostsetset_name }}"
+      hpe3par_hostset: 
+        storage_system_ip="{{ storage_system_ip }}"
+        storage_system_username="{{ storage_system_username }}"
+        storage_system_password="{{ storage_system_password }}"
+        state=add_hosts
+        hostset_name="{{ hostset_name }}"
+        setmembers="{{ add_host_setmembers2 }}"
+        
+    - name: Create VLUN 
+      hpe3par_vlun: 
+        storage_system_ip="{{ storage_system_ip }}"
+        storage_system_username="{{ storage_system_username }}"
+        storage_system_password="{{ storage_system_password }}"
+        state=export_volume_to_host 
+        volume_name="{{ volume_name }}"
+        host_name="{{ host_name }}" 
+        lunid="{{ lunid }}" 
+        autolun="{{ autolun }}" 
+        
+
+        
+
+        

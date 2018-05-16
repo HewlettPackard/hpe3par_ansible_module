@@ -1,0 +1,4 @@
+host_name: "my_ansible_host"
+host_new_name: "my_ansible_host_renamed"
+
+

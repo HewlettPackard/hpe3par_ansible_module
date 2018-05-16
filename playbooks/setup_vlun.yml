@@ -1,0 +1,55 @@
+    - name: Create Host "{{ host_name }}"
+      hpe3par_host: 
+        storage_system_ip="{{ storage_system_ip }}"
+        storage_system_username="{{ storage_system_username }}"
+        storage_system_password="{{ storage_system_password }}"
+        state=present 
+        host_name="{{ item }}"   
+      with_items: "{{ ['host_ansible_1', 'host_ansible_2', 'host_ansible_3'] }}"
+      
+    - 
+      hpe3par_hostset: 
+        storage_system_ip="{{ storage_system_ip }}"
+        storage_system_username="{{ storage_system_username }}"
+        storage_system_password="{{ storage_system_password }}"
+        state=present 
+        hostset_name="{{ hostset_name }}"
+        setmembers="{{ add_host_setmembers }}"
+        
+    - name: Add hosts to Hostset "{{ hostsetset_name }}"
+      hpe3par_hostset: 
+        storage_system_ip="{{ storage_system_ip }}"
+        storage_system_username="{{ storage_system_username }}"
+        storage_system_password="{{ storage_system_password }}"
+        state=add_hosts
+        hostset_name="{{ hostset_name }}"
+        setmembers="{{ add_host_setmembers2 }}"
+               
+    - name: Create Volume "{{ volume_name }}"
+      hpe3par_volume: 
+        storage_system_ip="{{ storage_system_ip }}"
+        storage_system_username="{{ storage_system_username }}"
+        storage_system_password="{{ storage_system_password }}"
+        state=present 
+        volume_name="{{ item }}"
+        cpg="{{ cpg }}"
+        size="{{ size }}"
+      with_items: "{{ ['volume_ansible_1', 'volume_ansible_2', 'volume_ansible_3'] }}"
+      
+    - 
+      hpe3par_volumeset: 
+        storage_system_ip="{{ storage_system_ip }}"
+        storage_system_username="{{ storage_system_username }}"
+        storage_system_password="{{ storage_system_password }}"
+        state=present 
+        volumeset_name="{{ volumeset_name }}"
+        setmembers="{{ add_vol_setmembers }}"
+        
+    - name: Add volumes to Volumeset "{{ volumeset_name }}"
+      hpe3par_volumeset: 
+        storage_system_ip="{{ storage_system_ip }}"
+        storage_system_username="{{ storage_system_username }}"
+        storage_system_password="{{ storage_system_password }}"
+        state=add_volumes 
+        volumeset_name="{{ volumeset_name }}"
+        setmembers="{{ add_vol_setmembers2 }}"  

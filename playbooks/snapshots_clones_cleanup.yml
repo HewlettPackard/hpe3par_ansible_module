@@ -1,0 +1,46 @@
+- hosts: localhost
+  tasks:
+    - name: Load Demo Vars
+      include_vars: 'properties/storage_system_properties.yml'
+
+    - name: Delete snasphot my_ansible_snapshot
+      hpe3par_snapshot: 
+        storage_system_ip="{{ storage_system_ip }}"
+        storage_system_username="{{ storage_system_username }}"
+        storage_system_password="{{ storage_system_password }}"
+        state=absent
+        snapshot_name="my_ansible_snapshot"
+        
+    - name: Delete Base volume my_ansible_base_volume
+      hpe3par_volume: 
+        storage_system_ip="{{ storage_system_ip }}"
+        storage_system_username="{{ storage_system_username }}"
+        storage_system_password="{{ storage_system_password }}"
+        state=absent
+        volume_name="my_ansible_base_volume_1"
+        
+    - name: Load Storage System Vars
+      include_vars: 'properties/storage_system_properties.yml'
+      
+    - name: Load Volume Vars
+      include_vars: 'properties/volume_properties.yml'
+      
+    - name: Load Host Vars
+      include_vars: 'properties/host_properties.yml'
+        
+    - name: Delete clone "clone_volume_ansible"
+      hpe3par_offline_clone: 
+        storage_system_ip="{{ storage_system_ip }}"
+        storage_system_username="{{ storage_system_username }}"
+        storage_system_password="{{ storage_system_password }}"
+        state=absent 
+        clone_name="clone_volume_ansible"
+        base_volume_name="{{ volume_name }}"
+        
+    - name: Delete volume "{{ volume_name }}"
+      hpe3par_volume: 
+        storage_system_ip="{{ storage_system_ip }}"
+        storage_system_username="{{ storage_system_username }}"
+        storage_system_password="{{ storage_system_password }}"
+        state=absent 
+        volume_name="{{ volume_name }}"

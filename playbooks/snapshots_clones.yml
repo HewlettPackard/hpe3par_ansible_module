@@ -1,0 +1,70 @@
+- hosts: localhost
+  tasks:
+    - name: Load Demo Vars
+      include_vars: 'properties/storage_system_properties.yml'
+
+    - name: Create Volume my_ansible_base_volume
+      hpe3par_volume: 
+        storage_system_ip="{{ storage_system_ip }}"
+        storage_system_username="{{ storage_system_username }}"
+        storage_system_password="{{ storage_system_password }}"
+        state=present
+        volume_name="my_ansible_base_volume_1"
+        cpg="FC_r1"
+        snap_cpg="FC_r1"
+        size=1024
+        size_unit="MiB" 
+
+    - name: Create Volume snasphot my_ansible_snapshot
+      hpe3par_snapshot: 
+        storage_system_ip="{{ storage_system_ip }}"
+        storage_system_username="{{ storage_system_username }}"
+        storage_system_password="{{ storage_system_password }}"
+        state=present
+        snapshot_name="my_ansible_snapshot"
+        base_volume_name="my_ansible_base_volume_1"
+        read_only=False
+        
+    - name: Load Storage System Vars
+      include_vars: 'properties/storage_system_properties.yml'
+      
+    - name: Load Volume Vars
+      include_vars: 'properties/volume_properties.yml'
+      
+    - name: Load Host Vars
+      include_vars: 'properties/host_properties.yml'
+
+    - name: Create Volume "{{ volume_name }}"
+      hpe3par_volume: 
+        storage_system_ip="{{ storage_system_ip }}"
+        storage_system_username="{{ storage_system_username }}"
+        storage_system_password="{{ storage_system_password }}"
+        state=present 
+        volume_name="{{ volume_name }}"
+        cpg="{{ cpg }}"
+        size="{{ size }}"
+        snap_cpg="{{ cpg }}"
+        
+    - name: Create Volume "{{ volume_name }}"
+      hpe3par_volume: 
+        storage_system_ip="{{ storage_system_ip }}"
+        storage_system_username="{{ storage_system_username }}"
+        storage_system_password="{{ storage_system_password }}"
+        state=present 
+        volume_name="clone_volume_ansible"
+        cpg="{{ cpg }}"
+        size="{{ size }}"
+        snap_cpg="{{ cpg }}"
+        
+    - name: Create Clone clone_volume_ansible
+      hpe3par_offline_clone:
+        storage_system_ip="{{ storage_system_ip }}"
+        storage_system_username="{{ storage_system_username }}"
+        storage_system_password="{{ storage_system_password }}"
+        state=present
+        clone_name="clone_volume_ansible"
+        base_volume_name="{{ volume_name }}"
+        dest_cpg="{{ cpg }}"
+        priority="MEDIUM"
+      
+        

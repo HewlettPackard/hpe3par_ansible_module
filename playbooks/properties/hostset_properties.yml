@@ -1,0 +1,4 @@
+hostset_name: "my_ansible_hostset"
+add_host_setmembers: ['host_ansible_1', 'host_ansible_2']
+add_host_setmembers2: ['host_ansible_1', 'host_ansible_2', 'host_ansible_3']
+remove_host_setmembers: ["host_ansible_1", "host_ansible_2", "host_ansible_3", "host_ansible_4"]

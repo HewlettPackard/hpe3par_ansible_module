@@ -1,0 +1,91 @@
+- hosts: localhost
+  tasks:
+  
+    - name: Load Storage System Vars
+      include_vars: 'properties/storage_system_properties.yml'
+      
+    - name: Load Volume Vars
+      include_vars: 'properties/volume_properties.yml'
+      
+    - name: Load Host Vars
+      include_vars: 'properties/host_properties.yml'
+
+    - name: Create Volume "{{ volume_name }}"
+      hpe3par_volume: 
+        storage_system_ip="{{ storage_system_ip }}"
+        storage_system_username="{{ storage_system_username }}"
+        storage_system_password="{{ storage_system_password }}"
+        state=present 
+        volume_name="{{ volume_name }}"
+        cpg="{{ cpg }}"
+        size="{{ size }}"
+        snap_cpg="FC_r1"
+        
+    - name: Change provisioning type of Volume "{{ volume_name }} to thin"
+      hpe3par_volume: 
+        storage_system_ip="{{ storage_system_ip }}"
+        storage_system_username="{{ storage_system_username }}"
+        storage_system_password="{{ storage_system_password }}"
+        state=convert_type 
+        volume_name="{{ volume_name }}"
+        type="thin"
+        cpg="FC_r1"
+        wait_for_task_to_end="{{ wait_for_task_to_end }}"
+        
+    - name: Set Snap CPG of Volume "{{ volume_name }} to FC_r1"
+      hpe3par_volume: 
+        storage_system_ip="{{ storage_system_ip }}"
+        storage_system_username="{{ storage_system_username }}"
+        storage_system_password="{{ storage_system_password }}"
+        state=set_snap_cpg 
+        volume_name="{{ volume_name }}"
+        snap_cpg="FC_r1"
+               
+    - name: Change snap CPG of Volume "{{ volume_name }}" to FC_r5
+      hpe3par_volume: 
+        storage_system_ip="{{ storage_system_ip }}"
+        storage_system_username="{{ storage_system_username }}"
+        storage_system_password="{{ storage_system_password }}"
+        state=change_snap_cpg 
+        volume_name="{{ volume_name }}"
+        snap_cpg="FC_r5"
+        wait_for_task_to_end="{{ wait_for_task_to_end }}"
+        
+    - name: Grow Volume "{{ volume_name }} by 1 {{ size_unit }}"
+      hpe3par_volume: 
+        storage_system_ip="{{ storage_system_ip }}"
+        storage_system_username="{{ storage_system_username }}"
+        storage_system_password="{{ storage_system_password }}"
+        state=grow 
+        volume_name="{{ volume_name }}"
+        size=1
+        size_unit="{{ size_unit }}"
+
+    - name: Grow Volume "{{ volume_name }} to 5 {{ size_unit }}"
+      hpe3par_volume: 
+        storage_system_ip="{{ storage_system_ip }}"
+        storage_system_username="{{ storage_system_username }}"
+        storage_system_password="{{ storage_system_password }}"
+        state=grow_to_size
+        volume_name="{{ volume_name }}"
+        size=5
+        size_unit="{{ size_unit }}"     
+
+    - name: Rename Volume "{{ volume_name }} to {{ new_name }}"
+      hpe3par_volume: 
+        storage_system_ip="{{ storage_system_ip }}"
+        storage_system_username="{{ storage_system_username }}"
+        storage_system_password="{{ storage_system_password }}"
+        state=modify
+        volume_name="{{ volume_name }}"
+        new_name="{{ new_name }}"
+
+    - name: Delete Volume "{{ volume_name }}"
+      hpe3par_volume:
+        storage_system_ip="{{ storage_system_ip }}"
+        storage_system_username="{{ storage_system_username }}"
+        storage_system_password="{{ storage_system_password }}"
+        state=absent 
+        volume_name="{{ new_name }}"
+
+        

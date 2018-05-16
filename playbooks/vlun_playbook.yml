@@ -1,0 +1,37 @@
+- hosts: localhost
+  tasks:
+    - name: Load Demo Vars
+      include_vars: 'properties/demo_properties.yml'
+      
+    - name: Create Host "{{ host_name }}"
+      hpe3par_host: 
+        storage_system_ip="{{ storage_system_ip }}"
+        storage_system_username="{{ storage_system_username }}"
+        storage_system_password="{{ storage_system_password }}"
+        state=present 
+        host_name="{{ host_name }}"
+        host_persona="{{ host_persona }}"
+        host_domain="{{ host_domain }}"
+        host_iscsi_names="{{ host_iscsi_names }}"
+        
+    - name: Create Volume "{{ volume_name }}"
+      hpe3par_volume: 
+        storage_system_ip="{{ storage_system_ip }}"
+        storage_system_username="{{ storage_system_username }}"
+        storage_system_password="{{ storage_system_password }}"
+        state=present 
+        volume_name="{{ volume_name }}"
+        cpg="{{ cpg }}"
+        size="{{ size }}"
+        
+    - name: Create VLUN 
+      hpe3par_vlun: 
+        storage_system_ip="{{ storage_system_ip }}"
+        storage_system_username="{{ storage_system_username }}"
+        storage_system_password="{{ storage_system_password }}"
+        state=export_volume_to_host 
+        volume_name="{{ volume_name }}"
+        host_name="{{ host_name }}" 
+        lunid="{{ lunid }}" 
+        autolun="{{ autolun }}" 
+        

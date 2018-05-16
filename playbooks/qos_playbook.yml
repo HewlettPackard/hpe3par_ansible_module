@@ -1,0 +1,75 @@
+- hosts: localhost
+  tasks:
+  
+    - name: Load Storage System Vars
+      include_vars: 'properties/storage_system_properties.yml'
+      
+    - name: Load QoS Vars
+      include_vars: 'properties/qos_properties.yml'
+      
+    - name: Create VVSET
+      hpe3par_volumeset: 
+        storage_system_ip="{{ storage_system_ip }}"
+        storage_system_username="{{ storage_system_username }}"
+        storage_system_password="{{ storage_system_password }}"
+        state=present 
+        volumeset_name="Chef_TK_Volume_Set"
+        domain="Chef_Test"
+        
+    - name: Create QoS
+      hpe3par_qos: 
+        storage_system_ip="{{ storage_system_ip }}"
+        storage_system_username="{{ storage_system_username }}"
+        storage_system_password="{{ storage_system_password }}" 
+        state=present 
+        qos_target_name='all_others'
+        priority='NORMAL'
+        bwmin_goal_kb=200
+        bwmax_limit_kb=200
+        iomin_goal_op='NOLIMIT'
+        default_latency=true
+        enable=true
+        bwmin_goal_op='NOLIMIT'
+        bwmax_limit_op='NOLIMIT'
+        latency_goal_usecs=20
+        type='sys'
+        iomax_limit_op='NOLIMIT'
+        
+    - name: Modify QoS
+      hpe3par_qos: 
+        storage_system_ip="{{ storage_system_ip }}"
+        storage_system_username="{{ storage_system_username }}"
+        storage_system_password="{{ storage_system_password }}"
+        state=modify 
+        qos_target_name='all_others'
+        priority='HIGH'
+        bwmin_goal_kb=200
+        bwmax_limit_kb=200
+        iomin_goal_op='NOLIMIT'
+        default_latency=true
+        enable=true
+        bwmin_goal_op='NOLIMIT'
+        bwmax_limit_op='NOLIMIT'
+        latency_goal_usecs=20
+        type='sys'
+        iomax_limit_op='NOLIMIT'
+
+    - name: Delete QoS
+      hpe3par_qos:
+        storage_system_ip="{{ storage_system_ip }}"
+        storage_system_username="{{ storage_system_username }}"
+        storage_system_password="{{ storage_system_password }}"
+        state=absent 
+        qos_target_name='all_others'
+        type='sys'
+        
+    - name: Delete VVSET
+      hpe3par_volumeset: 
+        storage_system_ip="{{ storage_system_ip }}"
+        storage_system_username="{{ storage_system_username }}"
+        storage_system_password="{{ storage_system_password }}"
+        state=absent 
+        volumeset_name="Chef_TK_Volume_Set"
+        
+        
+        

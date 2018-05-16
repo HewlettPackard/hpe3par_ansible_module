@@ -1,0 +1,30 @@
+- hosts: localhost
+  tasks:
+    - name: Load Storage System Vars
+      include_vars: 'properties/storage_system_properties.yml'
+
+    - name: Create CPG ansible_auto_CreateCPG-001
+      hpe3par_cpg: 
+        storage_system_ip: 10.10.10.1
+        storage_system_password: username
+        storage_system_username: password
+        state: present 
+        cpg_name: ansible_auto_CreateCPG-001
+        growth_increment: 32.5
+        growth_increment_unit: GiB
+        growth_limit: 65536
+        growth_limit_unit: MiB
+        growth_warning: 51200
+        growth_warning_unit: MiB
+        raid_type: R6
+        set_size: 8
+        high_availability: MAG
+        disk_type: FC
+
+    - name: Delete CPG ansible_auto_CreateCPG-001
+      hpe3par_cpg:
+        storage_system_ip: 10.10.10.1
+        storage_system_username: username
+        storage_system_password: password
+        state: absent 
+        cpg_name: ansible_auto_CreateCPG-001

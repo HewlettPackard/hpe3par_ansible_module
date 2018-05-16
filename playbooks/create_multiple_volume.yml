@@ -1,0 +1,33 @@
+- hosts: localhost
+  tasks:
+  
+    - name: Load Storage System Vars
+      include_vars: 'properties/storage_system_properties.yml'
+      
+    - name: Load Volume Vars
+      include_vars: 'properties/volume_properties.yml'
+      
+    - name: Load Host Vars
+      include_vars: 'properties/host_properties.yml'
+
+    - name: Create Volume "{{ volume_name }}"
+      hpe3par_volume: 
+        storage_system_ip="{{ storage_system_ip }}"
+        storage_system_username="{{ storage_system_username }}"
+        storage_system_password="{{ storage_system_password }}"
+        state=present 
+        volume_name="{{ item }}"
+        cpg="{{ cpg }}"
+        size="{{ size }}"
+      with_items: "{{ ['volume_ansible_1', 'volume_ansible_2', 'volume_ansible_3'] }}"
+
+        
+    - name: Delete Volume "{{ volume_name }}"
+      hpe3par_volume:
+        storage_system_ip="{{ storage_system_ip }}"
+        storage_system_username="{{ storage_system_username }}"
+        storage_system_password="{{ storage_system_password }}"
+        state=absent 
+        volume_name="{{ item }}"
+      with_items: "{{ ['volume_ansible_1', 'volume_ansible_2', 'volume_ansible_3'] }}"
+        

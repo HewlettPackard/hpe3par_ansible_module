@@ -1,0 +1,45 @@
+- hosts: localhost
+  tasks:
+  
+    - name: Load Storage System Vars
+      include_vars: 'properties/storage_system_properties.yml'
+      
+    - name: Load QoS Vars
+      include_vars: 'properties/qos_properties.yml'
+      
+    - name: Create VVSET
+      hpe3par_volumeset: 
+        storage_system_ip="{{ storage_system_ip }}"
+        storage_system_username="{{ storage_system_username }}"
+        storage_system_password="{{ storage_system_password }}"
+        state=present 
+        volumeset_name="Chef_TK_Volume_Set"
+        domain="Chef_Test"
+        
+    - name: Create QoS
+      hpe3par_qos: 
+        storage_system_ip="{{ storage_system_ip }}"
+        storage_system_username="{{ storage_system_username }}"
+        storage_system_password="{{ storage_system_password }}"
+        state=present 
+        qos_target_name='Chef_TK_Volume_Set'
+        priority='NORMAL'
+        bwmin_goal_kb=200
+        bwmax_limit_kb=200
+        iomin_goal_op='NOLIMIT'
+        default_latency=true
+        enable=true
+        bwmin_goal_op='NOLIMIT'
+        bwmax_limit_op='NOLIMIT'
+        latency_goal_usecs=20
+        type='vvset'
+        iomax_limit_op='NOLIMIT'
+        
+    - name: Create Flash Cache
+      hpe3par_flash_cache: 
+        storage_system_ip="{{ storage_system_ip }}"
+        storage_system_username="{{ storage_system_username }}"
+        storage_system_password="{{ storage_system_password }}"
+        state=present 
+        size_in_gib=64
+  

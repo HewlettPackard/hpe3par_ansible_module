@@ -1,0 +1,71 @@
+- hosts: localhost
+  tasks:
+    - name: Load Demo Vars
+      include_vars: 'properties/storage_system_properties.yml'
+
+    - name: Create Volume my_ansible_base_volume
+      hpe3par_volume: 
+        storage_system_ip="{{ storage_system_ip }}"
+        storage_system_username="{{ storage_system_username }}"
+        storage_system_password="{{ storage_system_password }}"
+        state=present
+        volume_name="my_ansible_base_volume"
+        cpg="FC_r1"
+        snap_cpg="FC_r1"
+        size=1024
+        size_unit="MiB" 
+
+    - name: Create Volume snasphot my_ansible_snapshot
+      hpe3par_snapshot: 
+        storage_system_ip="{{ storage_system_ip }}"
+        storage_system_username="{{ storage_system_username }}"
+        storage_system_password="{{ storage_system_password }}"
+        state=present
+        snapshot_name="my_ansible_snapshot"
+        base_volume_name="my_ansible_base_volume"
+        read_only=False
+
+    - name: Restore offline Volume snasphot my_ansible_snapshot
+      hpe3par_snapshot: 
+        storage_system_ip="{{ storage_system_ip }}"
+        storage_system_username="{{ storage_system_username }}"
+        storage_system_password="{{ storage_system_password }}"
+        state=restore_offline
+        snapshot_name="my_ansible_snapshot"
+        priority="MEDIUM"
+        
+    - name: Restore offline Volume snasphot my_ansible_snapshot
+      hpe3par_snapshot: 
+        storage_system_ip="{{ storage_system_ip }}"
+        storage_system_username="{{ storage_system_username }}"
+        storage_system_password="{{ storage_system_password }}"
+        state=restore_online
+        snapshot_name="my_ansible_snapshot"
+        
+    - name: Modify/rename snasphot my_ansible_snapshot to my_ansible_snapshot_renamed
+      hpe3par_snapshot: 
+        storage_system_ip="{{ storage_system_ip }}"
+        storage_system_username="{{ storage_system_username }}"
+        storage_system_password="{{ storage_system_password }}"
+        state=modify
+        snapshot_name="my_ansible_snapshot"
+        new_name="my_ansible_snapshot_renamed"
+        
+    -  name: sleep for 100 seconds and continue with play
+       wait_for: timeout=100
+        
+    - name: Delete snasphot my_ansible_snapshot_renamed
+      hpe3par_snapshot: 
+        storage_system_ip="{{ storage_system_ip }}"
+        storage_system_username="{{ storage_system_username }}"
+        storage_system_password="{{ storage_system_password }}"
+        state=absent
+        snapshot_name="my_ansible_snapshot_renamed"
+        
+    - name: Delete Base volume my_ansible_base_volume
+      hpe3par_snapshot: 
+        storage_system_ip="{{ storage_system_ip }}"
+        storage_system_username="{{ storage_system_username }}"
+        storage_system_password="{{ storage_system_password }}"
+        state=absent
+        snapshot_name="my_ansible_base_volume"

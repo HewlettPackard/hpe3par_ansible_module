@@ -1,0 +1,4 @@
+volumeset_name: "my_ansible_volumeset"
+add_vol_setmembers: ['volume_ansible_1', 'volume_ansible_2']
+add_vol_setmembers2: ['volume_ansible_1', 'volume_ansible_2', 'volume_ansible_3']
+remove_vol_setmembers: ["volume_ansible_1", "volume_ansible_2", "volume_ansible_3", "volume_ansible_4"]

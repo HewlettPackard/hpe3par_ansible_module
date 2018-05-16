@@ -1,0 +1,4 @@
+vlun_host_name: "host_ansible_1"
+vlun_volume_name: "volume_ansible_1" 
+lunid: 10
+autolun: False

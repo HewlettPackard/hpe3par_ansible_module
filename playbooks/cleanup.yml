@@ -1,0 +1,31 @@
+- hosts: localhost
+  tasks:
+    - name: Load Demo Vars
+      include_vars: 'properties/demo_properties.yml'
+
+        
+    - name: Delete VLUN 
+      hpe3par_vlun: 
+        storage_system_ip="{{ storage_system_ip }}"
+        storage_system_username="{{ storage_system_username }}"
+        storage_system_password="{{ storage_system_password }}"
+        state=unexport_volume_from_host 
+        volume_name="{{ volume_name }}"
+        host_name="{{ host_name }}" 
+        lunid="{{ lunid }}" 
+        
+    - name: Delete Volume "{{ volume_name }}"
+      hpe3par_volume:
+        storage_system_ip="{{ storage_system_ip }}"
+        storage_system_username="{{ storage_system_username }}"
+        storage_system_password="{{ storage_system_password }}"
+        state=absent 
+        volume_name="{{ volume_name }}"
+        
+    - name: Delete Host "{{ host_name }}"
+      hpe3par_host:
+        storage_system_ip="{{ storage_system_ip }}"
+        storage_system_username="{{ storage_system_username }}"
+        storage_system_password="{{ storage_system_password }}"
+        state=absent 
+        host_name="{{ host_name }}"

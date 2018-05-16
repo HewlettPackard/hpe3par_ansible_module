@@ -1,0 +1,32 @@
+- hosts: localhost
+  tasks:
+    - name: Load Storage System Vars
+      include_vars: 'properties/storage_system_properties.yml'
+      
+    - name: Load Host Vars
+      include_vars: 'properties/host_properties.yml'
+      
+    - name: Create Host "{{ host_name }}"
+      hpe3par_host: 
+        storage_system_ip="{{ storage_system_ip }}"
+        storage_system_username="{{ storage_system_username }}"
+        storage_system_password="{{ storage_system_password }}"
+        state=present 
+        host_name="{{ host_name }}"      
+
+    - name: Modify Host "{{ host_name }}"
+      hpe3par_host: 
+        storage_system_ip="{{ storage_system_ip }}"
+        storage_system_username="{{ storage_system_username }}"
+        storage_system_password="{{ storage_system_password }}"
+        state=modify
+        host_name="{{ host_name }}"
+        host_new_name="{{ host_new_name }}"
+
+    - name: Delete Host "{{ new_name }}"
+      hpe3par_host:
+        storage_system_ip="{{ storage_system_ip }}"
+        storage_system_username="{{ storage_system_username }}"
+        storage_system_password="{{ storage_system_password }}"
+        state=absent 
+        host_name="{{ host_new_name }}"
