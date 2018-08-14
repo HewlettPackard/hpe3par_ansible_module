@@ -37,7 +37,7 @@ try:
     from hpe3par_sdk import client
 except ImportError:
     client = None
-    
+
 def create_remote_copy_group(
             client_obj,
             storage_system_username,
@@ -76,14 +76,14 @@ def create_remote_copy_group(
     finally:
         client_obj.logout()
     return (True, True, "Created Remote Copy Group %s successfully." % remote_copy_group_name, {})
-    
+
 
 def delete_remote_copy_group(
             client_obj,
             storage_system_username,
             storage_system_password,
             remote_copy_group_name,
-            keep_snap       
+            keep_snap
             ):
     if storage_system_username is None or storage_system_password is None:
         return (
@@ -106,13 +106,9 @@ def delete_remote_copy_group(
     finally:
         client_obj.logout()
     return (True, True, "Deleted Remote Copy Group %s successfully." % remote_copy_group_name, {})
-	
-
-def modify_remote_copy_group(
-)
 
 def main():
-        fields = {
+    fields = {
         "state": {
             "required": True,
             "choices": ['present', 'absent'],
@@ -151,9 +147,8 @@ def main():
         "keep_snap": {
             "type": "bool",
             "default": False
-        }       
+        }
     }
-
     module = AnsibleModule(argument_spec=fields)
 
     if client is None:
@@ -162,11 +157,12 @@ def main():
     storage_system_ip = module.params["storage_system_ip"]
     storage_system_username = module.params["storage_system_username"]
     storage_system_password = module.params["storage_system_password"]
-    cpg_name = module.params["remote_copy_group_name"]
+    remote_copy_group_name = module.params["remote_copy_group_name"]
     domain = module.params["domain"]
     targets = module.params["targets"]
     local_user_cpg = module.params["local_user_cpg"]
     local_snap_cpg = module.params["local_snap_cpg"]
+    keep_snap = module.params["keep_snap"]
 
     wsapi_url = 'https://%s:8080/api/v1' % storage_system_ip
     client_obj = client.HPE3ParClient(wsapi_url)
