@@ -76,7 +76,49 @@ def create_remote_copy_group(
     finally:
         client_obj.logout()
     return (True, True, "Created Remote Copy Group %s successfully." % remote_copy_group_name, {})
+	
+def modify_remote_copy_group(
+            client_obj,
+            storage_system_username,
+            storage_system_password,
+			remote_copy_group_name,
+			localUserCPG,
+			localSnapCPG,
+			targets,
+			unsetUserCPG,
+			unsetSnapCPG
+			):
+    if storage_system_username is None or storage_system_password is None:
+        return (
+            False,
+            False,
+            "Remote Copy Group delete failed. Storage system username or password is null",
+            {})
+    if remote_copy_group_name is None:
+        return (False, False, "Remote Copy Group delete failed. Remote Copy Group name is null", {})
+ 
+    if len(remote_copy_group_name) < 1 or len(remote_copy_group_name) > 31:
+        return (False, False, "Remote Copy Group modify failed. Remote Copy Group name must be atleast 1 character and not more than 31 characters", {})
 
+    local_cpgs = [localUserCPG, localSnapCPG]
+	for cpg in local_cpgs:
+		if not targets or len(target) == 0:
+			return (False, False, "Remote Copy Group modify failed. Remote Copy targets cannot be null or empty when modifying local user CPG or remote user CPG", {})
+		force_fail = True
+		for target in targets:
+			if not target['remoteUserCPG'] or not target['remoteUserCPG']:
+				return (False, False, "Remote Copy Group modify failed. Remote user CPG or remote snap CPG cannot be null when modifying local user CPG or remote user CPG", {})			
+    try:
+        client_obj.login(storage_system_username, storage_system_password)
+        if client_obj.remoteCopyGroupExists(remote_copy_group_name):
+			client_obj.modifyRemoteCopyGroup(remote_copy_group_name, localUserCPG, localSnapCPG, targets, unsetUserCPG, unsetSnapCPG)
+        else:
+            return (True, False, "Remote Copy Group not present", {})
+    except Exception as e:
+        return (False, False, "Remote Copy Group modify failed | %s" % (e), {})
+    finally:
+        client_obj.logout()
+    return (True, True, "Modify Remote Copy Group %s successfully." % remote_copy_group_name, {})
 
 def delete_remote_copy_group(
             client_obj,
@@ -100,7 +142,7 @@ def delete_remote_copy_group(
         if client_obj.remoteCopyGroupExists(remote_copy_group_name):
             client_obj.removeRemoteCopyGroup(remote_copy_group_name, keep_snap)
         else:
-            return (True, False, "Remote Copy Group not present", {})
+            return (True, False, "Remote Copy Group is already present", {})
     except Exception as e:
         return (False, False, "Remote Copy Group delete failed | %s" % (e), {})
     finally:
