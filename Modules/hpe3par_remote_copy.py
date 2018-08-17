@@ -213,10 +213,10 @@ def start_remote_copy_group(
             storage_system_username,
             storage_system_password,
             remote_copy_group_name,
-			skip_initial_sync,
-			target_name,
-			starting_snapshots
-			):
+            skip_initial_sync,
+            target_name,
+            starting_snapshots
+            ):
     if remote_copy_group_name is None:
         return (False, False, "Remove volume to Remote Copy Group failed. Remote Copy Group name is null", {})
     if len(remote_copy_group_name) < 1 or len(remote_copy_group_name) > 31:
@@ -224,12 +224,12 @@ def start_remote_copy_group(
     try:
         client_obj.login(storage_system_username, storage_system_password)
         if client_obj.remoteCopyGroupExists(remote_copy_group_name):
-			optional = {
-				'skipInitialSync': skip_initial_sync,
-				'targetName': target_name,
-				'startingSnapshots': starting_snapshots
-			}
-			client_obj.startRemoteCopy(remote_copy_group_name, optional)
+            optional = {
+                'skipInitialSync': skip_initial_sync,
+                'targetName': target_name,
+                'startingSnapshots': starting_snapshots
+            }
+            client_obj.startRemoteCopy(remote_copy_group_name, optional)
         else:
             return (False, False, "Remote Copy Group not present", {})
     except Exception as e:
@@ -243,9 +243,9 @@ def stop_remote_copy_group(
             storage_system_username,
             storage_system_password,
             remote_copy_group_name,
-			no_snapshot,
-			target_name
-			):
+            no_snapshot,
+            target_name
+            ):
     if remote_copy_group_name is None:
         return (False, False, "Remove volume to Remote Copy Group failed. Remote Copy Group name is null", {})
     if len(remote_copy_group_name) < 1 or len(remote_copy_group_name) > 31:
@@ -253,28 +253,28 @@ def stop_remote_copy_group(
     try:
         client_obj.login(storage_system_username, storage_system_password)
         if client_obj.remoteCopyGroupExists(remote_copy_group_name):
-			optional = {
-				'noSnapshot': no_snapshot,
-				'targetName': target_name
-			}
-			client_obj.stopRemoteCopy(remote_copy_group_name, optional)
+            optional = {
+                'noSnapshot': no_snapshot,
+                'targetName': target_name
+            }
+            client_obj.stopRemoteCopy(remote_copy_group_name, optional)
         else:
             return (False, False, "Remote Copy Group not present", {})
     except Exception as e:
         return (False, False, "Stop Remote Copy Group failed | %s" % (e), {})
     finally:
         client_obj.logout()
-    return (True, True, "Remote copy group %s stopped successfully." % remote_copy_group_name, {})			
+    return (True, True, "Remote copy group %s stopped successfully." % remote_copy_group_name, {})
 
 def synchronize_remote_copy_group(
             client_obj,
             storage_system_username,
             storage_system_password,
             remote_copy_group_name,
-			no_resync_snapshot,
-			target_name,
-			full_sync
-			):
+            no_resync_snapshot,
+            target_name,
+            full_sync
+            ):
     if remote_copy_group_name is None:
         return (False, False, "Remove volume to Remote Copy Group failed. Remote Copy Group name is null", {})
     if len(remote_copy_group_name) < 1 or len(remote_copy_group_name) > 31:
@@ -282,12 +282,12 @@ def synchronize_remote_copy_group(
     try:
         client_obj.login(storage_system_username, storage_system_password)
         if client_obj.remoteCopyGroupExists(remote_copy_group_name):
-			optional = {
-				'noResyncSnapshot': no_resync_snapshot,
-				'targetName': target_name,
-				'fullSync': full_sync
-			}
-			client_obj.synchronizeRemoteCopyGroup(remote_copy_group_name, optional)		
+            optional = {
+                'noResyncSnapshot': no_resync_snapshot,
+                'targetName': target_name,
+                'fullSync': full_sync
+            }
+            client_obj.synchronizeRemoteCopyGroup(remote_copy_group_name, optional)
         else:
             return (False, False, "Remote Copy Group not present", {})
     except Exception as e:
@@ -325,11 +325,76 @@ def delete_remote_copy_group(
         client_obj.logout()
     return (True, True, "Deleted Remote Copy Group %s successfully." % remote_copy_group_name, {})
 
+def recover_remote_copy_group(
+            client_obj,
+            storage_system_username,
+            storage_system_password,
+            remote_copy_group_name,
+            recovery_action,
+            target_name,
+            skip_start,
+            skip_sync,
+            discard_new_data,
+            skip_promote,
+            no_snapshot,
+            stop_groups,
+            local_groups_direction
+            ):
+    if storage_system_username is None or storage_system_password is None:
+        return (
+            False,
+            False,
+            "Remote Copy Group delete failed. Storage system username or password is null",
+            {})
+    if remote_copy_group_name is None:
+        return (False, False, "Remote Copy Recover delete failed. Remote Copy Group name is null", {})
+    if len(remote_copy_group_name) < 1 or len(remote_copy_group_name) > 31:
+        return (False, False, "Remote Copy Group Recover failed. Remote Copy Group name must be atleast 1 character and not more than 31 characters", {})
+    if recovery_action is None:
+        return (False, False, "Remote Copy Recover delete failed. recovery action is null", {})
+    if skip_start and (action != 'FAILOVER_GROUP' or action != 'RESTORE_GROUP' or action != 'RECOVER_GROUP'):
+        return (False, False, "Remote Copy Group Recover failed. skipStart can only be true if recovery action is either 'FAILOVER_GROUP', 'RESTORE_GROUP' or 'RECOVER_GROUP'", {})
+    if skip_sync and (action != 'FAILOVER_GROUP' or action != 'RESTORE_GROUP'):
+        return (False, False, "Remote Copy Group Recover failed. skipSync can only be true if recovery action is either 'FAILOVER_GROUP', 'RESTORE_GROUP' or 'RECOVER_GROUP'", {})
+    if discard_new_data and action != 'FAILOVER_GROUP':
+        return (False, False, "Remote Copy Group Recover failed. discardNewData can only be true if recovery action is 'FAILOVER_GROUP'", {})
+    if skip_promote and (action != 'FAILOVER_GROUP' or action != 'REVERSE_GROUP'):
+        return (False, False, "Remote Copy Group Recover failed. skipPromote can only be true if recovery action is either 'FAILOVER_GROUP' or 'REVERSE_GROUP'", {})
+    if no_snapshot and (action != 'FAILOVER_GROUP' or action != 'REVERSE_GROUP' or action != 'RESTORE_GROUP'):
+        return (False, False, "Remote Copy Group Recover failed. noSnapshot can only be true if recovery action is either 'FAILOVER_GROUP', 'RESTORE_GROUP' or 'REVERSE_GROUP'", {})
+    if stop_groups and action != 'REVERSE_GROUP':
+        return (False, False, "Remote Copy Group Recover failed. stopGroups can only be true if recovery action is 'REVERSE_GROUP'", {})
+    if local_groups_direction and action != 'REVERSE_GROUP':
+        return (False, False, "Remote Copy Group Recover failed. localGroupDirection can only be true if recovery action is 'REVERSE_GROUP'", {})
+    try:
+        client_obj.login(storage_system_username, storage_system_password)
+        if client_obj.remoteCopyGroupExists(remote_copy_group_name):
+            optional = {
+                'targetName': target_name,
+                'skipStart': skip_start,
+                'skipSync': skip_sync,
+                'discardNewData': discard_new_data,
+                'skipPromote': skip_promote,
+                'noSnapshot':no_snapshot,
+                'stopGroups': stop_groups,
+                'localGroupDirection': local_groups_direction
+            }
+            recovery_action_enum = getattr(client.HPE3ParClient, recovery_action)
+            client_obj.recoverRemoteCopyGroupFromDisaster(remote_copy_group_name, recovery_action_enum, optional)
+        else:
+            return (True, False, "Remote Copy Group is not present", {})
+    except Exception as e:
+        return (False, False, "Remote Copy Group recovery failed | %s" % (e), {})
+    finally:
+        client_obj.logout()
+    return (True, True, "Recovered Remote Copy Group %s successfully." % remote_copy_group_name, {})
+
+
 def main():
     fields = {
         "state": {
             "required": True,
-            "choices": ['present', 'absent', 'modify', 'add_volume', 'remove_volume', 'start', 'stop', 'synchronize'],
+            "choices": ['present', 'absent', 'modify', 'add_volume', 'remove_volume', 'start', 'stop', 'synchronize', 'recover'],
             "type": 'str'
         },
         "storage_system_ip": {
@@ -410,6 +475,34 @@ def main():
         "full_sync": {
             "type": "bool",
             "default": False
+        },
+        "recovery_action": {
+            "choices": ['REVERSE_GROUP', 'FAILOVER_GROUP', 'SWITCHOVER_GROUP', 'RECOVER_GROUP', 'RESTORE_GROUP', 'OVERRIDE_GROUP', 'CLX_DR'],
+            "type": 'str'
+        },
+        "skip_start": {
+            "type": "bool",
+            "default": False
+        },
+        "skip_sync": {
+            "type": "bool",
+            "default": False
+        },
+        "discard_new_data": {
+            "type": "bool",
+            "default": False
+        },
+        "skip_promote": {
+            "type": "bool",
+            "default": False
+        },
+        "stop_groups": {
+            "type": "bool",
+            "default": False
+        },
+        "local_groups_direction": {
+            "type": "bool",
+            "default": False
         }
     }
     module = AnsibleModule(argument_spec=fields)
@@ -432,12 +525,13 @@ def main():
     volume_auto_creation = module.params["volume_auto_creation"]
     skip_initial_sync = module.params["skip_initial_sync"]
     different_secondary_wwn = module.params["different_secondary_wwn"]
-	remove_secondary_volume = module.params["remove_secondary_volume"]
-	target_name = module.params["target_name"]
-	starting_snapshots = module.params["starting_snapshots"]
-	no_snapshot = module.params["no_snapshot"]
-	no_resync_snapshot = module.params["no_resync_snapshot"]
-	full_sync = module.params["full_sync"]
+    remove_secondary_volume = module.params["remove_secondary_volume"]
+    target_name = module.params["target_name"]
+    starting_snapshots = module.params["starting_snapshots"]
+    no_snapshot = module.params["no_snapshot"]
+    no_resync_snapshot = module.params["no_resync_snapshot"]
+    full_sync = module.params["full_sync"]
+    recovery_action = module.params["recovery_action"]
 
     wsapi_url = 'https://%s:8080/api/v1' % storage_system_ip
     client_obj = client.HPE3ParClient(wsapi_url)
@@ -503,29 +597,45 @@ def main():
             storage_system_username,
             storage_system_password,
             remote_copy_group_name,
-			skip_initial_sync,
-			target_name,
-			starting_snapshots
-		)
+            skip_initial_sync,
+            target_name,
+            starting_snapshots
+        )
     elif module.params["state"] == "stop":
         return_status, changed, msg, issue_attr_dict = stop_remote_copy_group(
             client_obj,
             storage_system_username,
             storage_system_password,
             remote_copy_group_name,
-			no_snapshot,
-			target_name
-		)
+            no_snapshot,
+            target_name
+        )
     elif module.params["state"] == "synchronize":
         return_status, changed, msg, issue_attr_dict = synchronize_remote_copy_group(
             client_obj,
             storage_system_username,
             storage_system_password,
             remote_copy_group_name,
-			no_resync_snapshot,
-			target_name,
-			full_sync
-		)
+            no_resync_snapshot,
+            target_name,
+            full_sync
+        )
+    elif module.params["state"] == "recover":
+        return_status, changed, msg, issue_attr_dict = recover_remote_copy_group(
+            client_obj,
+            storage_system_username,
+            storage_system_password,
+            remote_copy_group_name,
+            recovery_action,
+            target_name,
+            skip_start,
+            skip_sync,
+            discard_new_data,
+            skip_promote,
+            no_snapshot,
+            stop_groups,
+            local_groups_direction
+        )
 
     if return_status:
         if issue_attr_dict:
