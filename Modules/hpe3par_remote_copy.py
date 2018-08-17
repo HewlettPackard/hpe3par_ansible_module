@@ -76,18 +76,18 @@ def create_remote_copy_group(
     finally:
         client_obj.logout()
     return (True, True, "Created Remote Copy Group %s successfully." % remote_copy_group_name, {})
-	
+
 def modify_remote_copy_group(
             client_obj,
             storage_system_username,
             storage_system_password,
-			remote_copy_group_name,
-			localUserCPG,
-			localSnapCPG,
-			targets,
-			unsetUserCPG,
-			unsetSnapCPG
-			):
+            remote_copy_group_name,
+            local_user_cpg,
+            local_snap_cpg,
+            targets,
+            unset_user_cpg,
+            unset_snap_cpg
+            ):
     if storage_system_username is None or storage_system_password is None:
         return (
             False,
@@ -96,22 +96,20 @@ def modify_remote_copy_group(
             {})
     if remote_copy_group_name is None:
         return (False, False, "Remote Copy Group delete failed. Remote Copy Group name is null", {})
- 
+
     if len(remote_copy_group_name) < 1 or len(remote_copy_group_name) > 31:
         return (False, False, "Remote Copy Group modify failed. Remote Copy Group name must be atleast 1 character and not more than 31 characters", {})
-
-    local_cpgs = [localUserCPG, localSnapCPG]
-	for cpg in local_cpgs:
-		if not targets or len(target) == 0:
-			return (False, False, "Remote Copy Group modify failed. Remote Copy targets cannot be null or empty when modifying local user CPG or remote user CPG", {})
-		force_fail = True
-		for target in targets:
-			if not target['remoteUserCPG'] or not target['remoteUserCPG']:
-				return (False, False, "Remote Copy Group modify failed. Remote user CPG or remote snap CPG cannot be null when modifying local user CPG or remote user CPG", {})			
     try:
         client_obj.login(storage_system_username, storage_system_password)
         if client_obj.remoteCopyGroupExists(remote_copy_group_name):
-			client_obj.modifyRemoteCopyGroup(remote_copy_group_name, localUserCPG, localSnapCPG, targets, unsetUserCPG, unsetSnapCPG)
+            optional = {
+                'localUserCPG': local_user_cpg,
+                'localSnapCPG': local_snap_cpg,
+                'targets': targets,
+                'unsetUserCPG': unset_user_cpg,
+                'unsetSnapCPG': unset_snap_cpg
+            }
+            client_obj.modifyRemoteCopyGroup(remote_copy_group_name, optional)
         else:
             return (True, False, "Remote Copy Group not present", {})
     except Exception as e:
@@ -119,6 +117,184 @@ def modify_remote_copy_group(
     finally:
         client_obj.logout()
     return (True, True, "Modify Remote Copy Group %s successfully." % remote_copy_group_name, {})
+
+def add_volume_to_remote_copy_group(
+            client_obj,
+            storage_system_username,
+            storage_system_password,
+            remote_copy_group_name,
+            volume_name,
+            targets,
+            snapshot_name,
+            volume_auto_creation,
+            skip_initial_sync,
+            different_secondary_wwn
+            ):
+    if storage_system_username is None or storage_system_password is None:
+        return (
+            False,
+            False,
+            "Add volume to Remote Copy Group failed. Storage system username or password is null",
+            {})
+    if remote_copy_group_name is None:
+        return (False, False, "Add volume to Remote Copy Group failed. Remote Copy Group name is null", {})
+    if len(remote_copy_group_name) < 1 or len(remote_copy_group_name) > 31:
+        return (False, False, "Add volume to Remote Copy Group failed. Remote Copy Group name must be atleast 1 character and not more than 31 characters", {})
+    if volume_name is None:
+        return (False, False, "Add volume to Remote Copy Group failed. Volume name is null", {})
+    if len(volume_name) < 1 or len(volume_name) > 31:
+        return (False, False, "Add volume to Remote Copy Group failed. Volume name must be atleast 1 character and not more than 31 characters", {})
+    if snapshot_name and volume_auto_creation:
+        return (False, False, "Add volume to Remote Copy Group failed. volumeAutoCreation cannot be true if snapshot name is given", {})
+    if snapshot_name and skip_initial_sync:
+        return (False, False, "Add volume to Remote Copy Group failed. skipInitialSync cannot be true if snapshot name is given", {})
+    if not snapshot_name and different_secondary_wwn:
+        return (False, False, "Add volume to Remote Copy Group failed. skipInitialSync cannot be true if snapshot name is not given", {})
+    try:
+        client_obj.login(storage_system_username, storage_system_password)
+        if client_obj.remoteCopyGroupExists(remote_copy_group_name):
+            if not client_obj.remoteCopyGroupVolumeExists(remote_copy_group_name, volume_name):
+                optional = {
+                    'snapshotName': snapshot_name,
+                    'volumeAutoCreation': volume_auto_creation,
+                    'skipInitialSync': skip_initial_sync,
+                    'differentSecondaryWWN': different_secondary_wwn
+                }
+                client_obj.addVolumeToRemoteCopyGroup(remote_copy_group_name, volumeName, targets, optional)
+            else:
+                return (True, False, "Volume %s already present in Remote Copy Group %s" % (volume_name, remote_copy_group_name), {})
+        else:
+            return (False, False, "Remote Copy Group not present", {})
+    except Exception as e:
+        return (False, False, "Remote Copy Group modify failed | %s" % (e), {})
+    finally:
+        client_obj.logout()
+    return (True, True, "Volume %s added to Remote Copy Group %s successfully." % (volume_name, remote_copy_group_name), {})
+
+def remove_volume_from_remote_copy_group(
+            client_obj,
+            storage_system_username,
+            storage_system_password,
+            remote_copy_group_name,
+            volume_name,
+            keep_snap,
+            remove_secondary_volume
+            ):
+    if remote_copy_group_name is None:
+        return (False, False, "Remove volume to Remote Copy Group failed. Remote Copy Group name is null", {})
+    if len(remote_copy_group_name) < 1 or len(remote_copy_group_name) > 31:
+        return (False, False, "Remove volume to Remote Copy Group failed. Remote Copy Group name must be atleast 1 character and not more than 31 characters", {})
+    if volume_name is None:
+        return (False, False, "Remove volume to Remote Copy Group failed. Volume name is null", {})
+    if len(volume_name) < 1 or len(volume_name) > 31:
+        return (False, False, "Remove volume to Remote Copy Group failed. Volume name must be atleast 1 character and not more than 31 characters", {})
+    if keep_snap and remove_secondary_volume:
+        return (False, False, "Remove volume to Remote Copy Group failed. keepSnap and removeSecondaryVolume cannot both be true", {})
+    try:
+        client_obj.login(storage_system_username, storage_system_password)
+        if client_obj.remoteCopyGroupExists(remote_copy_group_name):
+            if client_obj.remoteCopyGroupVolumeExists(remote_copy_group_name, volume_name):
+                optional = {
+                    'keepSnap': keep_snap
+                }
+                client_obj.removeVolumeFromRemoteCopyGroup(self, remote_copy_group_name, volumeName, optional, remove_secondary_volume)
+            else:
+                return (True, False, "Volume %s is not present in Remote Copy Group %s" % (volume_name, remote_copy_group_name), {})
+        else:
+            return (False, False, "Remote Copy Group not present", {})
+    except Exception as e:
+        return (False, False, "Remove volume to Remote Copy Group failed | %s" % (e), {})
+    finally:
+        client_obj.logout()
+    return (True, True, "Volume %s removed from Remote Copy Group %s successfully." % (volume_name, remote_copy_group_name), {})
+
+def start_remote_copy_group(
+            client_obj,
+            storage_system_username,
+            storage_system_password,
+            remote_copy_group_name,
+			skip_initial_sync,
+			target_name,
+			starting_snapshots
+			):
+    if remote_copy_group_name is None:
+        return (False, False, "Remove volume to Remote Copy Group failed. Remote Copy Group name is null", {})
+    if len(remote_copy_group_name) < 1 or len(remote_copy_group_name) > 31:
+        return (False, False, "Remove volume to Remote Copy Group failed. Remote Copy Group name must be atleast 1 character and not more than 31 characters", {})
+    try:
+        client_obj.login(storage_system_username, storage_system_password)
+        if client_obj.remoteCopyGroupExists(remote_copy_group_name):
+			optional = {
+				'skipInitialSync': skip_initial_sync,
+				'targetName': target_name,
+				'startingSnapshots': starting_snapshots
+			}
+			client_obj.startRemoteCopy(remote_copy_group_name, optional)
+        else:
+            return (False, False, "Remote Copy Group not present", {})
+    except Exception as e:
+        return (False, False, "Start Remote Copy Group failed | %s" % (e), {})
+    finally:
+        client_obj.logout()
+    return (True, True, "Remote copy group %s started successfully." % remote_copy_group_name, {})
+
+def stop_remote_copy_group(
+            client_obj,
+            storage_system_username,
+            storage_system_password,
+            remote_copy_group_name,
+			no_snapshot,
+			target_name
+			):
+    if remote_copy_group_name is None:
+        return (False, False, "Remove volume to Remote Copy Group failed. Remote Copy Group name is null", {})
+    if len(remote_copy_group_name) < 1 or len(remote_copy_group_name) > 31:
+        return (False, False, "Remove volume to Remote Copy Group failed. Remote Copy Group name must be atleast 1 character and not more than 31 characters", {})
+    try:
+        client_obj.login(storage_system_username, storage_system_password)
+        if client_obj.remoteCopyGroupExists(remote_copy_group_name):
+			optional = {
+				'noSnapshot': no_snapshot,
+				'targetName': target_name
+			}
+			client_obj.stopRemoteCopy(remote_copy_group_name, optional)
+        else:
+            return (False, False, "Remote Copy Group not present", {})
+    except Exception as e:
+        return (False, False, "Stop Remote Copy Group failed | %s" % (e), {})
+    finally:
+        client_obj.logout()
+    return (True, True, "Remote copy group %s stopped successfully." % remote_copy_group_name, {})			
+
+def synchronize_remote_copy_group(
+            client_obj,
+            storage_system_username,
+            storage_system_password,
+            remote_copy_group_name,
+			no_resync_snapshot,
+			target_name,
+			full_sync
+			):
+    if remote_copy_group_name is None:
+        return (False, False, "Remove volume to Remote Copy Group failed. Remote Copy Group name is null", {})
+    if len(remote_copy_group_name) < 1 or len(remote_copy_group_name) > 31:
+        return (False, False, "Remove volume to Remote Copy Group failed. Remote Copy Group name must be atleast 1 character and not more than 31 characters", {})
+    try:
+        client_obj.login(storage_system_username, storage_system_password)
+        if client_obj.remoteCopyGroupExists(remote_copy_group_name):
+			optional = {
+				'noResyncSnapshot': no_resync_snapshot,
+				'targetName': target_name,
+				'fullSync': full_sync
+			}
+			client_obj.synchronizeRemoteCopyGroup(remote_copy_group_name, optional)		
+        else:
+            return (False, False, "Remote Copy Group not present", {})
+    except Exception as e:
+        return (False, False, "Synchronize Remote Copy Group failed | %s" % (e), {})
+    finally:
+        client_obj.logout()
+    return (True, True, "Remote copy group %s resynchronized successfully." % remote_copy_group_name, {})
 
 def delete_remote_copy_group(
             client_obj,
@@ -153,7 +329,7 @@ def main():
     fields = {
         "state": {
             "required": True,
-            "choices": ['present', 'absent'],
+            "choices": ['present', 'absent', 'modify', 'add_volume', 'remove_volume', 'start', 'stop', 'synchronize'],
             "type": 'str'
         },
         "storage_system_ip": {
@@ -189,6 +365,51 @@ def main():
         "keep_snap": {
             "type": "bool",
             "default": False
+        },
+        "unset_user_cpg": {
+            "type": "bool",
+            "default": False
+        },
+        "unset_snap_cpg": {
+            "type": "bool",
+            "default": False
+        },
+        "snapshot_name": {
+            "type": "string"
+        },
+        "volume_auto_creation": {
+            "type": "bool",
+            "default": False
+        },
+        "skip_initial_sync": {
+            "type": "bool",
+            "default": False
+        },
+        "different_secondary_wwn": {
+            "type": "bool",
+            "default": False
+        },
+        "remove_secondary_volume": {
+            "type": "bool",
+            "default": False
+        },
+        "target_name": {
+            "type": "str"
+        },
+        "starting_snapshots": {
+            "type": "list"
+        },
+        "no_snapshot": {
+            "type": "bool",
+            "default": False
+        },
+        "no_resync_snapshot": {
+            "type": "bool",
+            "default": False
+        },
+        "full_sync": {
+            "type": "bool",
+            "default": False
         }
     }
     module = AnsibleModule(argument_spec=fields)
@@ -205,6 +426,18 @@ def main():
     local_user_cpg = module.params["local_user_cpg"]
     local_snap_cpg = module.params["local_snap_cpg"]
     keep_snap = module.params["keep_snap"]
+    unset_user_cpg = module.params["unset_user_cpg"]
+    unset_snap_cpg = module.params["unset_snap_cpg"]
+    snapshot_name = module.params["snapshot_name"]
+    volume_auto_creation = module.params["volume_auto_creation"]
+    skip_initial_sync = module.params["skip_initial_sync"]
+    different_secondary_wwn = module.params["different_secondary_wwn"]
+	remove_secondary_volume = module.params["remove_secondary_volume"]
+	target_name = module.params["target_name"]
+	starting_snapshots = module.params["starting_snapshots"]
+	no_snapshot = module.params["no_snapshot"]
+	no_resync_snapshot = module.params["no_resync_snapshot"]
+	full_sync = module.params["full_sync"]
 
     wsapi_url = 'https://%s:8080/api/v1' % storage_system_ip
     client_obj = client.HPE3ParClient(wsapi_url)
@@ -221,7 +454,7 @@ def main():
             local_user_cpg,
             local_snap_cpg
         )
-    if module.params["state"] == "absent":
+    elif module.params["state"] == "absent":
         return_status, changed, msg, issue_attr_dict = delete_remote_copy_group(
             client_obj,
             storage_system_username,
@@ -229,6 +462,70 @@ def main():
             remote_copy_group_name,
             keep_snap
         )
+    elif module.params["state"] == "modify":
+        return_status, changed, msg, issue_attr_dict = modify_remote_copy_group(
+            client_obj,
+            storage_system_username,
+            storage_system_password,
+            remote_copy_group_name,
+            local_user_cpg,
+            local_snap_cpg,
+            targets,
+            unset_user_cpg,
+            unset_snap_cpg
+        )
+    elif module.params["state"] == "add_volume":
+        return_status, changed, msg, issue_attr_dict = add_volume_to_remote_copy_group(
+            client_obj,
+            storage_system_username,
+            storage_system_password,
+            remote_copy_group_name,
+            volume_name,
+            targets,
+            snapshot_name,
+            volume_auto_creation,
+            skip_initial_sync,
+            different_secondary_wwn
+        )
+    elif module.params["state"] == "remove_volume":
+        return_status, changed, msg, issue_attr_dict = remove_volume_from_remote_copy_group(
+            client_obj,
+            storage_system_username,
+            storage_system_password,
+            remote_copy_group_name,
+            volume_name,
+            keep_snap,
+            remove_secondary_volume
+        )
+    elif module.params["state"] == "start":
+        return_status, changed, msg, issue_attr_dict = start_remote_copy_group(
+            client_obj,
+            storage_system_username,
+            storage_system_password,
+            remote_copy_group_name,
+			skip_initial_sync,
+			target_name,
+			starting_snapshots
+		)
+    elif module.params["state"] == "stop":
+        return_status, changed, msg, issue_attr_dict = stop_remote_copy_group(
+            client_obj,
+            storage_system_username,
+            storage_system_password,
+            remote_copy_group_name,
+			no_snapshot,
+			target_name
+		)
+    elif module.params["state"] == "synchronize":
+        return_status, changed, msg, issue_attr_dict = synchronize_remote_copy_group(
+            client_obj,
+            storage_system_username,
+            storage_system_password,
+            remote_copy_group_name,
+			no_resync_snapshot,
+			target_name,
+			full_sync
+		)
 
     if return_status:
         if issue_attr_dict:
