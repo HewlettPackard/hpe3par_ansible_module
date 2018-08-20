@@ -160,7 +160,7 @@ def add_volume_to_remote_copy_group(
                     'skipInitialSync': skip_initial_sync,
                     'differentSecondaryWWN': different_secondary_wwn
                 }
-                client_obj.addVolumeToRemoteCopyGroup(remote_copy_group_name, volumeName, targets, optional)
+                client_obj.addVolumeToRemoteCopyGroup(remote_copy_group_name, volume_name, targets, optional)
             else:
                 return (True, False, "Volume %s already present in Remote Copy Group %s" % (volume_name, remote_copy_group_name), {})
         else:
@@ -503,6 +503,9 @@ def main():
         "local_groups_direction": {
             "type": "bool",
             "default": False
+        },
+        "volume_name": {
+            "type": "str"
         }
     }
     module = AnsibleModule(argument_spec=fields)
@@ -532,6 +535,7 @@ def main():
     no_resync_snapshot = module.params["no_resync_snapshot"]
     full_sync = module.params["full_sync"]
     recovery_action = module.params["recovery_action"]
+    volume_name= module.params["volume_name"]
 
     wsapi_url = 'https://%s:8080/api/v1' % storage_system_ip
     client_obj = client.HPE3ParClient(wsapi_url)
