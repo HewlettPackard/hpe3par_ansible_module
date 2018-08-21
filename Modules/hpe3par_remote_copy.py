@@ -197,7 +197,7 @@ def remove_volume_from_remote_copy_group(
                 optional = {
                     'keepSnap': keep_snap
                 }
-                client_obj.removeVolumeFromRemoteCopyGroup(self, remote_copy_group_name, volumeName, optional, remove_secondary_volume)
+                client_obj.removeVolumeFromRemoteCopyGroup(remote_copy_group_name, volume_name, optional, remove_secondary_volume)
             else:
                 return (True, False, "Volume %s is not present in Remote Copy Group %s" % (volume_name, remote_copy_group_name), {})
         else:
