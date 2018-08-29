@@ -215,8 +215,7 @@ def start_remote_copy_group(
             remote_copy_group_name,
             skip_initial_sync,
             target_name,
-            starting_snapshots,
-            wait_for_task_to_end
+            starting_snapshots
             ):
     if remote_copy_group_name is None:
         return (False, False, "Remove volume to Remote Copy Group failed. Remote Copy Group name is null", {})
@@ -230,9 +229,7 @@ def start_remote_copy_group(
                 'targetName': target_name,
                 'startingSnapshots': starting_snapshots
             }
-            task = client_obj.startRemoteCopy(remote_copy_group_name, optional)
-            if wait_for_task_to_end:
-                client_obj.waitForTaskToEnd(task.task_id)
+            client_obj.startRemoteCopy(remote_copy_group_name, optional)
         else:
             return (False, False, "Remote Copy Group not present", {})
     except Exception as e:
