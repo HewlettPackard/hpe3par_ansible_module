@@ -181,15 +181,15 @@ def remove_volume_from_remote_copy_group(
             remove_secondary_volume
             ):
     if remote_copy_group_name is None:
-        return (False, False, "Remove volume to Remote Copy Group failed. Remote Copy Group name is null", {})
+        return (False, False, "Remove volume from Remote Copy Group failed. Remote Copy Group name is null", {})
     if len(remote_copy_group_name) < 1 or len(remote_copy_group_name) > 31:
-        return (False, False, "Remove volume to Remote Copy Group failed. Remote Copy Group name must be atleast 1 character and not more than 31 characters", {})
+        return (False, False, "Remove volume from Remote Copy Group failed. Remote Copy Group name must be atleast 1 character and not more than 31 characters", {})
     if volume_name is None:
-        return (False, False, "Remove volume to Remote Copy Group failed. Volume name is null", {})
+        return (False, False, "Remove volume from Remote Copy Group failed. Volume name is null", {})
     if len(volume_name) < 1 or len(volume_name) > 31:
-        return (False, False, "Remove volume to Remote Copy Group failed. Volume name must be atleast 1 character and not more than 31 characters", {})
+        return (False, False, "Remove volume from Remote Copy Group failed. Volume name must be atleast 1 character and not more than 31 characters", {})
     if keep_snap and remove_secondary_volume:
-        return (False, False, "Remove volume to Remote Copy Group failed. keepSnap and removeSecondaryVolume cannot both be true", {})
+        return (False, False, "Remove volume from Remote Copy Group failed. keepSnap and removeSecondaryVolume cannot both be true", {})
     try:
         client_obj.login(storage_system_username, storage_system_password)
         if client_obj.remoteCopyGroupExists(remote_copy_group_name):
@@ -203,7 +203,7 @@ def remove_volume_from_remote_copy_group(
         else:
             return (False, False, "Remote Copy Group not present", {})
     except Exception as e:
-        return (False, False, "Remove volume to Remote Copy Group failed | %s" % (e), {})
+        return (False, False, "Remove volume from Remote Copy Group failed | %s" % (e), {})
     finally:
         client_obj.logout()
     return (True, True, "Volume %s removed from Remote Copy Group %s successfully." % (volume_name, remote_copy_group_name), {})
