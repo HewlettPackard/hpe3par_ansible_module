@@ -92,10 +92,10 @@ def modify_remote_copy_group(
         return (
             False,
             False,
-            "Remote Copy Group delete failed. Storage system username or password is null",
+            "Remote Copy Group modify failed. Storage system username or password is null",
             {})
     if remote_copy_group_name is None:
-        return (False, False, "Remote Copy Group delete failed. Remote Copy Group name is null", {})
+        return (False, False, "Remote Copy Group modify failed. Remote Copy Group name is null", {})
 
     if len(remote_copy_group_name) < 1 or len(remote_copy_group_name) > 31:
         return (False, False, "Remote Copy Group modify failed. Remote Copy Group name must be atleast 1 character and not more than 31 characters", {})
@@ -218,9 +218,9 @@ def start_remote_copy_group(
             starting_snapshots
             ):
     if remote_copy_group_name is None:
-        return (False, False, "Remove volume to Remote Copy Group failed. Remote Copy Group name is null", {})
+        return (False, False, "Start Remote Copy Group failed. Remote Copy Group name is null", {})
     if len(remote_copy_group_name) < 1 or len(remote_copy_group_name) > 31:
-        return (False, False, "Remove volume to Remote Copy Group failed. Remote Copy Group name must be atleast 1 character and not more than 31 characters", {})
+        return (False, False, "Start Remote Copy Group failed. Remote Copy Group name must be atleast 1 character and not more than 31 characters", {})
     try:
         client_obj.login(storage_system_username, storage_system_password)
         if client_obj.remoteCopyGroupExists(remote_copy_group_name):
@@ -247,9 +247,9 @@ def stop_remote_copy_group(
             target_name
             ):
     if remote_copy_group_name is None:
-        return (False, False, "Remove volume to Remote Copy Group failed. Remote Copy Group name is null", {})
+        return (False, False, "Stop Remote Copy Group failed. Remote Copy Group name is null", {})
     if len(remote_copy_group_name) < 1 or len(remote_copy_group_name) > 31:
-        return (False, False, "Remove volume to Remote Copy Group failed. Remote Copy Group name must be atleast 1 character and not more than 31 characters", {})
+        return (False, False, "Stop Remote Copy Group failed. Remote Copy Group name must be atleast 1 character and not more than 31 characters", {})
     try:
         client_obj.login(storage_system_username, storage_system_password)
         if client_obj.remoteCopyGroupExists(remote_copy_group_name):
@@ -277,9 +277,9 @@ def synchronize_remote_copy_group(
             wait_for_task_to_end
             ):
     if remote_copy_group_name is None:
-        return (False, False, "Remove volume to Remote Copy Group failed. Remote Copy Group name is null", {})
+        return (False, False, "Synchronize Remote Copy Group failed. Remote Copy Group name is null", {})
     if len(remote_copy_group_name) < 1 or len(remote_copy_group_name) > 31:
-        return (False, False, "Remove volume to Remote Copy Group failed. Remote Copy Group name must be atleast 1 character and not more than 31 characters", {})
+        return (False, False, "Synchronize Remote Copy Group failed. Remote Copy Group name must be atleast 1 character and not more than 31 characters", {})
     try:
         client_obj.login(storage_system_username, storage_system_password)
         if client_obj.remoteCopyGroupExists(remote_copy_group_name):
@@ -547,7 +547,13 @@ def main():
     full_sync = module.params["full_sync"]
     recovery_action = module.params["recovery_action"]
     volume_name = module.params["volume_name"]
+    skip_start = module.params["skip_start"]
+    skip_sync = module.params["skip_sync"]
     wait_for_task_to_end = module.params["wait_for_task_to_end"]
+    discard_new_data = module.params["discard_new_data"]
+    skip_promote = module.params["skip_promote"]
+    stop_groups = module.params["stop_groups"]
+    local_groups_direction = module.params["local_groups_direction"]
 
     wsapi_url = 'https://%s:8080/api/v1' % storage_system_ip
     client_obj = client.HPE3ParClient(wsapi_url)
