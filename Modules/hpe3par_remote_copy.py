@@ -215,7 +215,8 @@ def start_remote_copy_group(
             remote_copy_group_name,
             skip_initial_sync,
             target_name,
-            starting_snapshots
+            starting_snapshots,
+			wait_for_task_to_end
             ):
     if remote_copy_group_name is None:
         return (False, False, "Start Remote Copy Group failed. Remote Copy Group name is null", {})
@@ -229,8 +230,17 @@ def start_remote_copy_group(
                 'targetName': target_name,
                 'startingSnapshots': starting_snapshots
             }
-			if 
-            client_obj.startRemoteCopy(remote_copy_group_name, optional)
+            response = client_obj.startRemoteCopy(remote_copy_group_name, optional)
+            # Task will not be created if the remote copy is already started
+			if 'tasks' in response.keys():
+				if wait_for_task_to_end:
+					tasks = []
+					for task in response['tasks']:
+						client_obj.waitForTaskToEnd(task['task_id'])
+				else:
+					return (True, True, "Remote copy group %s starting." % remote_copy_group_name, {})
+			else:
+				return (True, False, "Remote Copy already started", {})
         else:
             return (False, False, "Remote Copy Group not present", {})
     except Exception as e:
