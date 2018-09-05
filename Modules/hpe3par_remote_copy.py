@@ -229,6 +229,7 @@ def start_remote_copy_group(
                 'targetName': target_name,
                 'startingSnapshots': starting_snapshots
             }
+			if 
             client_obj.startRemoteCopy(remote_copy_group_name, optional)
         else:
             return (False, False, "Remote Copy Group not present", {})
@@ -356,19 +357,19 @@ def recover_remote_copy_group(
         return (False, False, "Remote Copy Group Recover failed. Remote Copy Group name must be atleast 1 character and not more than 31 characters", {})
     if recovery_action is None:
         return (False, False, "Remote Copy Recover delete failed. recovery action is null", {})
-    if skip_start and (action != 'FAILOVER_GROUP' or action != 'RESTORE_GROUP' or action != 'RECOVER_GROUP'):
+    if skip_start and (recovery_action != 'FAILOVER_GROUP' or recovery_action != 'RESTORE_GROUP' or recovery_action != 'RECOVER_GROUP'):
         return (False, False, "Remote Copy Group Recover failed. skipStart can only be true if recovery action is either 'FAILOVER_GROUP', 'RESTORE_GROUP' or 'RECOVER_GROUP'", {})
-    if skip_sync and (action != 'FAILOVER_GROUP' or action != 'RESTORE_GROUP'):
+    if skip_sync and (recovery_action != 'FAILOVER_GROUP' or recovery_action != 'RESTORE_GROUP'):
         return (False, False, "Remote Copy Group Recover failed. skipSync can only be true if recovery action is either 'FAILOVER_GROUP', 'RESTORE_GROUP' or 'RECOVER_GROUP'", {})
-    if discard_new_data and action != 'FAILOVER_GROUP':
+    if discard_new_data and recovery_action != 'FAILOVER_GROUP':
         return (False, False, "Remote Copy Group Recover failed. discardNewData can only be true if recovery action is 'FAILOVER_GROUP'", {})
-    if skip_promote and (action != 'FAILOVER_GROUP' or action != 'REVERSE_GROUP'):
+    if skip_promote and (recovery_action != 'FAILOVER_GROUP' or recovery_action != 'REVERSE_GROUP'):
         return (False, False, "Remote Copy Group Recover failed. skipPromote can only be true if recovery action is either 'FAILOVER_GROUP' or 'REVERSE_GROUP'", {})
-    if no_snapshot and (action != 'FAILOVER_GROUP' or action != 'REVERSE_GROUP' or action != 'RESTORE_GROUP'):
+    if no_snapshot and (recovery_action != 'FAILOVER_GROUP' or recovery_action != 'REVERSE_GROUP' or recovery_action != 'RESTORE_GROUP'):
         return (False, False, "Remote Copy Group Recover failed. noSnapshot can only be true if recovery action is either 'FAILOVER_GROUP', 'RESTORE_GROUP' or 'REVERSE_GROUP'", {})
-    if stop_groups and action != 'REVERSE_GROUP':
+    if stop_groups and recovery_action != 'REVERSE_GROUP':
         return (False, False, "Remote Copy Group Recover failed. stopGroups can only be true if recovery action is 'REVERSE_GROUP'", {})
-    if local_groups_direction and action != 'REVERSE_GROUP':
+    if local_groups_direction and recovery_action != 'REVERSE_GROUP':
         return (False, False, "Remote Copy Group Recover failed. localGroupDirection can only be true if recovery action is 'REVERSE_GROUP'", {})
     try:
         client_obj.login(storage_system_username, storage_system_password)
