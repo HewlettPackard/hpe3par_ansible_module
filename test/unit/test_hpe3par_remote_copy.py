@@ -140,10 +140,6 @@ class TestHpe3parRemoteCopy(unittest.TestCase):
         },
         "volume_name": {
             "type": "str"
-        },
-        "wait_for_task_to_end": {
-            "type": "bool",
-            "defualt": False
         }
     }
 
@@ -184,8 +180,7 @@ class TestHpe3parRemoteCopy(unittest.TestCase):
             'skip_promote': False,
             'stop_groups': False,
             'local_groups_direction': False,
-            'volume_name': 'volume_1',
-            'wait_for_task_to_end': False
+            'volume_name': 'volume_1'
         }
 
         mock_module.params = PARAMS_FOR_PRESENT
@@ -231,8 +226,7 @@ class TestHpe3parRemoteCopy(unittest.TestCase):
             'skip_promote': False,
             'stop_groups': False,
             'local_groups_direction': False,
-            'volume_name': 'volume_1',
-            'wait_for_task_to_end': False
+            'volume_name': 'volume_1'
         }
         # This creates a instance of the AnsibleModule mock.
         mock_module.params = PARAMS_FOR_PRESENT
@@ -284,8 +278,7 @@ class TestHpe3parRemoteCopy(unittest.TestCase):
             'skip_promote': False,
             'stop_groups': False,
             'local_groups_direction': False,
-            'volume_name': 'volume_1',
-            'wait_for_task_to_end': False
+            'volume_name': 'volume_1'
         }
         # This creates a instance of the AnsibleModule mock.
         mock_module.params = PARAMS_FOR_PRESENT
@@ -337,8 +330,7 @@ class TestHpe3parRemoteCopy(unittest.TestCase):
             'skip_promote': False,
             'stop_groups': False,
             'local_groups_direction': False,
-            'volume_name': 'volume_1',
-            'wait_for_task_to_end': False
+            'volume_name': 'volume_1'
         }
         # This creates a instance of the AnsibleModule mock.
         mock_module.params = PARAMS_FOR_PRESENT
@@ -390,8 +382,7 @@ class TestHpe3parRemoteCopy(unittest.TestCase):
             'skip_promote': False,
             'stop_groups': False,
             'local_groups_direction': False,
-            'volume_name': 'volume_1',
-            'wait_for_task_to_end': False
+            'volume_name': 'volume_1'
         }
         # This creates a instance of the AnsibleModule mock.
         mock_module.params = PARAMS_FOR_PRESENT
@@ -444,8 +435,7 @@ class TestHpe3parRemoteCopy(unittest.TestCase):
             'skip_promote': False,
             'stop_groups': False,
             'local_groups_direction': False,
-            'volume_name': 'volume_1',
-            'wait_for_task_to_end': False
+            'volume_name': 'volume_1'
         }
         # This creates a instance of the AnsibleModule mock.
         mock_module.params = PARAMS_FOR_PRESENT
@@ -497,8 +487,7 @@ class TestHpe3parRemoteCopy(unittest.TestCase):
             'skip_promote': False,
             'stop_groups': False,
             'local_groups_direction': False,
-            'volume_name': 'volume_1',
-            'wait_for_task_to_end': False
+            'volume_name': 'volume_1'
         }
         # This creates a instance of the AnsibleModule mock.
         mock_module.params = PARAMS_FOR_PRESENT
@@ -550,8 +539,7 @@ class TestHpe3parRemoteCopy(unittest.TestCase):
             'skip_promote': False,
             'stop_groups': False,
             'local_groups_direction': False,
-            'volume_name': 'volume_1',
-            'wait_for_task_to_end': False
+            'volume_name': 'volume_1'
         }
         # This creates a instance of the AnsibleModule mock.
         mock_module.params = PARAMS_FOR_PRESENT
@@ -604,8 +592,7 @@ class TestHpe3parRemoteCopy(unittest.TestCase):
             'skip_promote': False,
             'stop_groups': False,
             'local_groups_direction': False,
-            'volume_name': 'volume_1',
-            'wait_for_task_to_end': False
+            'volume_name': 'volume_1'
         }
         # This creates a instance of the AnsibleModule mock.
         mock_module.params = PARAMS_FOR_PRESENT
@@ -657,8 +644,7 @@ class TestHpe3parRemoteCopy(unittest.TestCase):
             'skip_promote': False,
             'stop_groups': False,
             'local_groups_direction': False,
-            'volume_name': 'volume_1',
-            'wait_for_task_to_end': False
+            'volume_name': 'volume_1'
         }
         # This creates a instance of the AnsibleModule mock.
         mock_module.params = PARAMS_FOR_PRESENT
@@ -1038,7 +1024,7 @@ class TestHpe3parRemoteCopy(unittest.TestCase):
                                                 'volume_1',
                                                 False,
                                                 False
-                                                ), (False, False, "Remove volume to Remote Copy Group failed. Remote Copy Group name is null", {}))
+                                                ), (False, False, "Remove volume from Remote Copy Group failed. Remote Copy Group name is null", {}))
         self.assertEqual(hpe3par_remote_copy.remove_volume_from_remote_copy_group(mock_client.HPE3ParClient,
                                                 'USER',
                                                 'PASS',
@@ -1046,7 +1032,7 @@ class TestHpe3parRemoteCopy(unittest.TestCase):
                                                 'volume_1',
                                                 False,
                                                 False
-                                                ), (False, False, "Remove volume to Remote Copy Group failed. Remote Copy Group name must be atleast 1 character and not more than 31 characters", {}))                                        
+                                                ), (False, False, "Remove volume from Remote Copy Group failed. Remote Copy Group name must be atleast 1 character and not more than 31 characters", {}))                                        
         self.assertEqual(hpe3par_remote_copy.remove_volume_from_remote_copy_group(mock_client.HPE3ParClient,
                                                 'USER',
                                                 'PASS',
@@ -1054,7 +1040,7 @@ class TestHpe3parRemoteCopy(unittest.TestCase):
                                                 None,
                                                 False,
                                                 False
-                                                ), (False, False, "Remove volume to Remote Copy Group failed. Volume name is null", {}))
+                                                ), (False, False, "Remove volume from Remote Copy Group failed. Volume name is null", {}))
         self.assertEqual(hpe3par_remote_copy.remove_volume_from_remote_copy_group(mock_client.HPE3ParClient,
                                                 'USER',
                                                 'PASS',
@@ -1062,7 +1048,7 @@ class TestHpe3parRemoteCopy(unittest.TestCase):
                                                 'remotesdfssfsdssdfsdfdfsfsdfsdfsdfsfsdfsfsdfsdfsdf',
                                                 False,
                                                 False
-                                                ), (False, False, "Remove volume to Remote Copy Group failed. Volume name must be atleast 1 character and not more than 31 characters", {}))                                        
+                                                ), (False, False, "Remove volume from Remote Copy Group failed. Volume name must be atleast 1 character and not more than 31 characters", {}))                                        
         self.assertEqual(hpe3par_remote_copy.remove_volume_from_remote_copy_group(mock_client.HPE3ParClient,
                                                 'USER',
                                                 'PASS',
@@ -1070,7 +1056,7 @@ class TestHpe3parRemoteCopy(unittest.TestCase):
                                                 'volume_1',
                                                 True,
                                                 True
-                                                ), (False, False, "Remove volume to Remote Copy Group failed. keepSnap and removeSecondaryVolume cannot both be true", {}))
+                                                ), (False, False, "Remove volume from Remote Copy Group failed. keepSnap and removeSecondaryVolume cannot both be true", {}))
 
     @mock.patch('Modules.hpe3par_remote_copy.client')
     def test_synchronize_remote_copy_group(self, mock_client):
@@ -1086,9 +1072,8 @@ class TestHpe3parRemoteCopy(unittest.TestCase):
                                                 'rcg_1',
                                                 False,
                                                 'CSSOS-SSA04',
-                                                False,
                                                 False
-                                                ), (True, True, "Remote copy group %s resynchronized successfully." % 'rcg_1', {}))
+                                                ), (True, True, "Remote copy group %s resynchronize started successfully." % 'rcg_1', {}))
         mock_client.HPE3ParClient.remoteCopyGroupExists.return_value = False
 
         self.assertEqual(hpe3par_remote_copy.synchronize_remote_copy_group(mock_client.HPE3ParClient,
@@ -1097,7 +1082,6 @@ class TestHpe3parRemoteCopy(unittest.TestCase):
                                                 'rcg_1',
                                                 False,
                                                 'CSSOS-SSA04',
-                                                False,
                                                 False
                                                 ), (False, False, "Remote Copy Group not present", {}))
         self.assertEqual(hpe3par_remote_copy.synchronize_remote_copy_group(mock_client.HPE3ParClient,
@@ -1106,7 +1090,6 @@ class TestHpe3parRemoteCopy(unittest.TestCase):
                                                 None,
                                                 False,
                                                 'CSSOS-SSA04',
-                                                False,
                                                 False
                                                 ), (False, False, "Synchronize Remote Copy Group failed. Remote Copy Group name is null", {}))
         self.assertEqual(hpe3par_remote_copy.synchronize_remote_copy_group(mock_client.HPE3ParClient,
@@ -1115,7 +1098,6 @@ class TestHpe3parRemoteCopy(unittest.TestCase):
                                                 'remotesdfssfsdssdfsdfdfsfsdfsdfsdfsfsdfsfsdfsdfsdf',
                                                 False,
                                                 'CSSOS-SSA04',
-                                                False,
                                                 False
                                                 ), (False, False, "Synchronize Remote Copy Group failed. Remote Copy Group name must be atleast 1 character and not more than 31 characters", {}))                                        
 

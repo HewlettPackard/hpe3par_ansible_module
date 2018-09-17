@@ -215,8 +215,7 @@ def start_remote_copy_group(
             remote_copy_group_name,
             skip_initial_sync,
             target_name,
-            starting_snapshots,
-			wait_for_task_to_end
+            starting_snapshots
             ):
     if remote_copy_group_name is None:
         return (False, False, "Start Remote Copy Group failed. Remote Copy Group name is null", {})
@@ -230,17 +229,7 @@ def start_remote_copy_group(
                 'targetName': target_name,
                 'startingSnapshots': starting_snapshots
             }
-            response = client_obj.startRemoteCopy(remote_copy_group_name, optional)
-            # Task will not be created if the remote copy is already started
-			if 'tasks' in response.keys():
-				if wait_for_task_to_end:
-					tasks = []
-					for task in response['tasks']:
-						client_obj.waitForTaskToEnd(task['task_id'])
-				else:
-					return (True, True, "Remote copy group %s starting." % remote_copy_group_name, {})
-			else:
-				return (True, False, "Remote Copy already started", {})
+            client_obj.startRemoteCopy(remote_copy_group_name, optional)
         else:
             return (False, False, "Remote Copy Group not present", {})
     except Exception as e:
@@ -284,8 +273,7 @@ def synchronize_remote_copy_group(
             remote_copy_group_name,
             no_resync_snapshot,
             target_name,
-            full_sync,
-            wait_for_task_to_end
+            full_sync
             ):
     if remote_copy_group_name is None:
         return (False, False, "Synchronize Remote Copy Group failed. Remote Copy Group name is null", {})
@@ -300,15 +288,13 @@ def synchronize_remote_copy_group(
                 'fullSync': full_sync
             }
             task = client_obj.synchronizeRemoteCopyGroup(remote_copy_group_name, optional)
-            if wait_for_task_to_end:
-                client_obj.waitForTaskToEnd(task.task_id)
         else:
             return (False, False, "Remote Copy Group not present", {})
     except Exception as e:
         return (False, False, "Synchronize Remote Copy Group failed | %s" % (e), {})
     finally:
         client_obj.logout()
-    return (True, True, "Remote copy group %s resynchronized successfully." % remote_copy_group_name, {})
+    return (True, True, "Remote copy group %s resynchronize started successfully." % remote_copy_group_name, {})
 
 def delete_remote_copy_group(
             client_obj,
@@ -352,8 +338,7 @@ def recover_remote_copy_group(
             skip_promote,
             no_snapshot,
             stop_groups,
-            local_groups_direction,
-            wait_for_task_to_end
+            local_groups_direction
             ):
     if storage_system_username is None or storage_system_password is None:
         return (
@@ -395,10 +380,7 @@ def recover_remote_copy_group(
                 'localGroupDirection': local_groups_direction
             }
             recovery_action_enum = getattr(client.HPE3ParClient, recovery_action)
-            tasks = client_obj.recoverRemoteCopyGroupFromDisaster(remote_copy_group_name, recovery_action_enum, optional)
-            if wait_for_task_to_end:
-                for task in tasks:
-                    client_obj.waitForTaskToEnd(task.task_id)
+            client_obj.recoverRemoteCopyGroupFromDisaster(remote_copy_group_name, recovery_action_enum, optional)
         else:
             return (True, False, "Remote Copy Group is not present", {})
     except Exception as e:
@@ -524,10 +506,6 @@ def main():
         },
         "volume_name": {
             "type": "str"
-        },
-        "wait_for_task_to_end": {
-            "type": "bool",
-            "defualt": False
         }
     }
     module = AnsibleModule(argument_spec=fields)
@@ -560,7 +538,6 @@ def main():
     volume_name = module.params["volume_name"]
     skip_start = module.params["skip_start"]
     skip_sync = module.params["skip_sync"]
-    wait_for_task_to_end = module.params["wait_for_task_to_end"]
     discard_new_data = module.params["discard_new_data"]
     skip_promote = module.params["skip_promote"]
     stop_groups = module.params["stop_groups"]
@@ -632,9 +609,8 @@ def main():
             remote_copy_group_name,
             skip_initial_sync,
             target_name,
-            starting_snapshots,
-            wait_for_task_to_end
-        )
+            starting_snapshots
+		)
     elif module.params["state"] == "stop":
         return_status, changed, msg, issue_attr_dict = stop_remote_copy_group(
             client_obj,
@@ -652,8 +628,7 @@ def main():
             remote_copy_group_name,
             no_resync_snapshot,
             target_name,
-            full_sync,
-            wait_for_task_to_end
+            full_sync
         )
     elif module.params["state"] == "recover":
         return_status, changed, msg, issue_attr_dict = recover_remote_copy_group(
@@ -669,8 +644,7 @@ def main():
             skip_promote,
             no_snapshot,
             stop_groups,
-            local_groups_direction,
-            wait_for_task_to_end
+            local_groups_direction
         )
 
     if return_status:
