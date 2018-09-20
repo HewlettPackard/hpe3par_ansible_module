@@ -291,7 +291,6 @@ try:
     from hpe3par_sdk import client
 except ImportError:
     client = None
-APP_TYPE = "ansible-3par-client"
 
 
 def convert_to_binary_multiple(size, size_unit):
@@ -744,7 +743,7 @@ is null",
             'rmUsrSpcAllocLimit': rm_usr_spc_alloc_limit,
             'userCPG': user_cpg,
             'snapCPG': snap_cpg}
-        client_obj.modifyVolume(volume_name, volume_mods, APP_TYPE)
+        client_obj.modifyVolume(volume_name, volume_mods)
     except Exception as e:
         return (False, False, "Modify Volume failed | %s" % e, {})
     finally:
@@ -903,7 +902,7 @@ def main():
     type = module.params["type"]
 
     wsapi_url = 'https://%s:8080/api/v1' % storage_system_ip
-    client_obj = client.HPE3ParClient(wsapi_url)
+    client_obj = client.HPE3ParClient(wsapi_url, 'ansible_module_3par')
 
     # States
     if module.params["state"] == "present":
