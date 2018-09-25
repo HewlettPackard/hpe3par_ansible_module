@@ -422,10 +422,10 @@ def main():
             "type": "list"
         },
         "local_user_cpg": {
-            "type": "string"
+            "type": "str"
         },
         "local_snap_cpg": {
-            "type": "string"
+            "type": "str"
         },
         "keep_snap": {
             "type": "bool",
@@ -440,7 +440,7 @@ def main():
             "default": False
         },
         "snapshot_name": {
-            "type": "string"
+            "type": "str"
         },
         "volume_auto_creation": {
             "type": "bool",
