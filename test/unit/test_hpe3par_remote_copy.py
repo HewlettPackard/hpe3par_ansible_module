@@ -28,7 +28,8 @@ class TestHpe3parRemoteCopy(unittest.TestCase):
     fields = {
         "state": {
             "required": True,
-            "choices": ['present', 'absent', 'modify', 'add_volume', 'remove_volume', 'start', 'stop', 'synchronize', 'recover'],
+            "choices": ['present', 'absent', 'modify', 'add_volume', 'remove_volume', 'start', 'stop', 'synchronize', 'recover', 'admitlink', 
+            'dismisslink','admittarget','dismisstarget', 'startrcopy'],
             "type": 'str'
         },
         "storage_system_ip": {
@@ -46,7 +47,6 @@ class TestHpe3parRemoteCopy(unittest.TestCase):
             "no_log": True
         },
         "remote_copy_group_name": {
-            "required": True,
             "type": "str"
         },
         "domain": {
@@ -56,10 +56,10 @@ class TestHpe3parRemoteCopy(unittest.TestCase):
             "type": "list"
         },
         "local_user_cpg": {
-            "type": "string"
+            "type": "str"
         },
         "local_snap_cpg": {
-            "type": "string"
+            "type": "str"
         },
         "keep_snap": {
             "type": "bool",
@@ -74,7 +74,7 @@ class TestHpe3parRemoteCopy(unittest.TestCase):
             "default": False
         },
         "snapshot_name": {
-            "type": "string"
+            "type": "str"
         },
         "volume_auto_creation": {
             "type": "bool",
@@ -140,6 +140,19 @@ class TestHpe3parRemoteCopy(unittest.TestCase):
         },
         "volume_name": {
             "type": "str"
+        },
+        "source_port": {
+            "type": "str"
+        },
+        "target_port_wwn_or_ip": {
+            "type": "str"
+        },
+        "target_mode": {
+            "choices": ['sync', 'periodic', 'async'],
+            "type": 'str'
+        },
+        "local_remote_volume_pair_list": {
+            "type": "list"
         }
     }
 
@@ -180,7 +193,11 @@ class TestHpe3parRemoteCopy(unittest.TestCase):
             'skip_promote': False,
             'stop_groups': False,
             'local_groups_direction': False,
-            'volume_name': 'volume_1'
+            'volume_name': 'volume_1',
+            'source_port': '0:3:1',
+            'target_port_wwn_or_ip': '192.168.1.2',
+            'local_remote_volume_pair_list': [('local_v1','remote_v1'),('local_v2','remote_v2')],
+            'target_mode': 'sync'
         }
 
         mock_module.params = PARAMS_FOR_PRESENT
@@ -226,7 +243,11 @@ class TestHpe3parRemoteCopy(unittest.TestCase):
             'skip_promote': False,
             'stop_groups': False,
             'local_groups_direction': False,
-            'volume_name': 'volume_1'
+            'volume_name': 'volume_1',
+            'source_port': '0:3:1',
+            'target_port_wwn_or_ip': '192.168.1.2',
+            'local_remote_volume_pair_list': [('local_v1','remote_v1'),('local_v2','remote_v2')],
+            'target_mode': 'sync'
         }
         # This creates a instance of the AnsibleModule mock.
         mock_module.params = PARAMS_FOR_PRESENT
@@ -278,7 +299,11 @@ class TestHpe3parRemoteCopy(unittest.TestCase):
             'skip_promote': False,
             'stop_groups': False,
             'local_groups_direction': False,
-            'volume_name': 'volume_1'
+            'volume_name': 'volume_1',
+            'source_port': '0:3:1',
+            'target_port_wwn_or_ip': '192.168.1.2',
+            'local_remote_volume_pair_list': [('local_v1','remote_v1'),('local_v2','remote_v2')],
+            'target_mode': 'sync'
         }
         # This creates a instance of the AnsibleModule mock.
         mock_module.params = PARAMS_FOR_PRESENT
@@ -330,7 +355,11 @@ class TestHpe3parRemoteCopy(unittest.TestCase):
             'skip_promote': False,
             'stop_groups': False,
             'local_groups_direction': False,
-            'volume_name': 'volume_1'
+            'volume_name': 'volume_1',
+            'source_port': '0:3:1',
+            'target_port_wwn_or_ip': '192.168.1.2',
+            'local_remote_volume_pair_list': [('local_v1','remote_v1'),('local_v2','remote_v2')],
+            'target_mode': 'sync'
         }
         # This creates a instance of the AnsibleModule mock.
         mock_module.params = PARAMS_FOR_PRESENT
@@ -382,7 +411,11 @@ class TestHpe3parRemoteCopy(unittest.TestCase):
             'skip_promote': False,
             'stop_groups': False,
             'local_groups_direction': False,
-            'volume_name': 'volume_1'
+            'volume_name': 'volume_1',
+            'source_port': '0:3:1',
+            'target_port_wwn_or_ip': '192.168.1.2',
+            'local_remote_volume_pair_list': [('local_v1','remote_v1'),('local_v2','remote_v2')],
+            'target_mode': 'sync'
         }
         # This creates a instance of the AnsibleModule mock.
         mock_module.params = PARAMS_FOR_PRESENT
@@ -435,7 +468,11 @@ class TestHpe3parRemoteCopy(unittest.TestCase):
             'skip_promote': False,
             'stop_groups': False,
             'local_groups_direction': False,
-            'volume_name': 'volume_1'
+            'volume_name': 'volume_1',
+            'source_port': '0:3:1',
+            'target_port_wwn_or_ip': '192.168.1.2',
+            'local_remote_volume_pair_list': [('local_v1','remote_v1'),('local_v2','remote_v2')],
+            'target_mode': 'sync'
         }
         # This creates a instance of the AnsibleModule mock.
         mock_module.params = PARAMS_FOR_PRESENT
@@ -487,7 +524,11 @@ class TestHpe3parRemoteCopy(unittest.TestCase):
             'skip_promote': False,
             'stop_groups': False,
             'local_groups_direction': False,
-            'volume_name': 'volume_1'
+            'volume_name': 'volume_1',
+            'source_port': '0:3:1',
+            'target_port_wwn_or_ip': '192.168.1.2',
+            'local_remote_volume_pair_list': [('local_v1','remote_v1'),('local_v2','remote_v2')],
+            'target_mode': 'sync'
         }
         # This creates a instance of the AnsibleModule mock.
         mock_module.params = PARAMS_FOR_PRESENT
@@ -539,7 +580,11 @@ class TestHpe3parRemoteCopy(unittest.TestCase):
             'skip_promote': False,
             'stop_groups': False,
             'local_groups_direction': False,
-            'volume_name': 'volume_1'
+            'volume_name': 'volume_1',
+            'source_port': '0:3:1',
+            'target_port_wwn_or_ip': '192.168.1.2',
+            'local_remote_volume_pair_list': [('local_v1','remote_v1'),('local_v2','remote_v2')],
+            'target_mode': 'sync'
         }
         # This creates a instance of the AnsibleModule mock.
         mock_module.params = PARAMS_FOR_PRESENT
@@ -592,7 +637,11 @@ class TestHpe3parRemoteCopy(unittest.TestCase):
             'skip_promote': False,
             'stop_groups': False,
             'local_groups_direction': False,
-            'volume_name': 'volume_1'
+            'volume_name': 'volume_1',
+            'source_port': '0:3:1',
+            'target_port_wwn_or_ip': '192.168.1.2',
+            'local_remote_volume_pair_list': [('local_v1','remote_v1'),('local_v2','remote_v2')],
+            'target_mode': 'sync'
         }
         # This creates a instance of the AnsibleModule mock.
         mock_module.params = PARAMS_FOR_PRESENT
@@ -644,22 +693,308 @@ class TestHpe3parRemoteCopy(unittest.TestCase):
             'skip_promote': False,
             'stop_groups': False,
             'local_groups_direction': False,
-            'volume_name': 'volume_1'
+            'volume_name': 'volume_1',
+            'source_port': '0:3:1',
+            'target_port_wwn_or_ip': '192.168.1.2',
+            'local_remote_volume_pair_list': [('local_v1','remote_v1'),('local_v2','remote_v2')],
+            'target_mode': 'sync'
         }
         # This creates a instance of the AnsibleModule mock.
         mock_module.params = PARAMS_FOR_PRESENT
         mock_module.return_value = mock_module
         instance = mock_module.return_value
         mock_recover_remote_copy_group.return_value = (
-            True, True, "Synchronized Remote Copy Group successfully.", {})
+            True, True, "Recovered Remote Copy Group successfully.", {})
         hpe3par_remote_copy.main()
         # AnsibleModule.exit_json should be called
         instance.exit_json.assert_called_with(
-            changed=True, msg="Synchronized Remote Copy Group successfully.")
+            changed=True, msg="Recovered Remote Copy Group successfully.")
         # AnsibleModule.fail_json should not be called
         self.assertEqual(instance.fail_json.call_count, 0)    
 
+    @mock.patch('Modules.hpe3par_remote_copy.client')
+    @mock.patch('Modules.hpe3par_remote_copy.AnsibleModule')
+    @mock.patch('Modules.hpe3par_remote_copy.admit_remote_copy_links')
+    def test_main_exit_admit_remote_copy_links(self, mock_admit_remote_copy_links, mock_module, mock_client):
+        """
+        hpe3par flash cache - success check
+        """
+        PARAMS_FOR_PRESENT = {
+            'state': 'admitlink',
+            'storage_system_ip': '192.168.0.1',
+            'storage_system_username': 'USER',
+            'storage_system_password': 'PASS',
+            'remote_copy_group_name': 'rcg_name_1',
+            'domain': 'test_domain',
+            'targets': [{'targetName': 'CSSOS-SSA04','mode': 1}],
+            'local_user_cpg': 'localusrcpg1',
+            'local_snap_cpg': 'snap_cpg1',
+            'keep_snap': False,
+            'unset_user_cpg': False,
+            'unset_snap_cpg': False,
+            'snapshot_name': 'snapshot_1',
+            'volume_auto_creation': False,
+            'skip_initial_sync': False,
+            'different_secondary_wwn': False,
+            'remove_secondary_volume': False,
+            'target_name': 'targetName1',
+            'starting_snapshots': ['volName1','snapShot1'],
+            'no_snapshot': False,
+            'no_resync_snapshot': False,
+            'full_sync': False,
+            'recovery_action': 'REVERSE_GROUP',
+            'skip_start': False,
+            'skip_sync': False,
+            'discard_new_data': False,
+            'skip_promote': False,
+            'stop_groups': False,
+            'local_groups_direction': False,
+            'volume_name': 'volume_1',
+            'source_port': '0:3:1',
+            'target_port_wwn_or_ip': '192.168.1.2',
+            'local_remote_volume_pair_list': [('local_v1','remote_v1'),('local_v2','remote_v2')],
+            'target_mode': 'sync'
+        }
+        # This creates a instance of the AnsibleModule mock.
+        mock_module.params = PARAMS_FOR_PRESENT
+        mock_module.return_value = mock_module
+        instance = mock_module.return_value
+        mock_admit_remote_copy_links.return_value = (
+            True, True, "Admit remote copy link %s:%s successful." % ('0:3:1', '192.168.1.2'), {})
+        hpe3par_remote_copy.main()
+        # AnsibleModule.exit_json should be called
+        instance.exit_json.assert_called_with(
+            changed=True, msg="Admit remote copy link %s:%s successful." % ('0:3:1', '192.168.1.2'))
+        # AnsibleModule.fail_json should not be called
+        self.assertEqual(instance.fail_json.call_count, 0)
 
+    @mock.patch('Modules.hpe3par_remote_copy.client')
+    @mock.patch('Modules.hpe3par_remote_copy.AnsibleModule')
+    @mock.patch('Modules.hpe3par_remote_copy.dismiss_remote_copy_links')
+    def test_main_exit_dismiss_remote_copy_links(self, mock_dismiss_remote_copy_links, mock_module, mock_client):
+        """
+        hpe3par flash cache - success check
+        """
+        PARAMS_FOR_PRESENT = {
+            'state': 'dismisslink',
+            'storage_system_ip': '192.168.0.1',
+            'storage_system_username': 'USER',
+            'storage_system_password': 'PASS',
+            'remote_copy_group_name': 'rcg_name_1',
+            'domain': 'test_domain',
+            'targets': [{'targetName': 'CSSOS-SSA04','mode': 1}],
+            'local_user_cpg': 'localusrcpg1',
+            'local_snap_cpg': 'snap_cpg1',
+            'keep_snap': False,
+            'unset_user_cpg': False,
+            'unset_snap_cpg': False,
+            'snapshot_name': 'snapshot_1',
+            'volume_auto_creation': False,
+            'skip_initial_sync': False,
+            'different_secondary_wwn': False,
+            'remove_secondary_volume': False,
+            'target_name': 'targetName1',
+            'starting_snapshots': ['volName1','snapShot1'],
+            'no_snapshot': False,
+            'no_resync_snapshot': False,
+            'full_sync': False,
+            'recovery_action': 'REVERSE_GROUP',
+            'skip_start': False,
+            'skip_sync': False,
+            'discard_new_data': False,
+            'skip_promote': False,
+            'stop_groups': False,
+            'local_groups_direction': False,
+            'volume_name': 'volume_1',
+            'source_port': '0:3:1',
+            'target_port_wwn_or_ip': '192.168.1.2',
+            'local_remote_volume_pair_list': [('local_v1','remote_v1'),('local_v2','remote_v2')],
+            'target_mode': 'sync'
+        }
+        # This creates a instance of the AnsibleModule mock.
+        mock_module.params = PARAMS_FOR_PRESENT
+        mock_module.return_value = mock_module
+        instance = mock_module.return_value
+        mock_dismiss_remote_copy_links.return_value = (
+            True, True, "Dismiss remote copy link %s:%s successful." % (PARAMS_FOR_PRESENT['source_port'], PARAMS_FOR_PRESENT['target_port_wwn_or_ip']), {})
+        hpe3par_remote_copy.main()
+        # AnsibleModule.exit_json should be called
+        instance.exit_json.assert_called_with(
+            changed=True, msg="Dismiss remote copy link %s:%s successful." % (PARAMS_FOR_PRESENT['source_port'], PARAMS_FOR_PRESENT['target_port_wwn_or_ip']))
+        # AnsibleModule.fail_json should not be called
+        self.assertEqual(instance.fail_json.call_count, 0)
+
+    @mock.patch('Modules.hpe3par_remote_copy.client')
+    @mock.patch('Modules.hpe3par_remote_copy.AnsibleModule')
+    @mock.patch('Modules.hpe3par_remote_copy.start_remote_copy_service')
+    def test_main_exit_start_remote_copy_service(self, mock_start_remote_copy_service, mock_module, mock_client):
+        """
+        hpe3par flash cache - success check
+        """
+        PARAMS_FOR_PRESENT = {
+            'state': 'startrcopy',
+            'storage_system_ip': '192.168.0.1',
+            'storage_system_username': 'USER',
+            'storage_system_password': 'PASS',
+            'remote_copy_group_name': 'rcg_name_1',
+            'domain': 'test_domain',
+            'targets': [{'targetName': 'CSSOS-SSA04','mode': 1}],
+            'local_user_cpg': 'localusrcpg1',
+            'local_snap_cpg': 'snap_cpg1',
+            'keep_snap': False,
+            'unset_user_cpg': False,
+            'unset_snap_cpg': False,
+            'snapshot_name': 'snapshot_1',
+            'volume_auto_creation': False,
+            'skip_initial_sync': False,
+            'different_secondary_wwn': False,
+            'remove_secondary_volume': False,
+            'target_name': 'targetName1',
+            'starting_snapshots': ['volName1','snapShot1'],
+            'no_snapshot': False,
+            'no_resync_snapshot': False,
+            'full_sync': False,
+            'recovery_action': 'REVERSE_GROUP',
+            'skip_start': False,
+            'skip_sync': False,
+            'discard_new_data': False,
+            'skip_promote': False,
+            'stop_groups': False,
+            'local_groups_direction': False,
+            'volume_name': 'volume_1',
+            'source_port': '0:3:1',
+            'target_port_wwn_or_ip': '192.168.1.2',
+            'local_remote_volume_pair_list': [('local_v1','remote_v1'),('local_v2','remote_v2')],
+            'target_mode': 'sync'
+        }
+        # This creates a instance of the AnsibleModule mock.
+        mock_module.params = PARAMS_FOR_PRESENT
+        mock_module.return_value = mock_module
+        instance = mock_module.return_value
+        mock_start_remote_copy_service.return_value = (
+            True, True, "Start remote copy service successful.", {})
+        hpe3par_remote_copy.main()
+        # AnsibleModule.exit_json should be called
+        instance.exit_json.assert_called_with(
+            changed=True, msg="Start remote copy service successful.")
+        # AnsibleModule.fail_json should not be called
+        self.assertEqual(instance.fail_json.call_count, 0)
+
+    @mock.patch('Modules.hpe3par_remote_copy.client')
+    @mock.patch('Modules.hpe3par_remote_copy.AnsibleModule')
+    @mock.patch('Modules.hpe3par_remote_copy.admit_remote_copy_target')
+    def test_main_exit_admit_remote_copy_target(self, mock_admit_remote_copy_target, mock_module, mock_client):
+        """
+        hpe3par flash cache - success check
+        """
+        PARAMS_FOR_PRESENT = {
+            'state': 'admittarget',
+            'storage_system_ip': '192.168.0.1',
+            'storage_system_username': 'USER',
+            'storage_system_password': 'PASS',
+            'remote_copy_group_name': 'rcg_name_1',
+            'domain': 'test_domain',
+            'targets': [{'targetName': 'CSSOS-SSA04','mode': 1}],
+            'local_user_cpg': 'localusrcpg1',
+            'local_snap_cpg': 'snap_cpg1',
+            'keep_snap': False,
+            'unset_user_cpg': False,
+            'unset_snap_cpg': False,
+            'snapshot_name': 'snapshot_1',
+            'volume_auto_creation': False,
+            'skip_initial_sync': False,
+            'different_secondary_wwn': False,
+            'remove_secondary_volume': False,
+            'target_name': 'targetName1',
+            'starting_snapshots': ['volName1','snapShot1'],
+            'no_snapshot': False,
+            'no_resync_snapshot': False,
+            'full_sync': False,
+            'recovery_action': 'REVERSE_GROUP',
+            'skip_start': False,
+            'skip_sync': False,
+            'discard_new_data': False,
+            'skip_promote': False,
+            'stop_groups': False,
+            'local_groups_direction': False,
+            'volume_name': 'volume_1',
+            'source_port': '0:3:1',
+            'target_port_wwn_or_ip': '192.168.1.2',
+            'local_remote_volume_pair_list': [('local_v1','remote_v1'),('local_v2','remote_v2')],
+            'target_mode': 'sync'
+        }
+        # This creates a instance of the AnsibleModule mock.
+        mock_module.params = PARAMS_FOR_PRESENT
+        mock_module.return_value = mock_module
+        instance = mock_module.return_value
+        mock_admit_remote_copy_target.return_value = (
+            True, True, "Admit remote copy target %s successful in remote copy group %s."
+            % (PARAMS_FOR_PRESENT['target_name'], PARAMS_FOR_PRESENT['remote_copy_group_name']), {})
+        hpe3par_remote_copy.main()
+        # AnsibleModule.exit_json should be called
+        instance.exit_json.assert_called_with(
+            changed=True, msg="Admit remote copy target %s successful in remote copy group %s."
+            % (PARAMS_FOR_PRESENT['target_name'], PARAMS_FOR_PRESENT['remote_copy_group_name']))
+        # AnsibleModule.fail_json should not be called
+        self.assertEqual(instance.fail_json.call_count, 0)
+
+    @mock.patch('Modules.hpe3par_remote_copy.client')
+    @mock.patch('Modules.hpe3par_remote_copy.AnsibleModule')
+    @mock.patch('Modules.hpe3par_remote_copy.dismiss_remote_copy_target')
+    def test_main_exit_dismiss_remote_copy_target(self, mock_dismiss_remote_copy_target, mock_module, mock_client):
+        """
+        hpe3par flash cache - success check
+        """
+        PARAMS_FOR_PRESENT = {
+            'state': 'dismisstarget',
+            'storage_system_ip': '192.168.0.1',
+            'storage_system_username': 'USER',
+            'storage_system_password': 'PASS',
+            'remote_copy_group_name': 'rcg_name_1',
+            'domain': 'test_domain',
+            'targets': [{'targetName': 'CSSOS-SSA04','mode': 1}],
+            'local_user_cpg': 'localusrcpg1',
+            'local_snap_cpg': 'snap_cpg1',
+            'keep_snap': False,
+            'unset_user_cpg': False,
+            'unset_snap_cpg': False,
+            'snapshot_name': 'snapshot_1',
+            'volume_auto_creation': False,
+            'skip_initial_sync': False,
+            'different_secondary_wwn': False,
+            'remove_secondary_volume': False,
+            'target_name': 'targetName1',
+            'starting_snapshots': ['volName1','snapShot1'],
+            'no_snapshot': False,
+            'no_resync_snapshot': False,
+            'full_sync': False,
+            'recovery_action': 'REVERSE_GROUP',
+            'skip_start': False,
+            'skip_sync': False,
+            'discard_new_data': False,
+            'skip_promote': False,
+            'stop_groups': False,
+            'local_groups_direction': False,
+            'volume_name': 'volume_1',
+            'source_port': '0:3:1',
+            'target_port_wwn_or_ip': '192.168.1.2',
+            'local_remote_volume_pair_list': [('local_v1','remote_v1'),('local_v2','remote_v2')],
+            'target_mode': 'sync'
+        }
+        # This creates a instance of the AnsibleModule mock.
+        mock_module.params = PARAMS_FOR_PRESENT
+        mock_module.return_value = mock_module
+        instance = mock_module.return_value
+        mock_dismiss_remote_copy_target.return_value = (
+            True, True, "Dismiss remote copy target %s successful." % (PARAMS_FOR_PRESENT['target_name']), {})
+        hpe3par_remote_copy.main()
+        # AnsibleModule.exit_json should be called
+        instance.exit_json.assert_called_with(
+            changed=True, msg="Dismiss remote copy target %s successful." % (PARAMS_FOR_PRESENT['target_name']))
+        # AnsibleModule.fail_json should not be called
+        self.assertEqual(instance.fail_json.call_count, 0)
+
+ 
     @mock.patch('Modules.hpe3par_remote_copy.client')
     def test_create_remote_copy_group(self, mock_client):
         mock_client.HPE3ParClient.login.return_value = True
@@ -1161,4 +1496,325 @@ class TestHpe3parRemoteCopy(unittest.TestCase):
                                                 False,
                                                 False
                                                 ), (False, False, "Remote Copy Group modify failed. Remote Copy Group name must be atleast 1 character and not more than 31 characters", {})) 
+
+    @mock.patch('Modules.hpe3par_remote_copy.client')
+    def test_admit_remote_copy_links(self, mock_client):
+        mock_client.HPE3ParClient.login.return_value = True
+        mock_client.HPE3ParClient.setSSHOptions.return_value = True
+        mock_client.HPE3ParClient.rcopyLinkExists.return_value = False
+        mock_client.HPE3ParClient.admitRemoteCopyLinks.return_value = True
+        mock_client.HPE3ParClient.logout.return_value = True
+        
+        self.assertEqual(hpe3par_remote_copy.admit_remote_copy_links(mock_client.HPE3ParClient,
+                                                'USER',
+                                                'PASS',
+                                                '192.168.0.1',
+                                                'targetName1',
+                                                '0:3:1',
+                                                '192.168.1.2'
+                                                ), (True, True, "Admit remote copy link %s:%s successful." % ('0:3:1', '192.168.1.2'), {}))
+        mock_client.HPE3ParClient.rcopyLinkExists.return_value = True
+
+        self.assertEqual(hpe3par_remote_copy.admit_remote_copy_links(mock_client.HPE3ParClient,
+                                                'USER',
+                                                'PASS',
+                                                '192.168.0.1',
+                                                'targetName1',
+                                                '0:3:1',
+                                                '192.168.1.2'
+                                                ), (True, False, "Admit remote copy link %s:%s already exists." % ('0:3:1', '192.168.1.2'), {}))
+        self.assertEqual(hpe3par_remote_copy.admit_remote_copy_links(mock_client.HPE3ParClient,
+                                                None,
+                                                'PASS',
+                                                '192.168.0.1',
+                                                'targetName1',
+                                                '0:3:1',
+                                                '192.168.1.2'
+                                                ), (False, False, "Admit remote copy link failed. Storage system username or password is null", {}))
+        self.assertEqual(hpe3par_remote_copy.admit_remote_copy_links(mock_client.HPE3ParClient,
+                                                'USER',
+                                                'PASS',
+                                                None,
+                                                'targetName1',
+                                                '0:3:1',
+                                                '192.168.1.2'
+                                                ), (False, False, "SSH to 3par storage system failed. Storage system IP address is null", {}))
+        self.assertEqual(hpe3par_remote_copy.admit_remote_copy_links(mock_client.HPE3ParClient,
+                                                'USER',
+                                                'PASS',
+                                                '192.168.0.1',
+                                                None,
+                                                '0:3:1',
+                                                '192.168.1.2'
+                                                ), (False, False, "Admit remote copy link failed. Target name is null", {}))
+        self.assertEqual(hpe3par_remote_copy.admit_remote_copy_links(mock_client.HPE3ParClient,
+                                                'USER',
+                                                'PASS',
+                                                '192.168.0.1',
+                                                'targetName1',
+                                                None,
+                                                '192.168.1.2'
+                                                ), (False, False, "Admit remote copy link failed. Source port address is null", {}))
+        self.assertEqual(hpe3par_remote_copy.admit_remote_copy_links(mock_client.HPE3ParClient,
+                                                'USER',
+                                                'PASS',
+                                                '192.168.0.1',
+                                                'targetName1',
+                                                '0:3:1',
+                                                None
+                                                ), (False, False, "Admit remote copy link failed. Target port WWN/IP is null", {}))
+
+    @mock.patch('Modules.hpe3par_remote_copy.client')
+    def test_dismiss_remote_copy_links(self, mock_client):
+        mock_client.HPE3ParClient.login.return_value = True
+        mock_client.HPE3ParClient.setSSHOptions.return_value = True
+        mock_client.HPE3ParClient.rcopyLinkExists.return_value = True
+        mock_client.HPE3ParClient.admitRemoteCopyLinks.return_value = True
+        mock_client.HPE3ParClient.logout.return_value = True
+        
+        self.assertEqual(hpe3par_remote_copy.dismiss_remote_copy_links(mock_client.HPE3ParClient,
+                                                'USER',
+                                                'PASS',
+                                                '192.168.0.1',
+                                                'targetName1',
+                                                '0:3:1',
+                                                '192.168.1.2'
+                                                ), (True, True, "Dismiss remote copy link %s:%s successful." % ('0:3:1', '192.168.1.2'), {}))
+        mock_client.HPE3ParClient.rcopyLinkExists.return_value = False
+
+        self.assertEqual(hpe3par_remote_copy.dismiss_remote_copy_links(mock_client.HPE3ParClient,
+                                                'USER',
+                                                'PASS',
+                                                '192.168.0.1',
+                                                'targetName1',
+                                                '0:3:1',
+                                                '192.168.1.2'
+                                                ), (True, False, "Remote copy link %s:%s already not present." % ('0:3:1', '192.168.1.2'), {}))
+        self.assertEqual(hpe3par_remote_copy.dismiss_remote_copy_links(mock_client.HPE3ParClient,
+                                                None,
+                                                'PASS',
+                                                '192.168.0.1',
+                                                'targetName1',
+                                                '0:3:1',
+                                                '192.168.1.2'
+                                                ), (False, False, "Dismiss remote copy link failed. Storage system username or password is null", {}))
+        self.assertEqual(hpe3par_remote_copy.dismiss_remote_copy_links(mock_client.HPE3ParClient,
+                                                'USER',
+                                                'PASS',
+                                                None,
+                                                'targetName1',
+                                                '0:3:1',
+                                                '192.168.1.2'
+                                                ), (False, False, "Dismiss remote copy link failed. Storage system IP address is null", {}))
+        self.assertEqual(hpe3par_remote_copy.dismiss_remote_copy_links(mock_client.HPE3ParClient,
+                                                'USER',
+                                                'PASS',
+                                                '192.168.0.1',
+                                                None,
+                                                '0:3:1',
+                                                '192.168.1.2'
+                                                ), (False, False, "Dismiss remote copy link failed. Target name is null", {}))
+        self.assertEqual(hpe3par_remote_copy.dismiss_remote_copy_links(mock_client.HPE3ParClient,
+                                                'USER',
+                                                'PASS',
+                                                '192.168.0.1',
+                                                'targetName1',
+                                                None,
+                                                '192.168.1.2'
+                                                ), (False, False, "Dismiss remote copy link failed. Source port address is null", {}))
+        self.assertEqual(hpe3par_remote_copy.dismiss_remote_copy_links(mock_client.HPE3ParClient,
+                                                'USER',
+                                                'PASS',
+                                                '192.168.0.1',
+                                                'targetName1',
+                                                '0:3:1',
+                                                None
+                                                ), (False, False, "Dismiss remote copy link failed. Target port WWN/IP is null", {}))
+
+
+    @mock.patch('Modules.hpe3par_remote_copy.client')
+    def test_start_remote_copy_service(self, mock_client):
+        mock_client.HPE3ParClient.login.return_value = True
+        mock_client.HPE3ParClient.setSSHOptions.return_value = True
+        mock_client.HPE3ParClient.rcopyServiceExists.return_value = False
+        mock_client.HPE3ParClient.startrCopy.return_value = True
+        mock_client.HPE3ParClient.logout.return_value = True
+
+        self.assertEqual(hpe3par_remote_copy.start_remote_copy_service(mock_client.HPE3ParClient,
+                                                'USER',
+                                                'PASS',
+                                                '192.168.0.1',
+                                                ), (True, True, "Start remote copy service successful.", {}))
+        mock_client.HPE3ParClient.rcopyServiceExists.return_value = True
+
+        self.assertEqual(hpe3par_remote_copy.start_remote_copy_service(mock_client.HPE3ParClient,
+                                                'USER',
+                                                'PASS',
+                                                '192.168.0.1',
+                                                ), (True, False, "Remote copy service already started", {}))
+        self.assertEqual(hpe3par_remote_copy.start_remote_copy_service(mock_client.HPE3ParClient,
+                                                None,
+                                                'PASS',
+                                                '192.168.0.1',
+                                                ), (False, False, "Start remote copy service failed. Storage system username or password is null", {}))
+        self.assertEqual(hpe3par_remote_copy.start_remote_copy_service(mock_client.HPE3ParClient,
+                                                'USER',
+                                                'PASS',
+                                                None,
+                                                ), (False, False, "Start remote copy service failed. Storage system IP address is null", {}))
+
+    @mock.patch('Modules.hpe3par_remote_copy.client')
+    def test_admit_remote_copy_target(self, mock_client):
+        mock_client.HPE3ParClient.login.return_value = True
+        mock_client.HPE3ParClient.setSSHOptions.return_value = True
+        mock_client.HPE3ParClient.remoteCopyGroupExists.return_value = True
+        mock_client.HPE3ParClient.admitRemoteCopyTarget.return_value = True
+        mock_client.HPE3ParClient.targetInRemoteCopyGroupExists.return_value = False
+        mock_client.HPE3ParClient.logout.return_value = True
+
+        self.assertEqual(hpe3par_remote_copy.admit_remote_copy_target(mock_client.HPE3ParClient,
+                                                'USER',
+                                                'PASS',
+                                                '192.168.0.1',
+                                                'targetName1',
+                                                'sync',
+                                                'rcg_1',
+                                                [('local_v1','remote_v1'),('local_v2','remote_v2')]
+                                                ), (True, True, "Admit remote copy target %s successful in remote copy group %s." % ('targetName1', 'rcg_1'), {}))
+
+        mock_client.HPE3ParClient.remoteCopyGroupExists.return_value = False
+
+        self.assertEqual(hpe3par_remote_copy.admit_remote_copy_target(mock_client.HPE3ParClient,
+                                                'USER',
+                                                'PASS',
+                                                '192.168.0.1',
+                                                'targetName1',
+                                                'sync',
+                                                'rcg_1',
+                                                [('local_v1','remote_v1'),('local_v2','remote_v2')]
+                                                ), (True, False, "Remote Copy Group is not present", {}))
+
+        self.assertEqual(hpe3par_remote_copy.admit_remote_copy_target(mock_client.HPE3ParClient,
+                                                None,
+                                                'PASS',
+                                                '192.168.0.1',
+                                                'targetName1',
+                                                'sync',
+                                                'rcg_1',
+                                                [('local_v1','remote_v1'),('local_v2','remote_v2')]
+                                                ), (False, False, "Admit remote copy target failed. Storage system username or password is null", {}))
+        self.assertEqual(hpe3par_remote_copy.admit_remote_copy_target(mock_client.HPE3ParClient,
+                                                'USER',
+                                                'PASS',
+                                                '192.168.0.1',
+                                                None,
+                                                'sync',
+                                                'rcg_1',
+                                                [('local_v1','remote_v1'),('local_v2','remote_v2')]
+                                                ), (False, False, "Admit remote copy target failed. Target name is null", {}))
+        self.assertEqual(hpe3par_remote_copy.admit_remote_copy_target(mock_client.HPE3ParClient,
+                                                'USER',
+                                                'PASS',
+                                                None,
+                                                'targetName1',
+                                                'sync',
+                                                'rcg_1',
+                                                [('local_v1','remote_v1'),('local_v2','remote_v2')]
+                                                ), (False, False, "SSH to 3par storage system failed. Storage system IP address is null", {}))
+        self.assertEqual(hpe3par_remote_copy.admit_remote_copy_target(mock_client.HPE3ParClient,
+                                                'USER',
+                                                'PASS',
+                                                '192.168.0.1',
+                                                'targetName1',
+                                                None,
+                                                'rcg_1',
+                                                [('local_v1','remote_v1'),('local_v2','remote_v2')]
+                                                ), (False, False, "Admit remote copy target failed. Mode is null", {}))
+        self.assertEqual(hpe3par_remote_copy.admit_remote_copy_target(mock_client.HPE3ParClient,
+                                                'USER',
+                                                'PASS',
+                                                '192.168.0.1',
+                                                'targetName1',
+                                                'sync',
+                                                None,
+                                                [('local_v1','remote_v1'),('local_v2','remote_v2')]
+                                                ), (False, False, "Admit remote copy target failed. Remote copy group name is null", {}))
+
+        mock_client.HPE3ParClient.remoteCopyGroupExists.return_value = True
+        mock_client.HPE3ParClient.targetInRemoteCopyGroupExists.return_value = True
+        self.assertEqual(hpe3par_remote_copy.admit_remote_copy_target(mock_client.HPE3ParClient,
+                                                'USER',
+                                                'PASS',
+                                                '192.168.0.1',
+                                                'targetName1',
+                                                'sync',
+                                                'rcg_1',
+                                                [('local_v1','remote_v1'),('local_v2','remote_v2')]
+                                                ), (True, False, "Admit remote copy target failed.Target is already present", {}))
+
+    @mock.patch('Modules.hpe3par_remote_copy.client')
+    def test_dismiss_remote_copy_target(self, mock_client):
+        mock_client.HPE3ParClient.login.return_value = True
+        mock_client.HPE3ParClient.setSSHOptions.return_value = True
+        mock_client.HPE3ParClient.remoteCopyGroupExists.return_value = True
+        mock_client.HPE3ParClient.dismissRemoteCopyTarget.return_value = True
+        mock_client.HPE3ParClient.targetInRemoteCopyGroupExists.return_value = True
+        mock_client.HPE3ParClient.logout.return_value = True
+
+        self.assertEqual(hpe3par_remote_copy.dismiss_remote_copy_target(mock_client.HPE3ParClient,
+                                                'USER',
+                                                'PASS',
+                                                '192.168.0.1',
+                                                'targetName1',
+                                                'rcg_1',
+                                                ), (True, True, "Dismiss remote copy target %s successful." % 'targetName1', {}))
+
+        mock_client.HPE3ParClient.remoteCopyGroupExists.return_value = False
+
+        self.assertEqual(hpe3par_remote_copy.dismiss_remote_copy_target(mock_client.HPE3ParClient,
+                                                'USER',
+                                                'PASS',
+                                                '192.168.0.1',
+                                                'targetName1',
+                                                'rcg_1'
+                                                ), (True, False, "Remote Copy Group is not present", {}))
+
+        self.assertEqual(hpe3par_remote_copy.dismiss_remote_copy_target(mock_client.HPE3ParClient,
+                                                None,
+                                                'PASS',
+                                                '192.168.0.1',
+                                                'targetName1',
+                                                'rcg_1',
+                                                ), (False, False, "Dismiss remote copy target failed. Storage system username or password is null", {}))
+        self.assertEqual(hpe3par_remote_copy.dismiss_remote_copy_target(mock_client.HPE3ParClient,
+                                                'USER',
+                                                'PASS',
+                                                '192.168.0.1',
+                                                None,
+                                                'rcg_1'
+                                                ), (False, False, "Dismiss remote copy target failed. Target name is null", {}))
+        self.assertEqual(hpe3par_remote_copy.dismiss_remote_copy_target(mock_client.HPE3ParClient,
+                                                'USER',
+                                                'PASS',
+                                                None,
+                                                'targetName1',
+                                                'rcg_1'
+                                                ), (False, False, "SSH to 3par storage system failed. Storage system IP address is null", {}))
+        self.assertEqual(hpe3par_remote_copy.dismiss_remote_copy_target(mock_client.HPE3ParClient,
+                                                'USER',
+                                                'PASS',
+                                                '192.168.0.1',
+                                                'targetName1',
+                                                None,
+                                                ), (False, False, "Dismiss remote copy target failed. Remote copy group name is null", {}))
+
+        mock_client.HPE3ParClient.remoteCopyGroupExists.return_value = True
+        mock_client.HPE3ParClient.targetInRemoteCopyGroupExists.return_value = False
+        self.assertEqual(hpe3par_remote_copy.dismiss_remote_copy_target(mock_client.HPE3ParClient,
+                                                'USER',
+                                                'PASS',
+                                                '192.168.0.1',
+                                                'targetName1',
+                                                'rcg_1'
+                                                ), (True, False, "Dismiss remote copy target failed.Target is already not present", {}))
 

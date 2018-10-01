@@ -389,12 +389,195 @@ def recover_remote_copy_group(
         client_obj.logout()
     return (True, True, "Recovered Remote Copy Group %s successfully." % remote_copy_group_name, {})
 
+def admit_remote_copy_links(
+            client_obj,
+            storage_system_username,
+            storage_system_password,
+            storage_system_ip,
+            target_name,
+            source_port,
+            target_port_wwn_or_ip
+            ):
+    if storage_system_username is None or storage_system_password is None:
+        return (
+            False,
+            False,
+            "Admit remote copy link failed. Storage system username or password is null",
+            {})
+    if target_name is None:
+        return (False, False, "Admit remote copy link failed. Target name is null", {})
+    if source_port is None:
+        return (False, False, "Admit remote copy link failed. Source port address is null", {})
+    if target_port_wwn_or_ip is None:
+        return (False, False, "Admit remote copy link failed. Target port WWN/IP is null", {})
+    if storage_system_ip is None:
+        return (False, False, "SSH to 3par storage system failed. Storage system IP address is null", {})
+    try:
+        client_obj.login(storage_system_username, storage_system_password)
+        client_obj.setSSHOptions(storage_system_ip, storage_system_username, storage_system_password)
+        if client_obj.rcopyLinkExists(target_name, source_port, target_port_wwn_or_ip):
+            return (True, False, "Admit remote copy link %s:%s already exists." % (source_port, target_port_wwn_or_ip), {})
+        else:
+            response = client_obj.admitRemoteCopyLinks(target_name, source_port, target_port_wwn_or_ip)
+    except Exception as e:
+        return (False, False, "Admit remote copy link failed | %s" % (e), {})
+    finally:
+        client_obj.logout()
+    return (True, True, "Admit remote copy link %s:%s successful." % (source_port, target_port_wwn_or_ip), {})
+
+def dismiss_remote_copy_links(
+            client_obj,
+            storage_system_username,
+            storage_system_password,
+            storage_system_ip,
+            target_name,
+            source_port,
+            target_port_wwn_or_ip
+            ):
+    if storage_system_username is None or storage_system_password is None:
+        return (
+            False,
+            False,
+            "Dismiss remote copy link failed. Storage system username or password is null",
+            {})
+    if target_name is None:
+        return (False, False, "Dismiss remote copy link failed. Target name is null", {})
+    if source_port is None:
+        return (False, False, "Dismiss remote copy link failed. Source port address is null", {})
+    if target_port_wwn_or_ip is None:
+        return (False, False, "Dismiss remote copy link failed. Target port WWN/IP is null", {})
+    if storage_system_ip is None:
+        return (False, False, "Dismiss remote copy link failed. Storage system IP address is null", {})
+    try:
+        client_obj.login(storage_system_username, storage_system_password)
+        client_obj.setSSHOptions(storage_system_ip, storage_system_username, storage_system_password)
+        if client_obj.rcopyLinkExists(target_name, source_port, target_port_wwn_or_ip):
+            response = client_obj.dismissRemoteCopyLinks(target_name, source_port, target_port_wwn_or_ip)
+        else:
+            return (True, False, "Remote copy link %s:%s already not present." % (source_port, target_port_wwn_or_ip), {})
+    except Exception as e:
+        return (False, False, "Dismiss remote copy link failed| %s" % (e), {})
+    finally:
+        client_obj.logout()
+    return (True, True, "Dismiss remote copy link %s:%s successful." % (source_port,target_port_wwn_or_ip), {})
+
+def start_remote_copy_service(
+            client_obj,
+            storage_system_username,
+            storage_system_password,
+            storage_system_ip,
+            ):
+    if storage_system_username is None or storage_system_password is None:
+        return (
+            False,
+            False,
+            "Start remote copy service failed. Storage system username or password is null",
+            {})
+    if storage_system_ip is None:
+        return (False, False, "Start remote copy service failed. Storage system IP address is null", {})
+    try:
+        client_obj.login(storage_system_username, storage_system_password)
+        client_obj.setSSHOptions(storage_system_ip, storage_system_username, storage_system_password)
+        if client_obj.rcopyServiceExists():
+            return (True, False, "Remote copy service already started", {})
+        else:
+            response = client_obj.startrCopy()
+    except Exception as e:
+        return (False, False, "Start remote copy service failed| %s" % (e), {})
+    finally:
+        client_obj.logout()
+    return (True, True, "Start remote copy service successful.", {})
+
+def admit_remote_copy_target(
+            client_obj,
+            storage_system_username,
+            storage_system_password,
+            storage_system_ip,
+            target_name,
+            target_mode,
+            remote_copy_group_name,
+            local_remote_volume_pair_list
+            ):
+    if storage_system_username is None or storage_system_password is None:
+        return (
+            False,
+            False,
+            "Admit remote copy target failed. Storage system username or password is null",
+            {})
+    if target_name is None:
+        return (False, False, "Admit remote copy target failed. Target name is null", {})
+    if storage_system_ip is None:
+        return (False, False, "SSH to 3par storage system failed. Storage system IP address is null", {})
+    if target_mode is None:
+        return (False, False, "Admit remote copy target failed. Mode is null", {})
+    if remote_copy_group_name is None:
+        return (False, False, "Admit remote copy target failed. Remote copy group name is null", {})
+    try:
+        client_obj.login(storage_system_username, storage_system_password)
+        client_obj.setSSHOptions(storage_system_ip, storage_system_username, storage_system_password)
+        #checking existance of remote_copy_group_name
+        if not client_obj.remoteCopyGroupExists(remote_copy_group_name):
+            return (True, False, "Remote Copy Group is not present", {})
+
+        #Checking whether target name already present in remote copy
+        #If it is already present then target add to remote copy group fails
+        if client_obj.targetInRemoteCopyGroupExists(target_name, remote_copy_group_name):
+            return (True, False, "Admit remote copy target failed.Target is already present", {})
+        results=client_obj.admitRemoteCopyTarget(target_name, target_mode, remote_copy_group_name, local_remote_volume_pair_list)
+    except Exception as e:
+        return (False, False, "Admit remote copy target failed| %s" % (e), {})
+    finally:
+        client_obj.logout()
+    return (True, True, "Admit remote copy target %s successful in remote copy group %s." % (target_name, remote_copy_group_name), {})
+
+def dismiss_remote_copy_target(
+            client_obj,
+            storage_system_username,
+            storage_system_password,
+            storage_system_ip,
+            target_name,
+            remote_copy_group_name
+            ):
+    if storage_system_username is None or storage_system_password is None:
+        return (
+            False,
+            False,
+            "Dismiss remote copy target failed. Storage system username or password is null",
+            {})
+
+    if target_name is None:
+        return (False, False, "Dismiss remote copy target failed. Target name is null", {})
+    if storage_system_ip is None:
+        return (False, False, "SSH to 3par storage system failed. Storage system IP address is null", {})
+    if remote_copy_group_name is None:
+        return (False, False, "Dismiss remote copy target failed. Remote copy group name is null", {})
+    try:
+        client_obj.login(storage_system_username, storage_system_password)
+        client_obj.setSSHOptions(storage_system_ip, storage_system_username, storage_system_password)
+
+        #checking existance of remote_copy_group_name
+        if not client_obj.remoteCopyGroupExists(remote_copy_group_name):
+            return (True, False, "Remote Copy Group is not present", {})
+
+        #Checking whether target name already present in remote copy
+        #If it is already present then target add to remote copy group fails
+        if not client_obj.targetInRemoteCopyGroupExists(target_name, remote_copy_group_name):
+            return (True, False, "Dismiss remote copy target failed.Target is already not present", {})
+
+        results=client_obj.dismissRemoteCopyTarget(target_name, remote_copy_group_name)
+    except Exception as e:
+        return (False, False, "Dismiss remote copy target failed| %s" % (e), {})
+    finally:
+        client_obj.logout()
+    return (True, True, "Dismiss remote copy target %s successful." % target_name, {})
+
 
 def main():
     fields = {
         "state": {
             "required": True,
-            "choices": ['present', 'absent', 'modify', 'add_volume', 'remove_volume', 'start', 'stop', 'synchronize', 'recover'],
+            "choices": ['present', 'absent', 'modify', 'add_volume', 'remove_volume', 'start', 'stop', 'synchronize', 'recover', 'admitlink', 
+            'dismisslink','admittarget','dismisstarget', 'startrcopy'],
             "type": 'str'
         },
         "storage_system_ip": {
@@ -412,7 +595,6 @@ def main():
             "no_log": True
         },
         "remote_copy_group_name": {
-            "required": True,
             "type": "str"
         },
         "domain": {
@@ -506,6 +688,19 @@ def main():
         },
         "volume_name": {
             "type": "str"
+        },
+        "source_port": {
+            "type": "str"
+        },
+        "target_port_wwn_or_ip": {
+            "type": "str"
+        },
+        "target_mode": {
+            "choices": ['sync', 'periodic', 'async'],
+            "type": 'str'
+        },
+        "local_remote_volume_pair_list": {
+            "type": "list"
         }
     }
     module = AnsibleModule(argument_spec=fields)
@@ -530,6 +725,8 @@ def main():
     different_secondary_wwn = module.params["different_secondary_wwn"]
     remove_secondary_volume = module.params["remove_secondary_volume"]
     target_name = module.params["target_name"]
+    source_port = module.params["source_port"]
+    target_port_wwn_or_ip = module.params["target_port_wwn_or_ip"]
     starting_snapshots = module.params["starting_snapshots"]
     no_snapshot = module.params["no_snapshot"]
     no_resync_snapshot = module.params["no_resync_snapshot"]
@@ -542,6 +739,8 @@ def main():
     skip_promote = module.params["skip_promote"]
     stop_groups = module.params["stop_groups"]
     local_groups_direction = module.params["local_groups_direction"]
+    local_remote_volume_pair_list = module.params["local_remote_volume_pair_list"]
+    target_mode = module.params["target_mode"]
 
     wsapi_url = 'https://%s:8080/api/v1' % storage_system_ip
     client_obj = client.HPE3ParClient(wsapi_url)
@@ -646,7 +845,53 @@ def main():
             stop_groups,
             local_groups_direction
         )
-
+    elif module.params["state"] == "admitlink":
+        return_status, changed, msg, issue_attr_dict = admit_remote_copy_links(
+            client_obj,
+            storage_system_username,
+            storage_system_password,
+            storage_system_ip,
+            target_name,
+            source_port,
+            target_port_wwn_or_ip
+        )
+    elif module.params["state"] == "dismisslink":
+        return_status, changed, msg, issue_attr_dict = dismiss_remote_copy_links(
+            client_obj,
+            storage_system_username,
+            storage_system_password,
+            storage_system_ip,
+            target_name,
+            source_port,
+            target_port_wwn_or_ip
+        )		
+    elif module.params["state"] == "startrcopy":
+        return_status, changed, msg, issue_attr_dict = start_remote_copy_service(
+            client_obj,
+            storage_system_username,
+            storage_system_password,
+            storage_system_ip,
+        )		
+    elif module.params["state"] == "admittarget":
+        return_status, changed, msg, issue_attr_dict = admit_remote_copy_target(
+            client_obj,
+            storage_system_username,
+            storage_system_password,
+            storage_system_ip,
+            target_name,
+            target_mode,
+            remote_copy_group_name,
+            local_remote_volume_pair_list
+        )		
+    elif module.params["state"] == "dismisstarget":
+        return_status, changed, msg, issue_attr_dict = dismiss_remote_copy_target(
+            client_obj,
+            storage_system_username,
+            storage_system_password,
+            storage_system_ip,
+            target_name,
+            remote_copy_group_name
+        )		
     if return_status:
         if issue_attr_dict:
             module.exit_json(changed=changed, msg=msg, issue=issue_attr_dict)
