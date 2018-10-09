@@ -26,6 +26,451 @@ ANSIBLE_METADATA = {'metadata_version': '1.1',
                     'status': ['preview'],
                     'supported_by': 'community'}
 
+DOCUMENTATION = r'''
+---
+author: "Hewlett Packard Enterprise (ecostor@groups.ext.hpe.com)"
+description: "On HPE 3PAR - Create Remote Copy Group. - Modify Remote Copy
+ Group. - Add Volumes to Remote Copy Group. - Remove Volumes from Remote
+ Synchronize Remote Copy Group. - Recover Remote Copy Group. - Delete Remote
+ Copy Group. - Admit Remote Copy Group. - Dismiss Remote Copy Group.
+ - Start Remote Copy Group. - Admit Remote Copy Target. - Dismiss Remote Copy
+ Target.
+module: hpe3par_remote_copy
+options:
+  remote_copy_group_name:
+    description:
+      - "Specifies the name of the Remote Copy group to create.\n"
+  domain:
+    description:
+      - "Specifies the domain in which to create the Remote Copy group.\n"
+  targets:
+    description:
+      - "Specifies the attributes of the target of the Remote Copy group.\n"
+  local_user_cpg:
+    description:
+      - "Specifies the local user CPG used for auto-created volumes.\n"
+  local_snap_cpg:
+    description:
+      - "Specifies the local snap CPG used for auto-created volumes.\n"
+  keep_snap:
+    default: false
+    description:
+      - "Enables (true) or disables (false) retention \n of the local volume
+       resynchronization snapshot.\n"
+    type: bool
+  unset_user_cpg:
+    default: false
+    description:
+      - "Enables (true) or disables (false) setting the localUserCPG
+       and \n remoteUserCPG of the Remote Copy group.\n"
+    type: bool
+  unset_snap_cpg:
+    default: false
+    description:
+      - "Enables (true) or disables (false) setting the \n localSnapCPG
+       and remoteSnapCPG of the Remote Copy group.\n"
+    type: bool
+  snapshot_name:
+    description:
+      - "The optional read-only snapshotName is a starting snapshot
+       when \n the group is started without performing a full
+       resynchronization. \n Instead, for synchronized groups, the volume
+       synchronizes deltas \n between this snapshotName and the base volume.
+       For periodic groups, \n the volume synchronizes deltas between this
+       snapshotName and a snapshot of the base.\n"
+  volume_auto_creation:
+    default: false
+    description:
+      - "If volumeAutoCreation is set to true, \n the secondary volumes
+       should be created automatically \n on the target using the CPG.
+       associated with the Remote Copy group on that target.
+       This cannot be set to true if the snapshot name is specified.\n"
+    type: bool
+  skip_initial_sync:
+    default: false
+    description:
+      - "If skipInitialSync is set to true, the volume
+       should skip the initial sync. \n This is for the
+       admission of volumes that have been presynced
+       with the target volume. \n This cannot be set to
+       true if the snapshot name is specified.\n"
+    type: bool
+  different_secondary_wwn:
+    default: false
+    description:
+      - "Setting differentSecondaryWWN to true, \n ensures that
+       the system uses a different WWN on the secondary volume.
+       Defaults to false. Use with volumeAutoCreation only.\n"
+    type: bool
+  remove_secondary_volume:
+    default: false
+    description:
+      - "Enables (true) or disables (false) deletion of the
+       remote volume on the secondary array from the system.
+       Defaults to false. Do not use with keepSnap.\n"
+    type: bool
+  target_name:
+    description:
+      - "Specifies the target name associated with the Remote Copy
+       group to be created.\n"
+  starting_snapshots:
+    description:
+      - "When used, you must specify all the volumes inthe group.
+       While specifying the pair, the starting snapshot is optional.
+       When not used, the system performs a full resynchronization of
+       the volume.\n"
+  no_snapshot:
+    default: false
+    description:
+      - "If true, this option turns off creation of snapshots in
+       synchronous and periodic modes, and deletes the current
+       synchronization snapshots.\n"
+    type: bool
+  no_resync_snapshot:
+    default: false
+    description:
+      - "Enables (true) or disables (false) saving the resynchronization
+       snapshot. Applicable only to Remote Copy groups in asychronous
+       periodic mode.\n"
+    type: bool
+  full_sync:
+    default: false
+    description:
+      - "Enables (true) or disables (false) forcing a full synchronization
+       of the Remote Copy group, even if the volumes are already
+       synchronized. Applies only to volume groups in synchronous mode, and
+       can be used to resynchronize volumes that have become inconsistent.\n"
+    type: bool
+  recovery_action:
+    choices:
+      - REVERSE_GROUP
+      - FAILOVER_GROUP
+      - SWITCHOVER_GROUP
+      - RECOVER_GROUP
+      - RESTORE_GROUP
+      - OVERRIDE_GROUP
+      - CLX_DR
+    description:
+      - "Specifies the action to be taken on the specified group.\n"
+  skip_start:
+    default: false
+    description:
+      - "If true, groups are not started after role reversal is completed.
+       Valid for only FAILOVER, RECOVER, and RESTORE operations.\n"
+    type: bool
+  skip_sync:
+    default: false
+    description:
+      - "If true, the groups are not synchronized after role reversal is
+        completed. Valid for FAILOVER, RECOVER, and RESTORE operations only.\n"
+    type: bool
+  discard_new_data:
+    default: false
+    description:
+      - "If true and the group has multiple targets, do not check
+       other targets of the group to see if newer data should be
+       pushed from them. Valid for FAILOVER operation only.\n"
+    type: bool
+  skip_promote:
+    default: false
+    description:
+      - "If true, the snapshots of the groups that are switched from
+       secondary to primary are not promoted to the base
+       volume. Valid for FAILOVER and REVERSE operations only.\n"
+    type: bool
+  stop_groups:
+    default: false
+    description:
+      - "If true, the groups are stopped before performing
+       the reverse operation. Valid for REVERSE operation only.\n"
+    type: bool
+  local_groups_direction:
+    default: false
+    description:
+      - "If true, the group’s direction is changed only on the system
+       where the operation is run. Valid for REVERSE operation only.\n"
+    type: bool
+  volume_name:
+    description:
+      - "Specifies the name of the existing virtual volume to
+       be admitted to an existing Remote Copy group.\n"
+  source_port:
+    description:
+      - "node:slot:port Specifies the node, slot, and port of
+       the Ethernet port on the local system Ethernet port on the
+       local system.\n"
+  target_port_wwn_or_ip:
+    description:
+      - "IP/WWN address of the peer port on the target system.\n"
+  target_mode:
+    choices:
+      - sync
+      - periodic
+      - async
+    description:
+      - "Specifies the mode of the target as either synchronous (sync),
+       asynchronous periodic (periodic), or asynchronous streaming (async).\n"
+  local_remote_volume_pair_list:
+    description:
+      - "Is a list of tuples , where each tuple contains primary and
+       secondary volumes i.e. [(primary_vv1,secondary_vv1),(primary_vv2
+       ,secondary_vv2)].\n"
+  state:
+    choices:
+      - present
+      - absent
+      - modify
+      - add_volume
+      - remove_volume
+      - start
+      - stop
+      - synchronize
+      - recover
+      - admitlink
+      - dismisslink
+      - admittarget
+      - dismisstarget
+      - startrcopy
+    description:
+      - "Whether the specified Remote Copy Group should exist or not. State
+       also provides actions to modify Remote copy Group ,add/remove volumes,
+       start/stop/synchronize/recover remote copy group, Add/remove remote
+       copy link, start remote copy services, admit/dismiss target.\n"
+    required: true
+  storage_system_ip:
+    description:
+      - "The storage system IP address.\n"
+    required: true
+  storage_system_password:
+    description:
+      - "The storage system password.\n"
+    required: true
+  storage_system_username:
+    description:
+      - "The storage system user name.\n"
+    required: true
+
+requirements:
+  - "3PAR OS - 3.2.2 MU6, 3.3.1 MU1"
+  - "Ansible - 2.4"
+  - "hpe3par_sdk 1.0.0"
+  - "WSAPI service should be enabled on the 3PAR storage array."
+short_description: "Manage HPE 3PAR Host"
+version_added: "2.4"
+'''
+
+EXAMPLES = r'''
+- hosts: localhost
+  tasks:
+  - name: Load Storage System Vars
+    include_vars: 'properties/storage_system_properties.yml'
+
+  - name: Create volume on source
+    hpe3par_volume:
+      storage_system_ip: 10.10.10.1
+      storage_system_password: password
+      storage_system_username: username
+      state: present
+      volume_name: demo_volume_1
+      size: 1024
+      size_unit: MiB
+      cpg: FC_r1
+      snap_cpg: FC_r1
+
+  - name: Create volume on source
+    hpe3par_volume:
+      storage_system_ip: 10.10.10.1
+      storage_system_password: password
+      storage_system_username: username
+      state: present
+      volume_name: demo_volume_2
+      size: 1024
+      size_unit: MiB
+      cpg: FC_r1
+      snap_cpg: FC_r1     
+
+  - name: Create volume on target
+    hpe3par_volume:
+      storage_system_ip: 10.10.10.1
+      storage_system_password: password
+      storage_system_username: username
+      state: present
+      volume_name: demo_volume_1
+      size: 1024
+      size_unit: MiB
+      cpg: FC_r1
+      snap_cpg: FC_r1     
+
+  - name: Create volume on target
+    hpe3par_volume:
+      storage_system_ip: 10.10.10.1
+      storage_system_password: password
+      storage_system_username: username
+      state: present
+      volume_name: demo_volume_2
+      size: 1024
+      size_unit: MiB
+      cpg: FC_r1
+      snap_cpg: FC_r1           
+  
+  - name: Create Remote Copy Group farhan_rcg
+    hpe3par_remote_copy:
+      storage_system_ip: 10.10.10.1
+      storage_system_password: password
+      storage_system_username: username
+      state: present 
+      remote_copy_group_name: farhan_rcg
+      targets:
+      - targetName: CSSOS-SSA06
+        mode: 1
+        
+  - pause:
+      prompt: "Press Enter"
+        
+  - name: Add volume to remote copy group
+    hpe3par_remote_copy:
+      storage_system_ip: 10.10.10.1
+      storage_system_password: password
+      storage_system_username: username
+      state: add_volume
+      remote_copy_group_name: farhan_rcg
+      volume_name: demo_volume_1
+      targets:
+      - targetName: CSSOS-SSA06
+        secVolumeName: demo_volume_1
+        
+  - name: Add volume to remote copy group
+    hpe3par_remote_copy:
+      storage_system_ip: 10.10.10.1
+      storage_system_password: password
+      storage_system_username: username
+      state: add_volume
+      remote_copy_group_name: farhan_rcg
+      volume_name: demo_volume_2
+      targets:
+      - targetName: CSSOS-SSA06
+        secVolumeName: demo_volume_2
+        
+  - pause:
+      prompt: "Press Enter"
+        
+  - name: Start remote copy
+    hpe3par_remote_copy:
+      storage_system_ip: 10.10.10.1
+      storage_system_password: password
+      storage_system_username: username
+      remote_copy_group_name: farhan_rcg
+      state: start
+      
+  - pause:
+      prompt: "Press Enter"
+      
+  - name: Stop remote copy
+    hpe3par_remote_copy:
+      storage_system_ip: 10.10.10.1
+      storage_system_password: password
+      storage_system_username: username
+      remote_copy_group_name: farhan_rcg
+      state: stop
+      
+  - pause:
+      prompt: "Press Enter"
+      
+  - name: Remove volume from remote copy group
+    hpe3par_remote_copy:
+      storage_system_ip: 10.10.10.1
+      storage_system_password: password
+      storage_system_username: username
+      state: remove_volume
+      remote_copy_group_name: farhan_rcg
+      volume_name: demo_volume_1
+      targets:
+      - targetName: CSSOS-SSA06
+        secVolumeName: demo_volume_1
+        
+  - name: Remove volume from remote copy group
+    hpe3par_remote_copy:
+      storage_system_ip: 10.10.10.1
+      storage_system_password: password
+      storage_system_username: username
+      state: remove_volume
+      remote_copy_group_name: farhan_rcg
+      volume_name: demo_volume_2
+      targets:
+      - targetName: CSSOS-SSA06
+        secVolumeName: demo_volume_2
+        
+  - pause:
+      prompt: "Press Enter"
+        
+  - name: Remove Remote Copy Group farhan_rcg
+    hpe3par_remote_copy:
+      storage_system_ip: 10.10.10.1
+      storage_system_password: password
+      storage_system_username: username
+      state: absent 
+      remote_copy_group_name: farhan_rcg
+
+  - pause:
+      prompt: "Press Enter"
+
+  - name: dismiss remote copy link
+    hpe3par_remote_copy:
+      storage_system_ip: 10.10.10.1
+      storage_system_password: password
+      storage_system_username: username
+      state: dismisslink
+      target_name: CSSOS-SSA06
+      source_port: 0:3:1
+      target_port_wwn_or_ip: 192.168.1.2
+
+  - name: dismiss remote copy link
+    hpe3par_remote_copy:
+      storage_system_ip: 10.10.10.1
+      storage_system_password: password
+      storage_system_username: username
+      state: dismisslink
+      target_name: CSSOS-SSA06
+      source_port: "1:3:1"
+      target_port_wwn_or_ip: 192.168.2.2
+
+  - pause:
+      prompt: "Press Enter"
+
+  - name: Admit remote copy link
+    hpe3par_remote_copy:
+      storage_system_ip: 10.10.10.1
+      storage_system_password: password
+      storage_system_username: username
+      state: admitlink
+      target_name: CSSOS-SSA06
+      source_port: 0:3:1
+      target_port_wwn_or_ip: 192.168.1.2
+
+  - name: Admit remote copy link
+    hpe3par_remote_copy:
+      storage_system_ip: 10.10.10.1
+      storage_system_password: password
+      storage_system_username: username
+      state: admitlink
+      target_name: CSSOS-SSA06
+      source_port: "1:3:1"
+      target_port_wwn_or_ip: 192.168.2.2
+
+  - pause:
+      prompt: "Press Enter"
+
+  - name: start remote copy service
+    hpe3par_remote_copy:
+      storage_system_ip: 10.10.10.1
+      storage_system_password: password
+      storage_system_username: username
+      state: startrcopy
+'''
+
+RETURN = r'''
+'''
+
 ########################################################
 #                                                      #
 #       TODO: Placeholder for documentation            #
