@@ -31,7 +31,7 @@ DOCUMENTATION = r'''
 ---
 author: "Hewlett Packard Enterprise (ecostor@groups.ext.hpe.com )"
 description: "On HPE 3PAR - Create Snapshot. - Delete Snapshot. - Modify
- Snapshot."
+ Snapshot. - Create Schedule. - Delete Schedule."
 module: hpe3par_snapshot
 options:
   allow_remote_copy_parent:
@@ -117,11 +117,21 @@ options:
     description:
       - "Specifies a snapshot volume name."
     required: true
+  schedule_name:
+    description:
+      - "Name of the schedule."
+    required: true
+  task_freq:
+    description:
+      - "Frequency of the schedule to be created."
+    required: false
   state:
     choices:
       - present
       - absent
       - modify
+      - schedule_create
+      - schedule_delete
       - restore_offline
       - restore_online
     description:
@@ -194,6 +204,8 @@ EXAMPLES = r'''
         storage_system_password="{{ storage_system_password }}"
         state=absent
         snapshot_name="{{ snapshot_name }}"
+
+
 '''
 
 RETURN = r'''
@@ -435,13 +447,134 @@ password is null",
         snapshot_name,
         {})
 
+def create_schedule(
+        client_obj,
+        storage_system_ip,        
+        storage_system_username,
+        storage_system_password,
+        schedule_name,
+        snapshot_name,
+        base_volume_name,
+        read_only,
+        expiration_time,
+        retention_time,
+        expiration_unit,
+        retention_unit,
+        task_freq, task_freq_custom):
+    if storage_system_username is None or storage_system_password is None:
+        return (
+            False,
+            False,
+            "Schedule creation failed. Storage system username or password is \
+null",
+            {})
+    if schedule_name is None:
+        return (
+            False,
+            False,
+            "Schedule create failed. Schedule name is null",
+            {})                 
+    if snapshot_name is None:
+        return (
+            False,
+            False,
+            "Schedule create failed. Snapshot name is null",
+            {})
+    if len(schedule_name) < 1 or len(schedule_name) > 31:
+        return (False, False, "Schedule creation failed. Schedule name must be atleast 1 character and not more than 31 characters", {})
+
+    if len(snapshot_name) < 1 or len(snapshot_name) > 31:
+        return (False, False, "Schedule create failed. Snapshot name must be atleast 1 character and not more than 31 characters", {})
+    if base_volume_name is None:
+        return (
+            False,
+            False,
+            "Schedule create failed. Base volume name is null",
+            {})
+    if len(base_volume_name) < 1 or len(base_volume_name) > 31:
+        return (False, False, "Schedule create failed. Base volume name must be atleast 1 character and not more than 31 characters", {})
+    try:
+        client_obj.login(storage_system_username, storage_system_password)
+        client_obj.setSSHOptions(storage_system_ip, storage_system_username, storage_system_password)
+        expirationHours = convert_to_hours(expiration_time, expiration_unit)
+        retentionHours = convert_to_hours(retention_time, retention_unit)
+        if not client_obj.scheduleExists(schedule_name):
+           cmd = ["createsv"]
+           if read_only:
+              cmd.append("-ro")
+              cmd.append("-exp")
+              cmd.append(str(expirationHours))
+              cmd.append("-retain")
+              cmd.append(str(retentionHours))
+              snap_string = ".@y@@m@@d@@H@@M@@S@"
+              cmd.append("snap-"+base_volume_name+snap_string)
+              cmd.append(base_volume_name)
+              if task_freq_custom:
+                 freq = task_freq_custom
+
+              if task_freq:
+                  freq="@"+task_freq
+              cmd = ' '.join(cmd)
+              client_obj.createSchedule(
+                schedule_name, cmd, freq)
+        else:
+            return (True, False, "Schedule not Exist", {})
+    except Exception as e:
+        return (False, "False", "Schedule creation failed | %s" % (e), {})
+    finally:
+        client_obj.logout()
+    return (
+        True,
+        True,
+        "Created Schedule %s successfully." %
+        schedule_name,
+        {})
+                
+def delete_schedule(
+        client_obj,
+        storage_system_ip,
+        storage_system_username,
+        storage_system_password,
+        schedule_name):
+    if storage_system_username is None or storage_system_password is None:
+        return (
+            False,
+            False,
+            "schedule delete failed. Storage system username or password is \
+null",
+            {})
+    if schedule_name is None:
+        return (
+            False,
+            False,
+            "schedule delete failed. Schedule name is null",
+            {})
+    if len(schedule_name) < 1 or len(schedule_name) > 31:
+        return (False, False, "schedule create failed. Schedule name must be atleast 1 character and not more than 31 characters", {})
+    try:
+        client_obj.login(storage_system_username, storage_system_password)
+        client_obj.setSSHOptions(storage_system_ip, storage_system_username, storage_system_password)
+        if client_obj.scheduleExists(schedule_name):
+           client_obj.deleteSchedule(schedule_name)
+        else:
+           return (True, False, "Schedule does not exist", {})
+    except Exception as e:
+        return (False, False, "Schedule delete failed | %s" % (e), {})
+    finally:
+        client_obj.logout()
+    return (
+        True,
+        True,
+        "Deleted Schedule %s successfully." %
+        schedule_name,
+        {})             
 
 def main():
 
     fields = {
         "state": {
             "required": True,
-            "choices": ['present', 'absent', 'modify', 'restore_offline',
+            "choices": ['present', 'absent', 'schedule_create', 'schedule_delete', 'modify', 'restore_offline',
                         'restore_online'],
             "type": 'str'
         },
@@ -460,7 +593,6 @@ def main():
             "no_log": True
         },
         "snapshot_name": {
-            "required": True,
             "type": "str"
         },
         "base_volume_name": {
@@ -505,7 +637,18 @@ def main():
         },
         "rm_exp_time": {
             "type": "bool"
+        },
+        "schedule_name": {
+            "type": "str"
+        },
+        "task_freq": {
+            "type": "str",
+            "choices": ['yearly', 'monthly', 'weekly', 'daily', 'hourly']
+        },
+        "task_freq_custom": {
+            "type": "str"           
         }
+
     }
 
     module = AnsibleModule(argument_spec=fields)
@@ -529,6 +672,10 @@ def main():
     allow_remote_copy_parent = module.params["allow_remote_copy_parent"]
     new_name = module.params["new_name"]
     rm_exp_time = module.params["rm_exp_time"]
+    schedule_name = module.params["schedule_name"]
+    task_freq = module.params["task_freq"]
+    task_freq_custom = module.params["task_freq_custom"]
+
 
     wsapi_url = 'https://%s:8080/api/v1' % storage_system_ip
     client_obj = client.HPE3ParClient(wsapi_url)
@@ -558,6 +705,15 @@ def main():
         return_status, changed, msg, issue_attr_dict = restore_snapshot_online(
             client_obj, storage_system_username, storage_system_password,
             snapshot_name, allow_remote_copy_parent)
+    elif module.params["state"] == "schedule_create":        
+        return_status, changed, msg, issue_attr_dict = create_schedule(
+            client_obj, storage_system_ip, storage_system_username, storage_system_password,
+            schedule_name, snapshot_name, base_volume_name, read_only, expiration_time, retention_time, expiration_unit, retention_unit, task_freq, task_freq_custom)
+    elif module.params["state"] == "schedule_delete":
+        return_status, changed, msg, issue_attr_dict = delete_schedule(
+            client_obj, storage_system_ip, storage_system_username, storage_system_password,
+            schedule_name)
+
 
     if return_status:
         if issue_attr_dict:
