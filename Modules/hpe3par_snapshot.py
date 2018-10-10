@@ -585,7 +585,7 @@ null",
                  cmd.append("-retain")
                  cmd.append(str(retentionHours)+"h")
            snap_string = ".@y@@m@@d@@H@@M@@S@"
-           cmd.append("snap-"+base_volume_name+snap_string)
+           cmd.append(snapshot_name+"-"+base_volume_name+snap_string)
            cmd.append(base_volume_name)
            if task_freq:
               freq="@"+task_freq
