@@ -187,7 +187,7 @@ options:
   local_groups_direction:
     default: false
     description:
-      - "If true, the group’s direction is changed only on the system
+      - "If true, the groups direction is changed only on the system
        where the operation is run. Valid for REVERSE operation only.\n"
     type: bool
   volume_name:
@@ -470,12 +470,6 @@ EXAMPLES = r'''
 
 RETURN = r'''
 '''
-
-########################################################
-#                                                      #
-#       TODO: Placeholder for documentation            #
-#                                                      #
-########################################################
 
 from ansible.module_utils.basic import AnsibleModule
 try:
@@ -865,7 +859,8 @@ def admit_remote_copy_links(
         else:
             response = client_obj.admitRemoteCopyLinks(target_name, source_port, target_port_wwn_or_ip)
     except Exception as e:
-        return (False, False, "Admit remote copy link failed | %s" % (e), {})
+        result = ','.join(e.msg.msg).replace('\r','')
+        return (False, False, "Admit remote copy link failed | %s" % (result), {})
     finally:
         client_obj.logout()
     return (True, True, "Admit remote copy link %s:%s successful." % (source_port, target_port_wwn_or_ip), {})
@@ -896,12 +891,13 @@ def dismiss_remote_copy_links(
     try:
         client_obj.login(storage_system_username, storage_system_password)
         client_obj.setSSHOptions(storage_system_ip, storage_system_username, storage_system_password)
-        if client_obj.rcopyLinkExists(target_name, source_port, target_port_wwn_or_ip):
+        if not client_obj.rcopyLinkExists(target_name, source_port, target_port_wwn_or_ip):
             response = client_obj.dismissRemoteCopyLinks(target_name, source_port, target_port_wwn_or_ip)
         else:
             return (True, False, "Remote copy link %s:%s already not present." % (source_port, target_port_wwn_or_ip), {})
     except Exception as e:
-        return (False, False, "Dismiss remote copy link failed| %s" % (e), {})
+        result = ','.join(e.msg.msg).replace('\r','')
+        return (False, False, "Dismiss remote copy link failed| %s" % (result), {})
     finally:
         client_obj.logout()
     return (True, True, "Dismiss remote copy link %s:%s successful." % (source_port,target_port_wwn_or_ip), {})
@@ -928,7 +924,8 @@ def start_remote_copy_service(
         else:
             response = client_obj.startrCopy()
     except Exception as e:
-        return (False, False, "Start remote copy service failed| %s" % (e), {})
+        result = ','.join(e.msg.msg).replace('\r','')
+        return (False, False, "Start remote copy service failed| %s" % (result), {})
     finally:
         client_obj.logout()
     return (True, True, "Start remote copy service successful.", {})
@@ -970,7 +967,8 @@ def admit_remote_copy_target(
             return (True, False, "Admit remote copy target failed.Target is already present", {})
         results=client_obj.admitRemoteCopyTarget(target_name, target_mode, remote_copy_group_name, local_remote_volume_pair_list)
     except Exception as e:
-        return (False, False, "Admit remote copy target failed| %s" % (e), {})
+        result = ','.join(e.msg.msg).replace('\r','')
+        return (False, False, "Admit remote copy target failed| %s" % (result), {})
     finally:
         client_obj.logout()
     return (True, True, "Admit remote copy target %s successful in remote copy group %s." % (target_name, remote_copy_group_name), {})
@@ -1011,7 +1009,8 @@ def dismiss_remote_copy_target(
 
         results=client_obj.dismissRemoteCopyTarget(target_name, remote_copy_group_name)
     except Exception as e:
-        return (False, False, "Dismiss remote copy target failed| %s" % (e), {})
+        result = ','.join(e.msg.msg).replace('\r','')
+        return (False, False, "Dismiss remote copy target failed| %s" % (result), {})
     finally:
         client_obj.logout()
     return (True, True, "Dismiss remote copy target %s successful." % target_name, {})
