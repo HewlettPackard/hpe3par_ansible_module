@@ -892,9 +892,9 @@ def dismiss_remote_copy_links(
         client_obj.login(storage_system_username, storage_system_password)
         client_obj.setSSHOptions(storage_system_ip, storage_system_username, storage_system_password)
         if not client_obj.rcopyLinkExists(target_name, source_port, target_port_wwn_or_ip):
-            response = client_obj.dismissRemoteCopyLinks(target_name, source_port, target_port_wwn_or_ip)
-        else:
             return (True, False, "Remote copy link %s:%s already not present." % (source_port, target_port_wwn_or_ip), {})
+        else:
+            response = client_obj.dismissRemoteCopyLinks(target_name, source_port, target_port_wwn_or_ip)
     except Exception as e:
         result = ','.join(e.msg.msg).replace('\r','')
         return (False, False, "Dismiss remote copy link failed| %s" % (result), {})
