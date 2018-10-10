@@ -477,6 +477,27 @@ try:
 except ImportError:
     client = None
 
+def validate_and_form_target(targets):
+    targets_transformed=[]
+    for dict1 in targets:
+        new_dict={}
+        for key in dict1.keys():
+            if key == 'target_name':
+                new_dict['targetName']=dict1.get(key)
+            if key == 'target_mode':
+                if dict1.get(key) == 'SYNC':
+                    new_dict['mode'] = 1
+                if dict1.get(key) == 'PERIODIC':
+                    new_dict['mode'] = 3
+                if dict1.get(key) == 'ASYNC':
+                    new_dict['mode'] = 4
+            if key == 'user_cpg':
+                new_dict['userCPG']=dict1.get(key)
+            if key == 'snap_cpg':
+                new_dict['snapCPG']=dict1.get(key)
+        targets_transformed.append(new_dict)
+    return targets_transformed 
+
 def create_remote_copy_group(
             client_obj,
             storage_system_username,
@@ -507,6 +528,7 @@ def create_remote_copy_group(
                 'localUserCPG': local_user_cpg,
                 'localSnapCPG': local_snap_cpg
             }
+            targets = validate_and_form_target(targets) 
             client_obj.createRemoteCopyGroup(remote_copy_group_name, targets, optional)
         else:
             return (True, False, "Remote Copy Group already present", {})
