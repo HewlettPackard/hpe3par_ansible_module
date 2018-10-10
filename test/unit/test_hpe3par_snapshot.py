@@ -27,7 +27,7 @@ class TestHpe3parSnapshot(unittest.TestCase):
     fields = {
         "state": {
             "required": True,
-            "choices": ['present', 'absent', 'schedule_create', 'schedule_delete', 'modify', 'restore_offline', 'restore_online'],
+            "choices": ['present', 'absent', 'create', 'delete', 'modify', 'restore_offline', 'restore_online'],
             "type": 'str'
         },
         "storage_system_ip": {
@@ -379,7 +379,7 @@ class TestHpe3parSnapshot(unittest.TestCase):
             'allow_remote_copy_parent': None,
             'new_name': None,
             'rm_exp_time': None,
-            'state': 'schedule_create',
+            'state': 'create',
             'schedule_name': 'test_schedule',
             'task_freq': 'hourly', 
             'task_freq_custom': '0 * * * *' 
@@ -422,7 +422,7 @@ class TestHpe3parSnapshot(unittest.TestCase):
             'allow_remote_copy_parent': None,
             'new_name': None,
             'rm_exp_time': None,
-            'state': 'schedule_delete',
+            'state': 'delete',
             'schedule_name': 'test_schedule',
             'task_freq': 'hourly',
             'task_freq_custom': '0 * * * *'
@@ -635,6 +635,7 @@ null", {}))
     def test_create_schedule(self, mock_client):
         mock_client.HPE3ParClient.login.return_value = None
         mock_client.HPE3ParClient.scheduleExists.return_value = False
+        mock_client.HPE3ParClient.volumeExists.return_value = True
         mock_client.HPE3ParClient.createSchedule.return_value = None
         mock_client.HPE3ParClient.logout.return_value = None
         self.assertEqual(hpe3par_snapshot.create_schedule(mock_client.HPE3ParClient,
@@ -650,7 +651,52 @@ null", {}))
                                                           'Hours',
                                                           'Days',
                                                           'hourly',''
+                                                          ), (False, False, "Expiration time must be greater than or equal to retention time", {}))
+
+        self.assertEqual(hpe3par_snapshot.create_schedule(mock_client.HPE3ParClient,
+                                                          '192.168.0.1',
+                                                          'USER',
+                                                          'PASS',
+                                                          'test_schedule',
+                                                          'test_snapshot',
+                                                          'base_volume',
+                                                          True,
+                                                          10,
+                                                          10,
+                                                          'Hours',
+                                                          'Hours',
+                                                          'hourly',''
                                                           ), (True, True, "Created Schedule %s successfully." % 'test_schedule', {}))
+        self.assertEqual(hpe3par_snapshot.create_schedule(mock_client.HPE3ParClient,
+                                                          '192.168.0.1',
+                                                          'USER',
+                                                          'PASS',
+                                                          'test_schedule',
+                                                          'test_snapshot',
+                                                          'base_volume',
+                                                          True,
+                                                          10,
+                                                          10,
+                                                          'Hours',
+                                                          'Hours',
+                                                          'hourly','0 * * * *'
+                                                          ), (False, False, "Please Enter either task_freq or task_freq_custom", {}))
+
+        self.assertEqual(hpe3par_snapshot.create_schedule(mock_client.HPE3ParClient,
+                                                          '192.168.0.1',
+                                                          'USER',
+                                                          'PASS',
+                                                          'test_schedule',
+                                                          'test_snapshot',
+                                                          'base_volume',
+                                                          True,
+                                                          10,
+                                                          10,
+                                                          'Hours',
+                                                          'Hours',
+                                                          '','*****'
+                                                          ), (False, False, "Invalid task freq", {}))
+
 
         mock_client.HPE3ParClient.scheduleExists.return_value = True
         self.assertEqual(hpe3par_snapshot.create_schedule(mock_client.HPE3ParClient,
@@ -664,9 +710,9 @@ null", {}))
                                                           10,
                                                           10,
                                                           'Hours',
-                                                          'Days',
+                                                          'Hours',
                                                           'hourly',''
-                                                          ), (True, False, "Schedule not Exist", {}))
+                                                          ), (True, False, "Schedule already Exist", {}))
         
         mock_client.HPE3ParClient.scheduleExists.return_value = True
         self.assertEqual(hpe3par_snapshot.create_schedule(mock_client.HPE3ParClient,
@@ -680,7 +726,7 @@ null", {}))
                                                           10,
                                                           10,
                                                           'Hours',
-                                                          'Days',
+                                                          'Hours',
                                                           'hourly',''
                                                           ), (False, False, "Schedule creation failed. Storage system username or password is null", {}))
 
@@ -695,7 +741,7 @@ null", {}))
                                                           10,
                                                           10,
                                                           'Hours',
-                                                          'Days',
+                                                          'Hours',
                                                           'hourly',''
                                                           ), (False, False, "Schedule create failed. Schedule name is null", {}))
 
@@ -710,7 +756,7 @@ null", {}))
                                                           10,
                                                           10,
                                                           'Hours',
-                                                          'Days',
+                                                          'Hours',
                                                           'hourly',''
                                                           ), (False, False, "Schedule create failed. Snapshot name is null", {}))
         self.assertEqual(hpe3par_snapshot.create_schedule(mock_client.HPE3ParClient,
@@ -724,9 +770,25 @@ null", {}))
                                                           10,
                                                           10,
                                                           'Hours',
-                                                          'Days',
+                                                          'Hours',
                                                           '0 * * * *',''
                                                           ), (False, False, "Schedule create failed. Base volume name is null", {}))
+        mock_client.HPE3ParClient.volumeExists.return_value = False
+        self.assertEqual(hpe3par_snapshot.create_schedule(mock_client.HPE3ParClient,
+                                                          '192.168.0.1',
+                                                          'USER',
+                                                          'PASS',
+                                                          'test_schedule',
+                                                          'test_snapshot',
+                                                          'base_volume',
+                                                          True,
+                                                          10,
+                                                          10,
+                                                          'Hours',
+                                                          'Hours',
+                                                          '0 * * * *',''
+                                                          ), (False, False, "Volume does not Exist", {}))
+
        
     @mock.patch('Modules.hpe3par_snapshot.client')
     def test_delete_schedule(self, mock_client):
@@ -755,14 +817,14 @@ null", {}))
                                                           'USER',
                                                           None,
                                                           'test_schedule'
-                                                          ), (False, False, "schedule delete failed. Storage system username or password is null", {}))
+                                                          ), (False, False, "Schedule delete failed. Storage system username or password is null", {}))
 
         self.assertEqual(hpe3par_snapshot.delete_schedule(mock_client.HPE3ParClient,
                                                           '192.168.0.1',
                                                           'USER',
                                                           'PASS',
                                                           None
-                                                          ), (False, False, "schedule delete failed. Schedule name is null", {}))
+                                                          ), (False, False, "Schedule delete failed. Schedule name is null", {}))
 
 
 if __name__ == '__main__':

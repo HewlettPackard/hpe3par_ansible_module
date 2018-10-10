@@ -522,7 +522,7 @@ null",
 
         freq = "@hourly"
         if not client_obj.volumeExists(base_volume_name):
-           return (False, False, "Volume not Exist", {})
+           return (False, False, "Volume does not Exist", {})
         
         if retentionHours > expirationHours:
            return (False, False, "Expiration time must be greater than or equal to retention time", {})   
@@ -593,7 +593,7 @@ null",
            client_obj.createSchedule(
                 schedule_name, cmd, freq)
         else:
-            return (True, False, "Schedule Exist", {})
+            return (True, False, "Schedule already Exist", {})
     except Exception as e:
         return (False, "False", "Schedule creation failed | %s" % (e), {})
     finally:
