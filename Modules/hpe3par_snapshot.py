@@ -123,15 +123,18 @@ options:
     required: true
   task_freq:
     description:
-      - "Frequency of the schedule to be created."
+      - "Frequency as special string for the schedule to be created."
     required: false
+  task_freq_custom:
+    description:
+      - "Custom frequency for the schedule to be created."
   state:
     choices:
       - present
       - absent
       - modify
-      - schedule_create
-      - schedule_delete
+      - create
+      - delete
       - restore_offline
       - restore_online
     description:
@@ -204,6 +207,24 @@ EXAMPLES = r'''
         storage_system_password="{{ storage_system_password }}"
         state=absent
         snapshot_name="{{ snapshot_name }}"
+
+    - name: Create schedule my_ansible_sc
+      hpe3par_snapshot:
+        storage_system_ip="{{ storage_system_ip }}"
+        storage_system_username="{{ storage_system_username }}"
+        storage_system_password="{{ storage_system_password }}"
+        state=create
+        schedule_name="{{ schedule_name }}"
+        snapshot_name="{{ snapshot_name }}"
+
+
+    - name: Delete schedule my_ansible_sc
+      hpe3par_snapshot:
+        storage_system_ip="{{ storage_system_ip }}"
+        storage_system_username="{{ storage_system_username }}"
+        storage_system_password="{{ storage_system_password }}"
+        state=absent
+        schedule_name="{{ schedule_name }}"
 
 
 '''
@@ -498,27 +519,81 @@ null",
         client_obj.setSSHOptions(storage_system_ip, storage_system_username, storage_system_password)
         expirationHours = convert_to_hours(expiration_time, expiration_unit)
         retentionHours = convert_to_hours(retention_time, retention_unit)
+
+        freq = "@hourly"
+        if not client_obj.volumeExists(base_volume_name):
+           return (False, False, "Volume not Exist", {})
+        
+        if retentionHours > expirationHours:
+           return (False, False, "Expiration time must be greater than or equal to retention time", {})   
+       
+        if task_freq_custom:          
+          if ' ' in task_freq_custom:            
+           taskcm = str(task_freq_custom).split()
+           if len(taskcm) == 5:
+               minutes_t = taskcm[0]               
+               hour_t = taskcm[1]
+               day_t = taskcm[2]
+               month_t = taskcm[3]  
+               dow_t = taskcm[4]
+               if '*' not in minutes_t:
+                  if (int(minutes_t) > 50 or int(minutes_t) < 0):
+                    return (False, False, "Invalid task freq", {})
+               else:
+                  if (len(minutes_t)>1 or minutes_t == ""):
+                    return (False, False, "Invalid task freq", {})
+               if '*' not in hour_t:
+                  if (int(hour_t) > 23 or int(hour_t) < 0):
+                    return (False, False, "Invalid task freq", {})
+               else:
+                  if (len(hour_t)>1 or hour_t == ""):
+                    return (False, False, "Invalid task freq", {})
+               if '*' not in day_t:
+                  if (int(day_t) > 31 or int(day_t) < 1):
+                    return (False, False, "Invalid task freq", {})
+               else:
+                  if (len(day_t)>1 or day_t == ""):
+                    return (False, False, "Invalid task freq", {})
+               if '*' not in month_t:
+                  if (int(month_t) > 12 or int(month_t) < 1):
+                    return (False, False, "Invalid task freq", {})
+               else:
+                  if (len(month_t)>1 or month_t == ""):
+                    return (False, False, "Invalid task freq", {})
+               if '*' not in dow_t:
+                  if (int(dow_t) > 6 or int(dow_t) < 0):
+                    return (False, False, "Invalid task freq", {})
+               else:
+                  if (len(dow_t)>1 or dow_t == ""):
+                    return (False, False, "Invalid task freq", {})
+           else:
+              return (False, False, "Invalid task freq", {})
+          else:
+              return (False, False, "Invalid task freq", {})
+          freq = task_freq_custom
+
+        if task_freq_custom and task_freq:
+            return (False, False, "Please Enter either task_freq or task_freq_custom", {})    
         if not client_obj.scheduleExists(schedule_name):
            cmd = ["createsv"]
            if read_only:
               cmd.append("-ro")
+           if expirationHours != None:
               cmd.append("-exp")
-              cmd.append(str(expirationHours))
-              cmd.append("-retain")
-              cmd.append(str(retentionHours))
-              snap_string = ".@y@@m@@d@@H@@M@@S@"
-              cmd.append("snap-"+base_volume_name+snap_string)
-              cmd.append(base_volume_name)
-              if task_freq_custom:
-                 freq = task_freq_custom
-
-              if task_freq:
-                  freq="@"+task_freq
-              cmd = ' '.join(cmd)
-              client_obj.createSchedule(
+              cmd.append(str(expirationHours)+"h")
+           if retentionHours != None:
+                 cmd.append("-retain")
+                 cmd.append(str(retentionHours)+"h")
+           snap_string = ".@y@@m@@d@@H@@M@@S@"
+           cmd.append("snap-"+base_volume_name+snap_string)
+           cmd.append(base_volume_name)
+           if task_freq:
+              freq="@"+task_freq
+           cmd = ' '.join(cmd)
+           client_obj.createSchedule(
                 schedule_name, cmd, freq)
         else:
-            return (True, False, "Schedule not Exist", {})
+            return (True, False, "Schedule Exist", {})
     except Exception as e:
         return (False, "False", "Schedule creation failed | %s" % (e), {})
     finally:
@@ -527,7 +602,7 @@ null",
         True,
         True,
         "Created Schedule %s successfully." %
-        schedule_name,
+       schedule_name,
         {})
                 
 def delete_schedule(
@@ -540,17 +615,17 @@ def delete_schedule(
         return (
             False,
             False,
-            "schedule delete failed. Storage system username or password is \
+            "Schedule delete failed. Storage system username or password is \
 null",
             {})
     if schedule_name is None:
         return (
             False,
             False,
-            "schedule delete failed. Schedule name is null",
+            "Schedule delete failed. Schedule name is null",
             {})
     if len(schedule_name) < 1 or len(schedule_name) > 31:
-        return (False, False, "schedule create failed. Schedule name must be atleast 1 character and not more than 31 characters", {})
+        return (False, False, "Schedule create failed. Schedule name must be atleast 1 character and not more than 31 characters", {})
     try:
         client_obj.login(storage_system_username, storage_system_password)
         client_obj.setSSHOptions(storage_system_ip, storage_system_username, storage_system_password)
@@ -574,7 +649,7 @@ def main():
     fields = {
         "state": {
             "required": True,
-            "choices": ['present', 'absent', 'schedule_create', 'schedule_delete', 'modify', 'restore_offline',
+            "choices": ['present', 'absent', 'create', 'delete', 'modify', 'restore_offline',
                         'restore_online'],
             "type": 'str'
         },
@@ -705,11 +780,11 @@ def main():
         return_status, changed, msg, issue_attr_dict = restore_snapshot_online(
             client_obj, storage_system_username, storage_system_password,
             snapshot_name, allow_remote_copy_parent)
-    elif module.params["state"] == "schedule_create":        
+    elif module.params["state"] == "create":        
         return_status, changed, msg, issue_attr_dict = create_schedule(
             client_obj, storage_system_ip, storage_system_username, storage_system_password,
             schedule_name, snapshot_name, base_volume_name, read_only, expiration_time, retention_time, expiration_unit, retention_unit, task_freq, task_freq_custom)
-    elif module.params["state"] == "schedule_delete":
+    elif module.params["state"] == "delete":
         return_status, changed, msg, issue_attr_dict = delete_schedule(
             client_obj, storage_system_ip, storage_system_username, storage_system_password,
             schedule_name)
