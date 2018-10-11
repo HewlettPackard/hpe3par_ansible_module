@@ -805,7 +805,7 @@ null", {}))
                                                           'hourly',''
                                                           ), (True, False, "Schedule already Exist", {}))
         
-        mock_client.HPE3ParClient.scheduleExists.return_value = True
+        mock_client.HPE3ParClient.scheduleExists.return_value = False
         self.assertEqual(hpe3par_snapshot.create_schedule(mock_client.HPE3ParClient,
                                                           '192.168.0.1',
                                                           'USER',
@@ -835,6 +835,36 @@ null", {}))
                                                           'Hours',
                                                           'hourly',''
                                                           ), (False, False, "Schedule create failed. Schedule name is null", {}))
+
+        self.assertEqual(hpe3par_snapshot.create_schedule(mock_client.HPE3ParClient,
+                                                          '192.168.0.1',
+                                                          'USER',
+                                                          'PASS',
+                                                          'test_schedule',
+                                                          'test_snapshot123456789101112131415',
+                                                          'base_volume',
+                                                          True,
+                                                          10,
+                                                          10,
+                                                          'Hours',
+                                                          'Hours',
+                                                          'hourly',''
+                                                          ), (False, False, "Schedule create failed. Snapshot name must be atleast 1 character and not more than 20 characters", {}))
+
+        self.assertEqual(hpe3par_snapshot.create_schedule(mock_client.HPE3ParClient,
+                                                          '192.168.0.1',
+                                                          'USER',
+                                                          'PASS',
+                                                          'test_schedule',
+                                                          'test_snapsho',
+                                                          'base_volume',
+                                                          '',
+                                                          10,
+                                                          10,
+                                                          'Hours',
+                                                          'Hours',
+                                                          'hourly',''
+                                                          ), (True, True, "Created Schedule %s successfully." % 'test_schedule', {}))
 
         self.assertEqual(hpe3par_snapshot.create_schedule(mock_client.HPE3ParClient,
                                                           '192.168.0.1',

@@ -1,5 +1,3 @@
-#!/usr/bin/python
-
 # (C) Copyright 2018 Hewlett Packard Enterprise Development LP
 #
 # This program is free software; you can redistribute it and/or modify
@@ -166,65 +164,62 @@ version_added: "2.4"
 EXAMPLES = r'''
     - name: Create Volume snasphot my_ansible_snapshot
       hpe3par_snapshot:
-        storage_system_ip="{{ storage_system_ip }}"
-        storage_system_username="{{ storage_system_username }}"
-        storage_system_password="{{ storage_system_password }}"
-        state=present
-        snapshot_name="{{ snapshot_name }}"
-        base_volume_name="{{ base_volume_name }}"
-        read_only=False
+        storage_system_ip: 10.10.10.1
+        storage_system_username: username
+        storage_system_password: password
+        state: present
+        snapshot_name: snap-volume
+        base_volume_name: test_volume
+        read_only: False
 
     - name: Restore offline Volume snasphot my_ansible_snapshot
       hpe3par_snapshot:
-        storage_system_ip="{{ storage_system_ip }}"
-        storage_system_username="{{ storage_system_username }}"
-        storage_system_password="{{ storage_system_password }}"
-        state=restore_offline
-        snapshot_name="{{ snapshot_name }}"
-        priority="MEDIUM"
+        storage_system_ip: 10.10.10.1
+        storage_system_username: username
+        storage_system_password: password
+        state: restore_offline
+        snapshot_name: snap-volume
+        priority: MEDIUM
 
     - name: Restore offline Volume snasphot my_ansible_snapshot
       hpe3par_snapshot:
-        storage_system_ip="{{ storage_system_ip }}"
-        storage_system_username="{{ storage_system_username }}"
-        storage_system_password="{{ storage_system_password }}"
-        state=restore_online
-        snapshot_name="{{ snapshot_name }}"
-
+        storage_system_ip: 10.10.10.1
+        storage_system_username: username
+        storage_system_password: password
+        state: restore_online
+        snapshot_name: snap-volume
     - name: Modify/rename snasphot my_ansible_snapshot to my_ansible_snapshot_renamed
       hpe3par_snapshot:
-        storage_system_ip="{{ storage_system_ip }}"
-        storage_system_username="{{ storage_system_username }}"
-        storage_system_password="{{ storage_system_password }}"
-        state=modify
-        snapshot_name="{{ snapshot_name }}"
-        new_name="{{ new_name }}"
+        storage_system_ip: 10.10.10.1
+        storage_system_username: username
+        storage_system_password: password
+        state: modify
+        snapshot_name: snap-volume
+        new_name: snapshot-volume
 
     - name: Delete snasphot my_ansible_snapshot_renamed
       hpe3par_snapshot:
-        storage_system_ip="{{ storage_system_ip }}"
-        storage_system_username="{{ storage_system_username }}"
-        storage_system_password="{{ storage_system_password }}"
-        state=absent
-        snapshot_name="{{ snapshot_name }}"
-
+        storage_system_ip: 10.10.10.1
+        storage_system_username: username
+        storage_system_password: password
+        state: absent
+        snapshot_name: snap-volume
     - name: Create schedule my_ansible_sc
       hpe3par_snapshot:
-        storage_system_ip="{{ storage_system_ip }}"
-        storage_system_username="{{ storage_system_username }}"
-        storage_system_password="{{ storage_system_password }}"
-        state=create_schedule
-        schedule_name="{{ schedule_name }}"
-        snapshot_name="{{ snapshot_name }}"
-
+        storage_system_ip: 10.10.10.1
+        storage_system_username: username
+        storage_system_password: password
+        state: create_schedule
+        schedule_name: my_ansible_sc
+        snapshot_name: snap-volume
 
     - name: Delete schedule my_ansible_sc
       hpe3par_snapshot:
-        storage_system_ip="{{ storage_system_ip }}"
-        storage_system_username="{{ storage_system_username }}"
-        storage_system_password="{{ storage_system_password }}"
-        state=delete_schedule
-        schedule_name="{{ schedule_name }}"
+        storage_system_ip: 10.10.10.1
+        storage_system_username: username
+        storage_system_password: password
+        state: delete_schedule
+        schedule_name: my_ansible_sc
 
 
 '''
@@ -235,7 +230,6 @@ RETURN = r'''
 from ansible.module_utils.basic import AnsibleModule
 try:
     from hpe3par_sdk import client
-    from hpe3parclient import ssh
 except ImportError:
     client = None
 
@@ -506,8 +500,8 @@ null",
     if len(schedule_name) < 1 or len(schedule_name) > 31:
         return (False, False, "Schedule creation failed. Schedule name must be atleast 1 character and not more than 31 characters", {})
 
-    if len(snapshot_name) < 1 or len(snapshot_name) > 31:
-        return (False, False, "Schedule create failed. Snapshot name must be atleast 1 character and not more than 31 characters", {})
+    if len(snapshot_name) < 1 or len(snapshot_name) > 20:
+        return (False, False, "Schedule create failed. Snapshot name must be atleast 1 character and not more than 20 characters", {})
     if base_volume_name is None:
         return (
             False,
@@ -515,18 +509,20 @@ null",
             "Schedule create failed. Base volume name is null",
             {})
     if len(base_volume_name) < 1 or len(base_volume_name) > 31:
-        return (False, False, "Schedule create failed. Base volume name must be atleast 1 character and not more than 31 characters", {})
-    try:
+        return (False, False, "Schedule create failed. Base volume name must be atleast 1 character and not more than 31 characters", {})    
 
-        expirationHours = convert_to_hours(expiration_time, expiration_unit)
-        retentionHours = convert_to_hours(retention_time, retention_unit)
+    expirationHours = convert_to_hours(expiration_time, expiration_unit)
+    retentionHours = convert_to_hours(retention_time, retention_unit)
 
-        freq = "@hourly"
-        if retentionHours > expirationHours:
-           return (False, False, "Expiration time must be greater than or equal to retention time", {})   
-       
-        if task_freq_custom:          
-          if ' ' in task_freq_custom:            
+    freq = "@hourly"
+    if retentionHours > expirationHours:
+       return (False, False, "Expiration time must be greater than or equal to retention time", {})   
+
+    if task_freq_custom and task_freq:
+       return (False, False, "Provide either task_freq or task_freq_custom", {})        
+
+    if task_freq_custom:          
+       if ' ' in task_freq_custom:            
            task_custom_list = str(task_freq_custom).split()
            if len(task_custom_list) == 5:
                minutes_task = task_custom_list[0]               
@@ -566,13 +562,10 @@ null",
                     return (False, False, "Invalid task frequency day of week", {})
            else:
               return (False, False, "Invalid task frequency string", {})
-          else:
-              return (False, False, "Invalid task frequency string", {})
-          freq = task_freq_custom
-
-        if task_freq_custom and task_freq:
-            return (False, False, "Provide either task_freq or task_freq_custom", {})    
-
+       else:
+             return (False, False, "Invalid task frequency string", {})
+       freq = task_freq_custom        
+    try:
         client_obj.login(storage_system_username, storage_system_password)
         client_obj.setSSHOptions(storage_system_ip, storage_system_username, storage_system_password)
         if not client_obj.volumeExists(base_volume_name):
@@ -599,7 +592,7 @@ null",
         else:
             return (True, False, "Schedule already Exist", {})
     except Exception as e:
-        return (False, False, "Schedule creation failed | %s" % (e), {})
+        return (False, "False", "Schedule creation failed | %s" % (e), {})
     finally:
         client_obj.logout()
     return (
