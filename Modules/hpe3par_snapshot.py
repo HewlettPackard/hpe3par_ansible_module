@@ -133,8 +133,8 @@ options:
       - present
       - absent
       - modify
-      - schedule_create
-      - schedule_delete
+      - create_schedule
+      - delete_schedule
       - restore_offline
       - restore_online
     description:
@@ -213,7 +213,7 @@ EXAMPLES = r'''
         storage_system_ip="{{ storage_system_ip }}"
         storage_system_username="{{ storage_system_username }}"
         storage_system_password="{{ storage_system_password }}"
-        state=schedule_create
+        state=create_schedule
         schedule_name="{{ schedule_name }}"
         snapshot_name="{{ snapshot_name }}"
 
@@ -223,7 +223,7 @@ EXAMPLES = r'''
         storage_system_ip="{{ storage_system_ip }}"
         storage_system_username="{{ storage_system_username }}"
         storage_system_password="{{ storage_system_password }}"
-        state=schedule_delete
+        state=delete_schedule
         schedule_name="{{ schedule_name }}"
 
 
@@ -599,7 +599,7 @@ null",
         else:
             return (True, False, "Schedule already Exist", {})
     except Exception as e:
-        return (False, "False", "Schedule creation failed | %s" % (e), {})
+        return (False, False, "Schedule creation failed | %s" % (e), {})
     finally:
         client_obj.logout()
     return (
@@ -653,7 +653,7 @@ def main():
     fields = {
         "state": {
             "required": True,
-            "choices": ['present', 'absent', 'schedule_create', 'schedule_delete', 'modify', 'restore_offline',
+            "choices": ['present', 'absent', 'create_schedule', 'delete_schedule', 'modify', 'restore_offline',
                         'restore_online'],
             "type": 'str'
         },
@@ -784,11 +784,11 @@ def main():
         return_status, changed, msg, issue_attr_dict = restore_snapshot_online(
             client_obj, storage_system_username, storage_system_password,
             snapshot_name, allow_remote_copy_parent)
-    elif module.params["state"] == "schedule_create":        
+    elif module.params["state"] == "create_schedule":        
         return_status, changed, msg, issue_attr_dict = create_schedule(
             client_obj, storage_system_ip, storage_system_username, storage_system_password,
             schedule_name, snapshot_name, base_volume_name, read_only, expiration_time, retention_time, expiration_unit, retention_unit, task_freq, task_freq_custom)
-    elif module.params["state"] == "schedule_delete":
+    elif module.params["state"] == "delete_schedule":
         return_status, changed, msg, issue_attr_dict = delete_schedule(
             client_obj, storage_system_ip, storage_system_username, storage_system_password,
             schedule_name)

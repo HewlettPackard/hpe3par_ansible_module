@@ -27,7 +27,7 @@ class TestHpe3parSnapshot(unittest.TestCase):
     fields = {
         "state": {
             "required": True,
-            "choices": ['present', 'absent', 'schedule_create', 'schedule_delete', 'modify', 'restore_offline', 'restore_online'],
+            "choices": ['present', 'absent', 'create_schedule', 'delete_schedule', 'modify', 'restore_offline', 'restore_online'],
             "type": 'str'
         },
         "storage_system_ip": {
@@ -379,7 +379,7 @@ class TestHpe3parSnapshot(unittest.TestCase):
             'allow_remote_copy_parent': None,
             'new_name': None,
             'rm_exp_time': None,
-            'state': 'schedule_create',
+            'state': 'create_schedule',
             'schedule_name': 'test_schedule',
             'task_freq': 'hourly', 
             'task_freq_custom': '0 * * * *' 
@@ -422,7 +422,7 @@ class TestHpe3parSnapshot(unittest.TestCase):
             'allow_remote_copy_parent': None,
             'new_name': None,
             'rm_exp_time': None,
-            'state': 'schedule_delete',
+            'state': 'delete_schedule',
             'schedule_name': 'test_schedule',
             'task_freq': 'hourly',
             'task_freq_custom': '0 * * * *'
