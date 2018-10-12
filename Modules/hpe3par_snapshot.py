@@ -268,7 +268,8 @@ null",
             "Snapshot create failed. Snapshot name is null",
             {})
     if len(snapshot_name) < 1 or len(snapshot_name) > 31:
-        return (False, False, "Snapshot create failed. Snapshot name must be atleast 1 character and not more than 31 characters", {})
+        return (False, False, "Snapshot create failed. Snapshot name must be \
+atleast 1 character and not more than 31 characters", {})
     if base_volume_name is None:
         return (
             False,
@@ -498,7 +499,8 @@ null",
             "Schedule create failed. Snapshot name is null",
             {})
     if len(schedule_name) < 1 or len(schedule_name) > 31:
-        return (False, False, "Schedule creation failed. Schedule name must be atleast 1 character and not more than 31 characters", {})
+        return (False, False, "Schedule creation failed. Schedule name must be atleast 1 character and not more than 31 characters",
+            {})
 
     if len(snapshot_name) < 1 or len(snapshot_name) > 20:
         return (False, False, "Schedule create failed. Snapshot name must be atleast 1 character and not more than 20 characters", {})
@@ -513,7 +515,6 @@ null",
 
     expirationHours = convert_to_hours(expiration_time, expiration_unit)
     retentionHours = convert_to_hours(retention_time, retention_unit)
-
     freq = "@hourly"
     if retentionHours > expirationHours:
        return (False, False, "Expiration time must be greater than or equal to retention time", {})   
@@ -631,9 +632,6 @@ null",
            return (True, False, "Schedule does not exist", {})
     except Exception as e:
         return (False, False, "Schedule delete failed | %s" % (e), {})
-    finally:
-        pass
-        #client_obj.logout()
     return (
         True,
         True,
