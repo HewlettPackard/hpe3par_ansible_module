@@ -22,10 +22,6 @@
       retention_unit: Hours
       task_freq_custom: "0 * * * *"
 
-  - pause:
-      prompt: "Press Enter"
-
-
   - name: Delete Schedule from source
     hpe3par_snapshot:
       storage_system_ip: 192.168.67.7
