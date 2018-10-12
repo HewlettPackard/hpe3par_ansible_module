@@ -151,7 +151,6 @@ options:
     description:
       - "The storage system user name."
     required: true
-
 requirements:
   - "3PAR OS - 3.2.2 MU6, 3.3.1 MU1"
   - "Ansible - 2.4"
@@ -171,7 +170,6 @@ EXAMPLES = r'''
         snapshot_name: snap-volume
         base_volume_name: test_volume
         read_only: False
-
     - name: Restore offline Volume snasphot my_ansible_snapshot
       hpe3par_snapshot:
         storage_system_ip: 10.10.10.1
@@ -180,7 +178,6 @@ EXAMPLES = r'''
         state: restore_offline
         snapshot_name: snap-volume
         priority: MEDIUM
-
     - name: Restore offline Volume snasphot my_ansible_snapshot
       hpe3par_snapshot:
         storage_system_ip: 10.10.10.1
@@ -196,7 +193,6 @@ EXAMPLES = r'''
         state: modify
         snapshot_name: snap-volume
         new_name: snapshot-volume
-
     - name: Delete snasphot my_ansible_snapshot_renamed
       hpe3par_snapshot:
         storage_system_ip: 10.10.10.1
@@ -220,14 +216,13 @@ EXAMPLES = r'''
         storage_system_password: password
         state: delete_schedule
         schedule_name: my_ansible_sc
-
-
 '''
 
 RETURN = r'''
 '''
 
 from ansible.module_utils.basic import AnsibleModule
+import re
 try:
     from hpe3par_sdk import client
 except ImportError:
@@ -522,35 +517,39 @@ null",
                day_task = task_custom_list[2]
                month_task = task_custom_list[3]  
                day_of_week_task = task_custom_list[4]
-               if '*' not in minutes_task:
+               if '*' not in minutes_task and not re.match("[@_!#$%^&()<>?/\|}{~:-]", minutes_task):
                   if (int(minutes_task) > 59 or int(minutes_task) < 0):
                     return (False, False, "Invalid task frequency minutes should be between 0-59", {})
                else:
-                  if (len(minutes_task)>1 or minutes_task == ""):
+                  if (len(minutes_task)>1 or not minutes_task == "*"):
                     return (False, False, "Invalid task frequency minutes", {})
-               if '*' not in hour_task:
+
+               if '*' not in hour_task and not re.match("[@_!#$%^&()<>?/\|}{~:-]", hour_task):
                   if (int(hour_task) > 23 or int(hour_task) < 0):
                     return (False, False, "Invalid task frequency hours should be between 0-23", {})
                else:
-                  if (len(hour_task)>1 or hour_task == ""):
+                  if (len(hour_task)>1 or not hour_task == "*"):
                     return (False, False, "Invalid task frequency hours", {})
-               if '*' not in day_task:
+
+               if '*' not in day_task and not re.match("[@_!#$%^&()<>?/\|}{~:-]", day_task):
                   if (int(day_task) > 31 or int(day_task) < 1):
                     return (False, False, "Invalid task frequency day should be between 1-31", {})
                else:
-                  if (len(day_task)>1 or day_task == ""):
+                  if (len(day_task)>1 or not day_task == "*"):
                     return (False, False, "Invalid task frequency day", {})
-               if '*' not in month_task:
+
+               if '*' not in month_task and not re.match("[@_!#$%^&()<>?/\|}{~:-]", month_task):
                   if (int(month_task) > 12 or int(month_task) < 1):
                     return (False, False, "Invalid task frequency month should be between 1-12", {})
                else:
-                  if (len(month_task)>1 or month_task == ""):
+                  if (len(month_task)>1 or not month_task == "*"):
                     return (False, False, "Invalid task frequency month", {})
-               if '*' not in day_of_week_task:
+
+               if '*' not in day_of_week_task and not re.match("[@_!#$%^&()<>?/\|}{~:-]", day_of_week_task):
                   if (int(day_of_week_task) > 6 or int(day_of_week_task) < 0):
                     return (False, False, "Invalid task frequency day of week should be between 0-6", {})
                else:
-                  if (len(day_of_week_task)>1 or day_of_week_task == ""):
+                  if (len(day_of_week_task)>1 or not day_of_week_task == "*"):
                     return (False, False, "Invalid task frequency day of week", {})
            else:
               return (False, False, "Invalid task frequency string", {})

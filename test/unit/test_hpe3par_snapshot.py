@@ -656,6 +656,20 @@ null", {}))
                                                           '192.168.0.1',
                                                           'USER',
                                                           'PASS',
+                                                          'test_schedule1222222222222223333333',
+                                                          'base_volume',
+                                                          True,
+                                                          10,
+                                                          10,
+                                                          'Hours',
+                                                          'Days',
+                                                          'hourly',''
+                                                          ), (False, False, "Schedule creation failed. Schedule name must be atleast 1 character and not more than 31 characters", {}))
+
+        self.assertEqual(hpe3par_snapshot.create_schedule(mock_client.HPE3ParClient,
+                                                          '192.168.0.1',
+                                                          'USER',
+                                                          'PASS',
                                                           'test_schedule',
                                                           'base_volume',
                                                           True,
@@ -692,6 +706,76 @@ null", {}))
                                                           'Hours',
                                                           '','*****'
                                                           ), (False, False, "Invalid task frequency string", {}))
+
+        self.assertEqual(hpe3par_snapshot.create_schedule(mock_client.HPE3ParClient,
+                                                          '192.168.0.1',
+                                                          'USER',
+                                                          'PASS',
+                                                          'test_schedule',
+                                                          'base_volume',
+                                                          True,
+                                                          10,
+                                                          10,
+                                                          'Hours',
+                                                          'Hours',
+                                                          '','** * * * *'
+                                                          ), (False, False, "Invalid task frequency minutes", {}))                                                          
+        self.assertEqual(hpe3par_snapshot.create_schedule(mock_client.HPE3ParClient,
+                                                          '192.168.0.1',
+                                                          'USER',
+                                                          'PASS',
+                                                          'test_schedule',
+                                                          'base_volume',
+                                                          True,
+                                                          10,
+                                                          10,
+                                                          'Hours',
+                                                          'Hours',
+                                                          '','* ** * * *'
+                                                          ), (False, False, "Invalid task frequency hours", {}))
+
+        self.assertEqual(hpe3par_snapshot.create_schedule(mock_client.HPE3ParClient,
+                                                          '192.168.0.1',
+                                                          'USER',
+                                                          'PASS',
+                                                          'test_schedule',
+                                                          'base_volume',
+                                                          True,
+                                                          10,
+                                                          10,
+                                                          'Hours',
+                                                          'Hours',
+                                                          '','* * ** * *'
+                                                          ), (False, False, "Invalid task frequency day", {}))
+
+        self.assertEqual(hpe3par_snapshot.create_schedule(mock_client.HPE3ParClient,
+                                                          '192.168.0.1',
+                                                          'USER',
+                                                          'PASS',
+                                                          'test_schedule',
+                                                          'base_volume',
+                                                          True,
+                                                          10,
+                                                          10,
+                                                          'Hours',
+                                                          'Hours',
+                                                          '','* * * ** *'
+                                                          ), (False, False, "Invalid task frequency month", {}))
+
+        self.assertEqual(hpe3par_snapshot.create_schedule(mock_client.HPE3ParClient,
+                                                          '192.168.0.1',
+                                                          'USER',
+                                                          'PASS',
+                                                          'test_schedule',
+                                                          'base_volume',
+                                                          True,
+                                                          10,
+                                                          10,
+                                                          'Hours',
+                                                          'Hours',
+                                                          '','* * * * **'
+                                                          ), (False, False, "Invalid task frequency day of week", {}))
+
 
         self.assertEqual(hpe3par_snapshot.create_schedule(mock_client.HPE3ParClient,
                                                           '192.168.0.1',
@@ -893,6 +977,14 @@ null", {}))
                                                           'PASS',
                                                           'test_schedule'
                                                           ), (True, True, "Deleted Schedule %s successfully." % 'test_schedule', {}))
+
+        self.assertEqual(hpe3par_snapshot.delete_schedule(mock_client.HPE3ParClient,
+                                                          '192.168.0.1',
+                                                          'USER',
+                                                          'PASS',
+                                                          'test_schedule122122222333334444444'
+                                                          ), (False, False, "Schedule create failed. Schedule name must be atleast 1 character and not more than 31 characters", {}))
+
 
         mock_client.HPE3ParClient.scheduleExists.return_value = False
         self.assertEqual(hpe3par_snapshot.delete_schedule(mock_client.HPE3ParClient,
