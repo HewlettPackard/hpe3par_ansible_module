@@ -485,6 +485,12 @@ def create_schedule(
             "Schedule creation failed. Storage system username or password is \
 null",
             {})
+    if schedule_name is None:
+        return (
+            False,
+            False,
+            "Schedule create failed. Schedule name is null",
+            {})
 
     if len(schedule_name) < 1 or len(schedule_name) > 31:
         return (False, False, "Schedule creation failed. Schedule name must be atleast 1 character and not more than 31 characters",

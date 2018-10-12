@@ -835,7 +835,7 @@ null", {}))
                                                           'Hours',
                                                           'Hours',
                                                           'hourly',''
-                                                          ), (False, False, "Schedule create failed. volume name must be atleast 1 character and not more than 19 characters", {}))
+                                                          ), (False, False, "Schedule create failed. Base volume name must be atleast 1 character and not more than 19 characters", {}))
 
         self.assertEqual(hpe3par_snapshot.create_schedule(mock_client.HPE3ParClient,
                                                           '192.168.0.1',
