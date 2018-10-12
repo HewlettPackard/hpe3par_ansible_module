@@ -211,8 +211,8 @@ EXAMPLES = r'''
         storage_system_password: password
         state: create_schedule
         schedule_name: my_ansible_sc
-        snapshot_name: snap-volume
-
+        base_volume_name: test_volume    
+       
     - name: Delete schedule my_ansible_sc
       hpe3par_snapshot:
         storage_system_ip: 10.10.10.1
@@ -470,7 +470,6 @@ def create_schedule(
         storage_system_username,
         storage_system_password,
         schedule_name,
-        snapshot_name,
         base_volume_name,
         read_only,
         expiration_time,
@@ -486,36 +485,22 @@ def create_schedule(
             "Schedule creation failed. Storage system username or password is \
 null",
             {})
-    if schedule_name is None:
-        return (
-            False,
-            False,
-            "Schedule create failed. Schedule name is null",
-            {})                 
-    if snapshot_name is None:
-        return (
-            False,
-            False,
-            "Schedule create failed. Snapshot name is null",
-            {})
+
     if len(schedule_name) < 1 or len(schedule_name) > 31:
         return (False, False, "Schedule creation failed. Schedule name must be atleast 1 character and not more than 31 characters",
             {})
 
-    if len(snapshot_name) < 1 or len(snapshot_name) > 20:
-        return (False, False, "Schedule create failed. Snapshot name must be atleast 1 character and not more than 20 characters", {})
     if base_volume_name is None:
         return (
             False,
             False,
             "Schedule create failed. Base volume name is null",
             {})
-    if len(base_volume_name) < 1 or len(base_volume_name) > 31:
-        return (False, False, "Schedule create failed. Base volume name must be atleast 1 character and not more than 31 characters", {})    
+    if len(base_volume_name) < 1 or len(base_volume_name) > 19:
+        return (False, False, "Schedule create failed. Base volume name must be atleast 1 character and not more than 19 characters", {})    
 
     expirationHours = convert_to_hours(expiration_time, expiration_unit)
     retentionHours = convert_to_hours(retention_time, retention_unit)
-    freq = "@hourly"
     if retentionHours > expirationHours:
        return (False, False, "Expiration time must be greater than or equal to retention time", {})   
 
@@ -532,8 +517,8 @@ null",
                month_task = task_custom_list[3]  
                day_of_week_task = task_custom_list[4]
                if '*' not in minutes_task:
-                  if (int(minutes_task) > 50 or int(minutes_task) < 0):
-                    return (False, False, "Invalid task frequency minutes should be between 0-50", {})
+                  if (int(minutes_task) > 59 or int(minutes_task) < 0):
+                    return (False, False, "Invalid task frequency minutes should be between 0-59", {})
                else:
                   if (len(minutes_task)>1 or minutes_task == ""):
                     return (False, False, "Invalid task frequency minutes", {})
@@ -583,7 +568,7 @@ null",
              cmd.append("-retain")
              cmd.append(str(retentionHours)+"h")
            snap_string = ".@y@@m@@d@@H@@M@@S@"
-           cmd.append(snapshot_name+snap_string)
+           cmd.append(base_volume_name+snap_string)
            cmd.append(base_volume_name)
            if task_freq:
               freq="@"+task_freq
@@ -778,7 +763,7 @@ def main():
     elif module.params["state"] == "create_schedule":        
         return_status, changed, msg, issue_attr_dict = create_schedule(
             client_obj, storage_system_ip, storage_system_username, storage_system_password,
-            schedule_name, snapshot_name, base_volume_name, read_only, expiration_time, retention_time, expiration_unit, retention_unit, task_freq, task_freq_custom)
+            schedule_name, base_volume_name, read_only, expiration_time, retention_time, expiration_unit, retention_unit, task_freq, task_freq_custom)
     elif module.params["state"] == "delete_schedule":
         return_status, changed, msg, issue_attr_dict = delete_schedule(
             client_obj, storage_system_ip, storage_system_username, storage_system_password,
