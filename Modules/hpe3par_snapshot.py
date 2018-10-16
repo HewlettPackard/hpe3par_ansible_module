@@ -527,7 +527,6 @@ greater than or equal to retention time", {})
     if task_freq_custom:
         if ' ' in task_freq_custom:
             task_custom_list = str(task_freq_custom).split()
-            invalid_string = ""
             if len(task_custom_list) == 5:
                 if '*' not in task_custom_list[0] and \
                     not re.match("[@_!#$%^&()<>?/\|}{~:-]",
