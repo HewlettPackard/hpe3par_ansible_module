@@ -514,9 +514,9 @@ character and not more than 31 characters",
 must be atleast 1 character and not more \
 than 19 characters", {})
 
-    expirationHours = convert_to_hours(expiration_time, expiration_unit)
-    retentionHours = convert_to_hours(retention_time, retention_unit)
-    if retentionHours > expirationHours:
+    expiration_hours = convert_to_hours(expiration_time, expiration_unit)
+    retention_hours = convert_to_hours(retention_time, retention_unit)
+    if retention_hours > expiration_hours:
         return (False, False, "Expiration time must be \
 greater than or equal to retention time", {})
 
@@ -617,10 +617,10 @@ week should be between 0-6",
                 cmd.append("-ro")
             if expiration_time:
                 cmd.append("-exp")
-                cmd.append(str(expirationHours)+"h")
+                cmd.append(str(expiration_hours)+"h")
             if retention_time:
                 cmd.append("-retain")
-                cmd.append(str(retentionHours)+"h")
+                cmd.append(str(retention_hours)+"h")
             cmd.append(base_volume_name+".@y@@m@@d@@H@@M@@S@")
             cmd.append(base_volume_name)
             if task_freq:
