@@ -125,9 +125,6 @@ options:
     description:
       - "Frequency as special string for the schedule to be created."
     required: false
-  task_freq_custom:
-    description:
-      - "Custom frequency for the schedule to be created."
   state:
     choices:
       - present
@@ -480,8 +477,7 @@ def create_schedule(
         retention_time,
         expiration_unit,
         retention_unit,
-        task_freq,
-        task_freq_custom):
+        task_freq):
     if storage_system_username is None or storage_system_password is None:
         return (
             False,
@@ -520,13 +516,11 @@ than 19 characters", {})
         return (False, False, "Expiration time must be \
 greater than or equal to retention time", {})
 
-    if task_freq_custom and task_freq:
-        return (False, False,
-                "Provide either task_freq or task_freq_custom", {})
-
-    if task_freq_custom:
-        if ' ' in task_freq_custom:
-            task_custom_list = str(task_freq_custom).split()
+    if task_freq not in ['yearly', 'monthly', 'weekly', 'daily', 'hourly'] and ' ' not in task_freq:
+        return (False, False, "Invalid task frequency string",{})
+       
+    if ' ' in task_freq:
+            task_custom_list = str(task_freq).split()
             if len(task_custom_list) == 5:
                 if '*' not in task_custom_list[0] and \
                     not re.match("[@_!#$%^&()<>?/\|}{~:-]",
@@ -600,10 +594,8 @@ week should be between 0-6",
                                 "Invalid task frequency day of week",
                                 {})
             else:
-                return (False, False, "Invalid task frequency string", {})
-        else:
-            return (False, False, "Invalid task frequency string", {})
-        freq = task_freq_custom
+                return (False, False, "Invalid task frequency string", {})     
+    
     try:
         client_obj.login(storage_system_username, storage_system_password)
         client_obj.setSSHOptions(storage_system_ip, storage_system_username,
@@ -623,11 +615,11 @@ week should be between 0-6",
                 cmd.append(str(retention_hours)+"h")
             cmd.append(base_volume_name+".@y@@m@@d@@H@@M@@S@")
             cmd.append(base_volume_name)
-            if task_freq:
-                freq = "@"+task_freq
+            if ' ' not in task_freq:
+                task_freq = "@"+task_freq
             cmd = ' '.join(cmd)
             client_obj.createSchedule(
-                schedule_name, cmd, freq)
+                schedule_name, cmd, task_freq)
         else:
             return (True, False, "Schedule already Exist", {})
     except Exception as e:
@@ -755,10 +747,6 @@ def main():
         },
         "task_freq": {
             "type": "str",
-            "choices": ['yearly', 'monthly', 'weekly', 'daily', 'hourly']
-        },
-        "task_freq_custom": {
-            "type": "str"
         }
 
     }
@@ -786,7 +774,6 @@ def main():
     rm_exp_time = module.params["rm_exp_time"]
     schedule_name = module.params["schedule_name"]
     task_freq = module.params["task_freq"]
-    task_freq_custom = module.params["task_freq_custom"]
 
     wsapi_url = 'https://%s:8080/api/v1' % storage_system_ip
     client_obj = client.HPE3ParClient(wsapi_url)
@@ -822,7 +809,7 @@ def main():
             storage_system_password,
             schedule_name, base_volume_name, read_only,
             expiration_time, retention_time, expiration_unit,
-            retention_unit, task_freq, task_freq_custom)
+            retention_unit, task_freq)
     elif module.params["state"] == "delete_schedule":
         return_status, changed, msg, issue_attr_dict = delete_schedule(
             client_obj, storage_system_ip, storage_system_username,

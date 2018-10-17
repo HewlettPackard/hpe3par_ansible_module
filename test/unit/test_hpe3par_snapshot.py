@@ -94,10 +94,6 @@ class TestHpe3parSnapshot(unittest.TestCase):
             "type": "str"
         },
         "task_freq": {
-            "type": "str",
-            "choices": ['yearly', 'monthly', 'weekly', 'daily', 'hourly']
-        },
-        "task_freq_custom": {
             "type": "str"
         }
 
@@ -128,8 +124,7 @@ class TestHpe3parSnapshot(unittest.TestCase):
             'rm_exp_time': False,
             'state': 'present',
             'schedule_name': 'test_schedule',
-            'task_freq': 'hourly',
-            'task_freq_custom': '0 * * * *'
+            'task_freq': 'hourly'
 
         }
 
@@ -166,8 +161,7 @@ class TestHpe3parSnapshot(unittest.TestCase):
             'rm_exp_time': None,
             'state': 'present',
             'schedule_name': 'test_schedule',
-            'task_freq': 'hourly',
-            'task_freq_custom': '0 * * * *'
+            'task_freq': 'hourly'
         }
         # This creates a instance of the AnsibleModule mock.
         mock_module.params = PARAMS_FOR_PRESENT
@@ -209,8 +203,7 @@ class TestHpe3parSnapshot(unittest.TestCase):
             'rm_exp_time': None,
             'state': 'absent',
             'schedule_name': 'test_schedule',
-            'task_freq': 'hourly',
-            'task_freq_custom': '0 * * * *'
+            'task_freq': 'hourly'
         }
         # This creates a instance of the AnsibleModule mock.
         mock_module.params = PARAMS_FOR_PRESENT
@@ -252,8 +245,7 @@ class TestHpe3parSnapshot(unittest.TestCase):
             'rm_exp_time': True,
             'state': 'modify',
             'schedule_name': 'test_schedule',
-            'task_freq': 'hourly',
-            'task_freq_custom': '0 * * * *'
+            'task_freq': 'hourly'
         }
         # This creates a instance of the AnsibleModule mock.
         mock_module.params = PARAMS_FOR_PRESENT
@@ -295,8 +287,7 @@ class TestHpe3parSnapshot(unittest.TestCase):
             'rm_exp_time': None,
             'state': 'restore_offline',
             'schedule_name': 'test_schedule',
-            'task_freq': 'hourly',
-            'task_freq_custom': '0 * * * *'
+            'task_freq': 'hourly'
         }
         # This creates a instance of the AnsibleModule mock.
         mock_module.params = PARAMS_FOR_PRESENT
@@ -338,8 +329,7 @@ class TestHpe3parSnapshot(unittest.TestCase):
             'rm_exp_time': None,
             'state': 'restore_online',
             'schedule_name': 'test_schedule',
-            'task_freq': 'hourly',
-            'task_freq_custom': '0 * * * *'
+            'task_freq': 'hourly'
         }
         # This creates a instance of the AnsibleModule mock.
         mock_module.params = PARAMS_FOR_PRESENT
@@ -381,8 +371,7 @@ class TestHpe3parSnapshot(unittest.TestCase):
             'rm_exp_time': None,
             'state': 'create_schedule',
             'schedule_name': 'test_schedule',
-            'task_freq': 'hourly', 
-            'task_freq_custom': '0 * * * *' 
+            'task_freq': 'hourly' 
         }
         # This creates a instance of the AnsibleModule mock.
         mock_module.params = PARAMS_FOR_PRESENT
@@ -424,8 +413,7 @@ class TestHpe3parSnapshot(unittest.TestCase):
             'rm_exp_time': None,
             'state': 'delete_schedule',
             'schedule_name': 'test_schedule',
-            'task_freq': 'hourly',
-            'task_freq_custom': '0 * * * *'
+            'task_freq': 'hourly'
         }
         # This creates a instance of the AnsibleModule mock.
         mock_module.params = PARAMS_FOR_PRESENT
@@ -649,7 +637,7 @@ null", {}))
                                                           10,
                                                           'Hours',
                                                           'Days',
-                                                          'hourly',''
+                                                          'hourly'
                                                           ), (False, False, "Expiration time must be greater than or equal to retention time", {}))
 
         self.assertEqual(hpe3par_snapshot.create_schedule(mock_client.HPE3ParClient,
@@ -663,7 +651,7 @@ null", {}))
                                                           10,
                                                           'Hours',
                                                           'Days',
-                                                          'hourly',''
+                                                          'hourly'
                                                           ), (False, False, "Schedule creation failed. Schedule name must be atleast 1 character and not more than 31 characters", {}))
 
         self.assertEqual(hpe3par_snapshot.create_schedule(mock_client.HPE3ParClient,
@@ -677,21 +665,8 @@ null", {}))
                                                           10,
                                                           'Hours',
                                                           'Hours',
-                                                          'hourly',''
+                                                          'hourly'
                                                           ), (True, True, "Created Schedule %s successfully." % 'test_schedule', {}))
-        self.assertEqual(hpe3par_snapshot.create_schedule(mock_client.HPE3ParClient,
-                                                          '192.168.0.1',
-                                                          'USER',
-                                                          'PASS',
-                                                          'test_schedule',
-                                                          'base_volume',
-                                                          True,
-                                                          10,
-                                                          10,
-                                                          'Hours',
-                                                          'Hours',
-                                                          'hourly','0 * * * *'
-                                                          ), (False, False, "Provide either task_freq or task_freq_custom", {}))
 
         self.assertEqual(hpe3par_snapshot.create_schedule(mock_client.HPE3ParClient,
                                                           '192.168.0.1',
@@ -704,7 +679,7 @@ null", {}))
                                                           10,
                                                           'Hours',
                                                           'Hours',
-                                                          '','*****'
+                                                          '*****'
                                                           ), (False, False, "Invalid task frequency string", {}))
 
         self.assertEqual(hpe3par_snapshot.create_schedule(mock_client.HPE3ParClient,
@@ -718,7 +693,7 @@ null", {}))
                                                           10,
                                                           'Hours',
                                                           'Hours',
-                                                          '','** * * * *'
+                                                          '** * * * *'
                                                           ), (False, False, "Invalid task frequency minutes", {}))                                                          
         self.assertEqual(hpe3par_snapshot.create_schedule(mock_client.HPE3ParClient,
                                                           '192.168.0.1',
@@ -731,7 +706,7 @@ null", {}))
                                                           10,
                                                           'Hours',
                                                           'Hours',
-                                                          '','* ** * * *'
+                                                          '* ** * * *'
                                                           ), (False, False, "Invalid task frequency hours", {}))
 
         self.assertEqual(hpe3par_snapshot.create_schedule(mock_client.HPE3ParClient,
@@ -745,7 +720,7 @@ null", {}))
                                                           10,
                                                           'Hours',
                                                           'Hours',
-                                                          '','* * ** * *'
+                                                          '* * ** * *'
                                                           ), (False, False, "Invalid task frequency day", {}))
 
         self.assertEqual(hpe3par_snapshot.create_schedule(mock_client.HPE3ParClient,
@@ -759,7 +734,7 @@ null", {}))
                                                           10,
                                                           'Hours',
                                                           'Hours',
-                                                          '','* * * ** *'
+                                                          '* * * ** *'
                                                           ), (False, False, "Invalid task frequency month", {}))
 
         self.assertEqual(hpe3par_snapshot.create_schedule(mock_client.HPE3ParClient,
@@ -773,7 +748,7 @@ null", {}))
                                                           10,
                                                           'Hours',
                                                           'Hours',
-                                                          '','* * * * **'
+                                                          '* * * * **'
                                                           ), (False, False, "Invalid task frequency day of week", {}))
 
 
@@ -788,7 +763,7 @@ null", {}))
                                                           10,
                                                           'Hours',
                                                           'Hours',
-                                                          '','99 * * * *'
+                                                          '99 * * * *'
                                                           ), (False, False, "Invalid task frequency minutes should be between 0-59", {}))
 
         self.assertEqual(hpe3par_snapshot.create_schedule(mock_client.HPE3ParClient,
@@ -802,7 +777,7 @@ null", {}))
                                                           10,
                                                           'Hours',
                                                           'Hours',
-                                                          '','* 30 * * *'
+                                                          '* 30 * * *'
                                                           ), (False, False, "Invalid task frequency hours should be between 0-23", {}))
 
         self.assertEqual(hpe3par_snapshot.create_schedule(mock_client.HPE3ParClient,
@@ -816,7 +791,7 @@ null", {}))
                                                           10,
                                                           'Hours',
                                                           'Hours',
-                                                          '','* * 0 * *'
+                                                          '* * 0 * *'
                                                           ), (False, False, "Invalid task frequency day should be between 1-31", {}))
 
         self.assertEqual(hpe3par_snapshot.create_schedule(mock_client.HPE3ParClient,
@@ -830,7 +805,7 @@ null", {}))
                                                           10,
                                                           'Hours',
                                                           'Hours',
-                                                          '','* * * 34 *'
+                                                          '* * * 34 *'
                                                           ), (False, False, "Invalid task frequency month should be between 1-12", {}))
 
 
@@ -845,7 +820,7 @@ null", {}))
                                                           10,
                                                           'Hours',
                                                           'Hours',
-                                                          '','* * * * 17'
+                                                          '* * * * 17'
                                                           ), (False, False, "Invalid task frequency day of week should be between 0-6", {}))
 
         self.assertEqual(hpe3par_snapshot.create_schedule(mock_client.HPE3ParClient,
@@ -859,7 +834,7 @@ null", {}))
                                                           10,
                                                           'Hours',
                                                           'Hours',
-                                                          '','  * * * 17'
+                                                          '  * * * 17'
                                                           ), (False, False, "Invalid task frequency string", {}))
 
 
@@ -875,7 +850,7 @@ null", {}))
                                                           10,
                                                           'Hours',
                                                           'Hours',
-                                                          'hourly',''
+                                                          'hourly'
                                                           ), (True, False, "Schedule already Exist", {}))
         
         mock_client.HPE3ParClient.scheduleExists.return_value = False
@@ -890,7 +865,7 @@ null", {}))
                                                           10,
                                                           'Hours',
                                                           'Hours',
-                                                          'hourly',''
+                                                          'hourly'
                                                           ), (False, False, "Schedule creation failed. Storage system username or password is null", {}))
 
         self.assertEqual(hpe3par_snapshot.create_schedule(mock_client.HPE3ParClient,
@@ -904,7 +879,7 @@ null", {}))
                                                           10,
                                                           'Hours',
                                                           'Hours',
-                                                          'hourly',''
+                                                          'hourly'
                                                           ), (False, False, "Schedule create failed. Schedule name is null", {}))
 
         self.assertEqual(hpe3par_snapshot.create_schedule(mock_client.HPE3ParClient,
@@ -918,7 +893,7 @@ null", {}))
                                                           10,
                                                           'Hours',
                                                           'Hours',
-                                                          'hourly',''
+                                                          'hourly'
                                                           ), (False, False, "Schedule create failed. Base volume name must be atleast 1 character and not more than 19 characters", {}))
 
         self.assertEqual(hpe3par_snapshot.create_schedule(mock_client.HPE3ParClient,
@@ -932,7 +907,7 @@ null", {}))
                                                           10,
                                                           'Hours',
                                                           'Hours',
-                                                          'hourly',''
+                                                          'hourly'
                                                           ), (True, True, "Created Schedule %s successfully." % 'test_schedule', {}))
 
         self.assertEqual(hpe3par_snapshot.create_schedule(mock_client.HPE3ParClient,
@@ -946,7 +921,7 @@ null", {}))
                                                           10,
                                                           'Hours',
                                                           'Hours',
-                                                          '0 * * * *',''
+                                                          '0 * * * *'
                                                           ), (False, False, "Schedule create failed. Base volume name is null", {}))
         mock_client.HPE3ParClient.volumeExists.return_value = False
         self.assertEqual(hpe3par_snapshot.create_schedule(mock_client.HPE3ParClient,
@@ -960,7 +935,7 @@ null", {}))
                                                           10,
                                                           'Hours',
                                                           'Hours',
-                                                          '0 * * * *',''
+                                                          '0 * * * *'
                                                           ), (False, False, "Volume does not Exist", {}))
 
        
