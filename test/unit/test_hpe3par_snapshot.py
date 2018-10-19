@@ -693,8 +693,9 @@ null", {}))
                                                           10,
                                                           'Hours',
                                                           'Hours',
-                                                          '** * * * *'
-                                                          ), (False, False, "Invalid task frequency minutes", {}))                                                          
+                                                          '0 11-1 * * *'
+                                                          ), (False, False, "Invalid task frequency hours start time should be less than end time", {}))   
+                                                       
         self.assertEqual(hpe3par_snapshot.create_schedule(mock_client.HPE3ParClient,
                                                           '192.168.0.1',
                                                           'USER',
@@ -706,8 +707,8 @@ null", {}))
                                                           10,
                                                           'Hours',
                                                           'Hours',
-                                                          '* ** * * *'
-                                                          ), (False, False, "Invalid task frequency hours", {}))
+                                                          '* * 12-1 * *'
+                                                          ), (False, False, "Invalid task frequency day start should be less than end", {}))
 
         self.assertEqual(hpe3par_snapshot.create_schedule(mock_client.HPE3ParClient,
                                                           '192.168.0.1',
@@ -720,8 +721,8 @@ null", {}))
                                                           10,
                                                           'Hours',
                                                           'Hours',
-                                                          '* * ** * *'
-                                                          ), (False, False, "Invalid task frequency day", {}))
+                                                          '* * * 11-1 *'
+                                                          ), (False, False, "Invalid task frequency month start should be less than end", {}))
 
         self.assertEqual(hpe3par_snapshot.create_schedule(mock_client.HPE3ParClient,
                                                           '192.168.0.1',
@@ -735,7 +736,7 @@ null", {}))
                                                           'Hours',
                                                           'Hours',
                                                           '* * * ** *'
-                                                          ), (False, False, "Invalid task frequency month", {}))
+                                                          ), (False, False, "Invalid task frequency string ", {}))
 
         self.assertEqual(hpe3par_snapshot.create_schedule(mock_client.HPE3ParClient,
                                                           '192.168.0.1',
@@ -748,8 +749,8 @@ null", {}))
                                                           10,
                                                           'Hours',
                                                           'Hours',
-                                                          '* * * * **'
-                                                          ), (False, False, "Invalid task frequency day of week", {}))
+                                                          '* * * * 5-1'
+                                                          ), (False, False, "Invalid task frequency day of week start should be less than end", {}))
 
 
         self.assertEqual(hpe3par_snapshot.create_schedule(mock_client.HPE3ParClient,
