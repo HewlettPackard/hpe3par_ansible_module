@@ -516,9 +516,10 @@ than 19 characters", {})
         return (False, False, "Expiration time must be \
 greater than or equal to retention time", {})
 
-    if task_freq not in ['yearly', 'monthly', 'weekly', 'daily', 'hourly'] and ' ' not in task_freq:
-        return (False, False, "Invalid task frequency string",{})
-       
+    interval = ['yearly', 'monthly', 'weekly', 'daily', 'hourly']
+    if task_freq not in interval and ' ' not in task_freq:
+            return (False, False, "Invalid task frequency string", {})
+
     if ' ' in task_freq:
             task_custom_list = str(task_freq).split()
             if len(task_custom_list) == 5:
@@ -594,8 +595,7 @@ week should be between 0-6",
                                 "Invalid task frequency day of week",
                                 {})
             else:
-                return (False, False, "Invalid task frequency string", {})     
-    
+                return (False, False, "Invalid task frequency string", {})
     try:
         client_obj.login(storage_system_username, storage_system_password)
         client_obj.setSSHOptions(storage_system_ip, storage_system_username,
