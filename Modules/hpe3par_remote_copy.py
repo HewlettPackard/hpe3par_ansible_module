@@ -43,9 +43,20 @@ options:
   domain:
     description:
       - "Specifies the domain in which to create the Remote Copy group.\n"
-  targets:
+  remote_copy_targets:
     description:
-      - "Specifies the attributes of the target of the Remote Copy group.\n"
+      - "Specifies the attributes of the target of the Remote Copy group.\n
+       Attributes are target_name, target_mode, user_cpg, snap_cpg.\n"
+  admit_volume_targets:
+    description:
+      - "Specify at least one pair of target_name and sec_volume_name.\n
+       Attributes are target_name, sec_volume_name.\n"
+  modify_targets:
+    description:
+      - "Specifies the attributes of the target of the Remote Copy group.\n
+       Attributes are target_name, remote_user_cpg, remote_snap_cpg,\n
+       sync_period, rm_sync_period, target_mode, snap_frequency,
+       rm_snap_frequency, policies.\n"
   local_user_cpg:
     description:
       - "Specifies the local user CPG used for auto-created volumes.\n"
@@ -267,9 +278,9 @@ EXAMPLES = r'''
 
   - name: Create volume on source
     hpe3par_volume:
-      storage_system_ip: 10.10.10.1
-      storage_system_password: password
-      storage_system_username: username
+      storage_system_ip: 192.168.67.5
+      storage_system_password: 3pardata
+      storage_system_username: 3paradm
       state: present
       volume_name: demo_volume_1
       size: 1024
@@ -279,9 +290,9 @@ EXAMPLES = r'''
 
   - name: Create volume on source
     hpe3par_volume:
-      storage_system_ip: 10.10.10.1
-      storage_system_password: password
-      storage_system_username: username
+      storage_system_ip: 192.168.67.5
+      storage_system_password: 3pardata
+      storage_system_username: 3paradm
       state: present
       volume_name: demo_volume_2
       size: 1024
@@ -291,9 +302,9 @@ EXAMPLES = r'''
 
   - name: Create volume on target
     hpe3par_volume:
-      storage_system_ip: 10.10.10.1
-      storage_system_password: password
-      storage_system_username: username
+      storage_system_ip: 192.168.67.6
+      storage_system_password: 3pardata
+      storage_system_username: 3paradm
       state: present
       volume_name: demo_volume_1
       size: 1024
@@ -303,122 +314,114 @@ EXAMPLES = r'''
 
   - name: Create volume on target
     hpe3par_volume:
-      storage_system_ip: 10.10.10.1
-      storage_system_password: password
-      storage_system_username: username
+      storage_system_ip: 192.168.67.6
+      storage_system_password: 3pardata
+      storage_system_username: 3paradm
       state: present
       volume_name: demo_volume_2
       size: 1024
       size_unit: MiB
       cpg: FC_r1
       snap_cpg: FC_r1           
-  
+
   - name: Create Remote Copy Group farhan_rcg
     hpe3par_remote_copy:
-      storage_system_ip: 10.10.10.1
-      storage_system_password: password
-      storage_system_username: username
-      state: present 
+      storage_system_ip: 192.168.67.5
+      storage_system_password: 3pardata
+      storage_system_username: 3paradm
+      state: present
       remote_copy_group_name: farhan_rcg
-      targets:
-      - targetName: CSSOS-SSA06
-        mode: 1
-        
-  - pause:
-      prompt: "Press Enter"
-        
+      remote_copy_targets:
+      - target_name: CSSOS-SSA06
+        target_mode: sync
+       
   - name: Add volume to remote copy group
     hpe3par_remote_copy:
-      storage_system_ip: 10.10.10.1
-      storage_system_password: password
-      storage_system_username: username
+      storage_system_ip: 192.168.67.5
+      storage_system_password: 3pardata
+      storage_system_username: 3paradm
       state: add_volume
       remote_copy_group_name: farhan_rcg
       volume_name: demo_volume_1
-      targets:
-      - targetName: CSSOS-SSA06
-        secVolumeName: demo_volume_1
+      admit_volume_targets:
+      - target_name: CSSOS-SSA06
+        sec_volume_name: demo_volume_1
         
   - name: Add volume to remote copy group
     hpe3par_remote_copy:
-      storage_system_ip: 10.10.10.1
-      storage_system_password: password
-      storage_system_username: username
+      storage_system_ip: 192.168.67.5
+      storage_system_password: 3pardata
+      storage_system_username: 3paradm
       state: add_volume
       remote_copy_group_name: farhan_rcg
       volume_name: demo_volume_2
-      targets:
-      - targetName: CSSOS-SSA06
-        secVolumeName: demo_volume_2
-        
-  - pause:
-      prompt: "Press Enter"
+      admit_volume_targets:
+      - target_name: CSSOS-SSA06
+        sec_volume_name: demo_volume_2
+
+  - name: Modify Remote Copy Group farhan_rcg
+    hpe3par_remote_copy:
+      storage_system_ip: 192.168.67.5
+      storage_system_password: 3pardata
+      storage_system_username: 3paradm
+      state: modify
+      remote_copy_group_name: farhan_rcg
+      local_user_cpg: "FC_r1"
+      local_snap_cpg: "FC_r6"
+      unset_user_cpg: false
+      unset_snap_cpg: false
+      modify_targets:
+      - target_name: CSSOS-SSA06
+        remote_user_cpg: "FC_r1"
+        remote_snap_cpg: "FC_r6"
         
   - name: Start remote copy
     hpe3par_remote_copy:
-      storage_system_ip: 10.10.10.1
-      storage_system_password: password
-      storage_system_username: username
+      storage_system_ip: 192.168.67.5
+      storage_system_password: 3pardata
+      storage_system_username: 3paradm
       remote_copy_group_name: farhan_rcg
       state: start
       
-  - pause:
-      prompt: "Press Enter"
-      
   - name: Stop remote copy
     hpe3par_remote_copy:
-      storage_system_ip: 10.10.10.1
-      storage_system_password: password
-      storage_system_username: username
+      storage_system_ip: 192.168.67.5
+      storage_system_password: 3pardata
+      storage_system_username: 3paradm
       remote_copy_group_name: farhan_rcg
       state: stop
       
-  - pause:
-      prompt: "Press Enter"
-      
   - name: Remove volume from remote copy group
     hpe3par_remote_copy:
-      storage_system_ip: 10.10.10.1
-      storage_system_password: password
-      storage_system_username: username
+      storage_system_ip: 192.168.67.5
+      storage_system_password: 3pardata
+      storage_system_username: 3paradm
       state: remove_volume
       remote_copy_group_name: farhan_rcg
       volume_name: demo_volume_1
-      targets:
-      - targetName: CSSOS-SSA06
-        secVolumeName: demo_volume_1
         
   - name: Remove volume from remote copy group
     hpe3par_remote_copy:
-      storage_system_ip: 10.10.10.1
-      storage_system_password: password
-      storage_system_username: username
+      storage_system_ip: 192.168.67.5
+      storage_system_password: 3pardata
+      storage_system_username: 3paradm
       state: remove_volume
       remote_copy_group_name: farhan_rcg
       volume_name: demo_volume_2
-      targets:
-      - targetName: CSSOS-SSA06
-        secVolumeName: demo_volume_2
-        
-  - pause:
-      prompt: "Press Enter"
         
   - name: Remove Remote Copy Group farhan_rcg
     hpe3par_remote_copy:
-      storage_system_ip: 10.10.10.1
-      storage_system_password: password
-      storage_system_username: username
+      storage_system_ip: 192.168.67.5
+      storage_system_password: 3pardata
+      storage_system_username: 3paradm
       state: absent 
       remote_copy_group_name: farhan_rcg
 
-  - pause:
-      prompt: "Press Enter"
-
   - name: dismiss remote copy link
     hpe3par_remote_copy:
-      storage_system_ip: 10.10.10.1
-      storage_system_password: password
-      storage_system_username: username
+      storage_system_ip: 192.168.67.5
+      storage_system_password: 3pardata
+      storage_system_username: 3paradm
       state: dismisslink
       target_name: CSSOS-SSA06
       source_port: 0:3:1
@@ -426,22 +429,19 @@ EXAMPLES = r'''
 
   - name: dismiss remote copy link
     hpe3par_remote_copy:
-      storage_system_ip: 10.10.10.1
-      storage_system_password: password
-      storage_system_username: username
+      storage_system_ip: 192.168.67.5
+      storage_system_password: 3pardata
+      storage_system_username: 3paradm
       state: dismisslink
       target_name: CSSOS-SSA06
       source_port: "1:3:1"
       target_port_wwn_or_ip: 192.168.2.2
 
-  - pause:
-      prompt: "Press Enter"
-
   - name: Admit remote copy link
     hpe3par_remote_copy:
-      storage_system_ip: 10.10.10.1
-      storage_system_password: password
-      storage_system_username: username
+      storage_system_ip: 192.168.67.5
+      storage_system_password: 3pardata
+      storage_system_username: 3paradm
       state: admitlink
       target_name: CSSOS-SSA06
       source_port: 0:3:1
@@ -449,22 +449,19 @@ EXAMPLES = r'''
 
   - name: Admit remote copy link
     hpe3par_remote_copy:
-      storage_system_ip: 10.10.10.1
-      storage_system_password: password
-      storage_system_username: username
+      storage_system_ip: 192.168.67.5
+      storage_system_password: 3pardata
+      storage_system_username: 3paradm
       state: admitlink
       target_name: CSSOS-SSA06
       source_port: "1:3:1"
       target_port_wwn_or_ip: 192.168.2.2
-
-  - pause:
-      prompt: "Press Enter"
 
   - name: start remote copy service
     hpe3par_remote_copy:
-      storage_system_ip: 10.10.10.1
-      storage_system_password: password
-      storage_system_username: username
+      storage_system_ip: 192.168.67.5
+      storage_system_password: 3pardata
+      storage_system_username: 3paradm
       state: startrcopy
 '''
 
@@ -477,34 +474,13 @@ try:
 except ImportError:
     client = None
 
-def validate_and_form_target(targets):
-    targets_transformed=[]
-    for dict1 in targets:
-        new_dict={}
-        for key in dict1.keys():
-            if key == 'target_name':
-                new_dict['targetName']=dict1.get(key)
-            if key == 'target_mode':
-                if dict1.get(key) == 'SYNC':
-                    new_dict['mode'] = 1
-                if dict1.get(key) == 'PERIODIC':
-                    new_dict['mode'] = 3
-                if dict1.get(key) == 'ASYNC':
-                    new_dict['mode'] = 4
-            if key == 'user_cpg':
-                new_dict['userCPG']=dict1.get(key)
-            if key == 'snap_cpg':
-                new_dict['snapCPG']=dict1.get(key)
-        targets_transformed.append(new_dict)
-    return targets_transformed 
-
 def create_remote_copy_group(
             client_obj,
             storage_system_username,
             storage_system_password,
             remote_copy_group_name,
             domain,
-            targets,
+            remote_copy_targets,
             local_user_cpg,
             local_snap_cpg
             ):
@@ -520,6 +496,32 @@ def create_remote_copy_group(
         return (False, False, "Remote Copy Group create failed. Remote Copy Group name must be atleast 1 character and not more than 31 characters", {})
     if (not local_user_cpg and local_snap_cpg) or (local_user_cpg and not local_snap_cpg):
         return (False, False, "Either both local_user_cpg and local_snap_cpg must be present, or none of them must be present", {})
+    targets_transformed=[]
+    for dict1 in remote_copy_targets:
+        target={}
+        for key in dict1.keys():
+            if key == 'target_name':
+                if dict1[key] is None:
+                    return (False, False, "Remote Copy Group create failed.Target name is null", {})
+                else:
+                    target['targetName']=dict1.get(key)
+            elif key == 'target_mode':
+                if dict1.get(key) == 'sync':
+                    target['mode'] = 1
+                elif dict1.get(key) == 'periodic':
+                    target['mode'] = 3
+                elif dict1.get(key) == 'async':
+                    target['mode'] = 4
+                else:
+                    return (False, False, "Remote Copy Group create failed.Target mode is invalid", {}) 
+            elif key == 'user_cpg':
+                target['userCPG']=dict1.get(key)
+            elif key == 'snap_cpg':
+                target['snapCPG']=dict1.get(key)
+            else:
+                return (False, False, "Remote Copy Group create failed. Wrong parameter name %s is given." % key, {}) 
+        targets_transformed.append(target)
+    remote_copy_targets = targets_transformed
     try:
         client_obj.login(storage_system_username, storage_system_password)
         if not client_obj.remoteCopyGroupExists(remote_copy_group_name):
@@ -528,8 +530,7 @@ def create_remote_copy_group(
                 'localUserCPG': local_user_cpg,
                 'localSnapCPG': local_snap_cpg
             }
-            targets = validate_and_form_target(targets) 
-            client_obj.createRemoteCopyGroup(remote_copy_group_name, targets, optional)
+            client_obj.createRemoteCopyGroup(remote_copy_group_name, remote_copy_targets, optional)
         else:
             return (True, False, "Remote Copy Group already present", {})
     except Exception as e:
@@ -545,7 +546,7 @@ def modify_remote_copy_group(
             remote_copy_group_name,
             local_user_cpg,
             local_snap_cpg,
-            targets,
+            modify_targets,
             unset_user_cpg,
             unset_snap_cpg
             ):
@@ -560,13 +561,39 @@ def modify_remote_copy_group(
 
     if len(remote_copy_group_name) < 1 or len(remote_copy_group_name) > 31:
         return (False, False, "Remote Copy Group modify failed. Remote Copy Group name must be atleast 1 character and not more than 31 characters", {})
+    targets_transformed = []
+    for dict1 in modify_targets:
+        target = {}
+        for key in dict1.keys():
+            if key == 'target_name':
+                target['targetName'] = dict1.get(key)
+            elif key == 'remote_user_cpg':
+                target['remoteUserCPG'] = dict1.get(key)
+            elif key == 'remote_snap_cpg':
+                target['remoteSnapCPG'] = dict1.get(key)
+            elif key == 'sync_period':
+                target['syncPeriod'] = dict1.get(key)
+            elif key == 'rm_sync_period':
+                target['rmSyncPeriod'] = dict1.get(key)
+            elif key == 'target_mode':
+                target['mode'] = dict1.get(key)
+            elif key == 'snap_frequency':
+                target['snapFrequency'] = dict1.get(key)
+            elif key == 'rm_snap_frequency':
+                target['rmSnapFrequency'] = dict1.get(key)
+            elif key == 'policies':
+                target['policies'] = dict1.get(key)
+            else:
+                return (False, False, "Remote Copy Group modification failed. Wrong parameter name %s is given." % key, {})
+        targets_transformed.append(target)
+    modify_targets = targets_transformed
     try:
         client_obj.login(storage_system_username, storage_system_password)
         if client_obj.remoteCopyGroupExists(remote_copy_group_name):
             optional = {
                 'localUserCPG': local_user_cpg,
                 'localSnapCPG': local_snap_cpg,
-                'targets': targets,
+                'targets': modify_targets,
                 'unsetUserCPG': unset_user_cpg,
                 'unsetSnapCPG': unset_snap_cpg
             }
@@ -585,7 +612,7 @@ def add_volume_to_remote_copy_group(
             storage_system_password,
             remote_copy_group_name,
             volume_name,
-            targets,
+            admit_volume_targets,
             snapshot_name,
             volume_auto_creation,
             skip_initial_sync,
@@ -611,6 +638,24 @@ def add_volume_to_remote_copy_group(
         return (False, False, "Add volume to Remote Copy Group failed. skipInitialSync cannot be true if snapshot name is given", {})
     if not snapshot_name and different_secondary_wwn:
         return (False, False, "Add volume to Remote Copy Group failed. skipInitialSync cannot be true if snapshot name is not given", {})
+    targets_transformed = []
+    for dict1 in admit_volume_targets:
+        target = {}
+        for key in dict1.keys():
+            if key == 'target_name':
+                if dict1[key] is None:
+                    return (False, False, "Remote Copy Group create failed.Target name is null", {})
+                else:
+                    target['targetName'] = dict1.get(key)
+            elif key == 'sec_volume_name':
+                if dict1[key] is None:
+                    return (False, False, "Remote Copy Group create failed. Secondary volume is null", {})
+                else:
+                    target['secVolumeName'] = dict1.get(key)
+            else:
+                return (False, False, "Remote Copy Group create failed. Wrong parameter name %s is given." % key, {}) 
+        targets_transformed.append(target)
+    admit_volume_targets = targets_transformed
     try:
         client_obj.login(storage_system_username, storage_system_password)
         if client_obj.remoteCopyGroupExists(remote_copy_group_name):
@@ -621,7 +666,7 @@ def add_volume_to_remote_copy_group(
                     'skipInitialSync': skip_initial_sync,
                     'differentSecondaryWWN': different_secondary_wwn
                 }
-                client_obj.addVolumeToRemoteCopyGroup(remote_copy_group_name, volume_name, targets, optional)
+                client_obj.addVolumeToRemoteCopyGroup(remote_copy_group_name, volume_name, admit_volume_targets, optional)
             else:
                 return (True, False, "Volume %s already present in Remote Copy Group %s" % (volume_name, remote_copy_group_name), {})
         else:
@@ -1066,7 +1111,13 @@ def main():
         "domain": {
             "type": "str"
         },
-        "targets": {
+        "remote_copy_targets": {
+            "type": "list"
+        },
+        "modify_targets": {
+            "type": "list"
+        },
+        "admit_volume_targets": {
             "type": "list"
         },
         "local_user_cpg": {
@@ -1179,7 +1230,9 @@ def main():
     storage_system_password = module.params["storage_system_password"]
     remote_copy_group_name = module.params["remote_copy_group_name"]
     domain = module.params["domain"]
-    targets = module.params["targets"]
+    remote_copy_targets = module.params["remote_copy_targets"]
+    modify_targets = module.params["modify_targets"]
+    admit_volume_targets = module.params["admit_volume_targets"]
     local_user_cpg = module.params["local_user_cpg"]
     local_snap_cpg = module.params["local_snap_cpg"]
     keep_snap = module.params["keep_snap"]
@@ -1219,7 +1272,7 @@ def main():
             storage_system_password,
             remote_copy_group_name,
             domain,
-            targets,
+            remote_copy_targets,
             local_user_cpg,
             local_snap_cpg
         )
@@ -1239,7 +1292,7 @@ def main():
             remote_copy_group_name,
             local_user_cpg,
             local_snap_cpg,
-            targets,
+            modify_targets,
             unset_user_cpg,
             unset_snap_cpg
         )
@@ -1250,7 +1303,7 @@ def main():
             storage_system_password,
             remote_copy_group_name,
             volume_name,
-            targets,
+            admit_volume_targets,
             snapshot_name,
             volume_auto_creation,
             skip_initial_sync,
