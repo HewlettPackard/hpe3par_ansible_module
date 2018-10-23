@@ -518,7 +518,10 @@ greater than or equal to retention time", {})
 
     interval = ['yearly', 'monthly', 'weekly', 'daily', 'hourly']
     if task_freq not in interval and ' ' not in task_freq:
-            return (False, False, "Invalid task frequency string", {})
+            return (False, 
+                    False, 
+                    "The schedule format is <minute> <hour> <dom> <month> \
+<dow> or by hourly daily monthly weekly monthly yearly", {})
 
     if ' ' in task_freq:
             task_custom_list = str(task_freq).split()

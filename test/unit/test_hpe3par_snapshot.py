@@ -680,7 +680,7 @@ null", {}))
                                                           'Hours',
                                                           'Hours',
                                                           '*****'
-                                                          ), (False, False, "Invalid task frequency string", {}))
+                                                          ), (False, False, "The schedule format is <minute> <hour> <dom> <month> <dow> or by hourly daily monthly weekly monthly yearly", {}))
 
         self.assertEqual(hpe3par_snapshot.create_schedule(mock_client.HPE3ParClient,
                                                           '192.168.0.1',
