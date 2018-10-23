@@ -278,9 +278,9 @@ EXAMPLES = r'''
 
   - name: Create volume on source
     hpe3par_volume:
-      storage_system_ip: 192.168.67.5
-      storage_system_password: 3pardata
-      storage_system_username: 3paradm
+      storage_system_ip: 10.10.10.1
+      storage_system_password: password
+      storage_system_username: username
       state: present
       volume_name: demo_volume_1
       size: 1024
@@ -290,9 +290,9 @@ EXAMPLES = r'''
 
   - name: Create volume on source
     hpe3par_volume:
-      storage_system_ip: 192.168.67.5
-      storage_system_password: 3pardata
-      storage_system_username: 3paradm
+      storage_system_ip: 10.10.10.1
+      storage_system_password: password
+      storage_system_username: username
       state: present
       volume_name: demo_volume_2
       size: 1024
@@ -302,9 +302,9 @@ EXAMPLES = r'''
 
   - name: Create volume on target
     hpe3par_volume:
-      storage_system_ip: 192.168.67.6
-      storage_system_password: 3pardata
-      storage_system_username: 3paradm
+      storage_system_ip: 10.10.10.1
+      storage_system_password: password
+      storage_system_username: username
       state: present
       volume_name: demo_volume_1
       size: 1024
@@ -314,9 +314,9 @@ EXAMPLES = r'''
 
   - name: Create volume on target
     hpe3par_volume:
-      storage_system_ip: 192.168.67.6
-      storage_system_password: 3pardata
-      storage_system_username: 3paradm
+      storage_system_ip: 10.10.10.1
+      storage_system_password: password
+      storage_system_username: username
       state: present
       volume_name: demo_volume_2
       size: 1024
@@ -326,9 +326,9 @@ EXAMPLES = r'''
 
   - name: Create Remote Copy Group farhan_rcg
     hpe3par_remote_copy:
-      storage_system_ip: 192.168.67.5
-      storage_system_password: 3pardata
-      storage_system_username: 3paradm
+      storage_system_ip: 10.10.10.1
+      storage_system_password: password
+      storage_system_username: username
       state: present
       remote_copy_group_name: farhan_rcg
       remote_copy_targets:
@@ -337,9 +337,9 @@ EXAMPLES = r'''
        
   - name: Add volume to remote copy group
     hpe3par_remote_copy:
-      storage_system_ip: 192.168.67.5
-      storage_system_password: 3pardata
-      storage_system_username: 3paradm
+      storage_system_ip: 10.10.10.1
+      storage_system_password: password
+      storage_system_username: username
       state: add_volume
       remote_copy_group_name: farhan_rcg
       volume_name: demo_volume_1
@@ -349,9 +349,9 @@ EXAMPLES = r'''
         
   - name: Add volume to remote copy group
     hpe3par_remote_copy:
-      storage_system_ip: 192.168.67.5
-      storage_system_password: 3pardata
-      storage_system_username: 3paradm
+      storage_system_ip: 10.10.10.1
+      storage_system_password: password
+      storage_system_username: username
       state: add_volume
       remote_copy_group_name: farhan_rcg
       volume_name: demo_volume_2
@@ -361,9 +361,9 @@ EXAMPLES = r'''
 
   - name: Modify Remote Copy Group farhan_rcg
     hpe3par_remote_copy:
-      storage_system_ip: 192.168.67.5
-      storage_system_password: 3pardata
-      storage_system_username: 3paradm
+      storage_system_ip: 10.10.10.1
+      storage_system_password: password
+      storage_system_username: username
       state: modify
       remote_copy_group_name: farhan_rcg
       local_user_cpg: "FC_r1"
@@ -377,51 +377,51 @@ EXAMPLES = r'''
         
   - name: Start remote copy
     hpe3par_remote_copy:
-      storage_system_ip: 192.168.67.5
-      storage_system_password: 3pardata
-      storage_system_username: 3paradm
+      storage_system_ip: 10.10.10.1
+      storage_system_password: password
+      storage_system_username: username
       remote_copy_group_name: farhan_rcg
       state: start
       
   - name: Stop remote copy
     hpe3par_remote_copy:
-      storage_system_ip: 192.168.67.5
-      storage_system_password: 3pardata
-      storage_system_username: 3paradm
+      storage_system_ip: 10.10.10.1
+      storage_system_password: password
+      storage_system_username: username
       remote_copy_group_name: farhan_rcg
       state: stop
       
   - name: Remove volume from remote copy group
     hpe3par_remote_copy:
-      storage_system_ip: 192.168.67.5
-      storage_system_password: 3pardata
-      storage_system_username: 3paradm
+      storage_system_ip: 10.10.10.1
+      storage_system_password: password
+      storage_system_username: username
       state: remove_volume
       remote_copy_group_name: farhan_rcg
       volume_name: demo_volume_1
         
   - name: Remove volume from remote copy group
     hpe3par_remote_copy:
-      storage_system_ip: 192.168.67.5
-      storage_system_password: 3pardata
-      storage_system_username: 3paradm
+      storage_system_ip: 10.10.10.1
+      storage_system_password: password
+      storage_system_username: username
       state: remove_volume
       remote_copy_group_name: farhan_rcg
       volume_name: demo_volume_2
         
   - name: Remove Remote Copy Group farhan_rcg
     hpe3par_remote_copy:
-      storage_system_ip: 192.168.67.5
-      storage_system_password: 3pardata
-      storage_system_username: 3paradm
+      storage_system_ip: 10.10.10.1
+      storage_system_password: password
+      storage_system_username: username
       state: absent 
       remote_copy_group_name: farhan_rcg
 
   - name: dismiss remote copy link
     hpe3par_remote_copy:
-      storage_system_ip: 192.168.67.5
-      storage_system_password: 3pardata
-      storage_system_username: 3paradm
+      storage_system_ip: 10.10.10.1
+      storage_system_password: password
+      storage_system_username: username
       state: dismisslink
       target_name: CSSOS-SSA06
       source_port: 0:3:1
@@ -429,9 +429,9 @@ EXAMPLES = r'''
 
   - name: dismiss remote copy link
     hpe3par_remote_copy:
-      storage_system_ip: 192.168.67.5
-      storage_system_password: 3pardata
-      storage_system_username: 3paradm
+      storage_system_ip: 10.10.10.1
+      storage_system_password: password
+      storage_system_username: username
       state: dismisslink
       target_name: CSSOS-SSA06
       source_port: "1:3:1"
@@ -439,9 +439,9 @@ EXAMPLES = r'''
 
   - name: Admit remote copy link
     hpe3par_remote_copy:
-      storage_system_ip: 192.168.67.5
-      storage_system_password: 3pardata
-      storage_system_username: 3paradm
+      storage_system_ip: 10.10.10.1
+      storage_system_password: password
+      storage_system_username: username
       state: admitlink
       target_name: CSSOS-SSA06
       source_port: 0:3:1
@@ -449,9 +449,9 @@ EXAMPLES = r'''
 
   - name: Admit remote copy link
     hpe3par_remote_copy:
-      storage_system_ip: 192.168.67.5
-      storage_system_password: 3pardata
-      storage_system_username: 3paradm
+      storage_system_ip: 10.10.10.1
+      storage_system_password: password
+      storage_system_username: username
       state: admitlink
       target_name: CSSOS-SSA06
       source_port: "1:3:1"
@@ -459,9 +459,9 @@ EXAMPLES = r'''
 
   - name: start remote copy service
     hpe3par_remote_copy:
-      storage_system_ip: 192.168.67.5
-      storage_system_password: 3pardata
-      storage_system_username: 3paradm
+      storage_system_ip: 10.10.10.1
+      storage_system_password: password
+      storage_system_username: username
       state: startrcopy
 '''
 
