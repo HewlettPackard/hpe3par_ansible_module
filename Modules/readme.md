@@ -2112,7 +2112,7 @@ hpe3par\_snapshot - Manage HPE 3PAR Snapshots
 Synopsis
 --------
 
--   On HPE 3PAR - Create Snapshot. - Delete Snapshot. - Modify Snapshot.
+-   On HPE 3PAR - Create Snapshot. - Delete Snapshot. - Modify Snapshot. - Create Schedule. - Modify Schedule. - Suspend Schedule. - Resume Schedule. - Delete Schedule.
 
 Parameters
 ----------
@@ -2389,6 +2389,60 @@ Required with action present</div>
                             <td>
                 <div class="outer-elbow-container">
                                             <div class="elbow-key">
+                        <b>schedule_name</b>
+                        <br/><div style="font-size: small; color: red">required</div>                                                    </div>
+                </div>
+            </td>
+                            <td>
+                <div class="cell-border">
+                                                                                                                                                                                        </div>
+            </td>
+                                                            <td>
+                <div class="cell-border">
+                                                                                <div>Specifies name of the schedule.</div>
+                                                                                            </div>
+            </td>
+        </tr>     
+                            <tr class="return-value-column">
+                            <td>
+                <div class="outer-elbow-container">
+                                            <div class="elbow-key">
+                        <b>new_schedule_name</b>
+                                                                           </div>
+                </div>
+            </td>
+                            <td>
+                <div class="cell-border">
+                                                                                                                                                                                        </div>
+            </td>
+                                                            <td>
+                <div class="cell-border">
+                                                                                <div>New Name of the schedule.</div>
+                                                                                            </div>
+            </td>
+        </tr>   
+                            <tr class="return-value-column">
+                            <td>
+                <div class="outer-elbow-container">
+                                            <div class="elbow-key">
+                        <b>task_freq</b>
+                                                                           </div>
+                </div>
+            </td>
+                            <td>
+                <div class="cell-border">
+                                                                                                                                                                                        </div>
+            </td>
+                                                            <td>
+                <div class="cell-border">
+                                                                                <div>Frequency as special string for the schedule to be created.</div>
+                                                                                            </div>
+            </td>
+        </tr>          
+                            <tr class="return-value-column">
+                            <td>
+                <div class="outer-elbow-container">
+                                            <div class="elbow-key">
                         <b>state</b>
                         <br/><div style="font-size: small; color: red">required</div>                                                    </div>
                 </div>
@@ -2513,6 +2567,32 @@ Examples
     storage_system_password="{{ storage_system_password }}"
     state=absent
     snapshot_name="{{ snapshot_name }}"
+    
+- name: Create schedule my_ansible_sc
+  hpe3par_snapshot:
+    storage_system_ip="{{ storage_system_ip }}"
+    storage_system_username="{{ storage_system_username }}"
+    storage_system_password="{{ storage_system_password }}"
+    state: create_schedule
+    schedule_name="{{ schedule_name }}"
+    base_volume_name="{{ base_volume_name }}"
+    
+- name: Modify schedule my_ansible_sc
+  hpe3par_snapshot:
+    storage_system_ip="{{ storage_system_ip }}"
+    storage_system_username="{{ storage_system_username }}"
+    storage_system_password="{{ storage_system_password }}"
+    state: create_schedule
+    schedule_name="{{ schedule_name }}"
+    new_schedule_name="{{ new_schedule_name }}"
+    
+- name: Delete schedule my_ansible_sc
+  hpe3par_snapshot:
+    storage_system_ip="{{ storage_system_ip }}"
+    storage_system_username="{{ storage_system_username }}"
+    storage_system_password="{{ storage_system_password }}"
+    state: delete_schedule
+    schedule_name: my_ansible_sc       
 ```
 
 ### Author
@@ -2979,6 +3059,7 @@ Required with action present, change_user_cpg</div>
                                                                                             </div>
             </td>
         </tr>
+        
                             <tr class="return-value-column">
                             <td>
                 <div class="outer-elbow-container">
