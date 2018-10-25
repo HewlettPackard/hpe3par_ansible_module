@@ -1,0 +1,70 @@
+- hosts: localhost
+  environment:
+    http_proxy: http://web-proxy.in.hpecorp.net:8080
+    http_proxy: http://web-proxy.in.hpecorp.net:8080
+    no_proxy: 192.168.67.7,192.168.67.5
+  
+  tasks:
+  
+  - name: Create Schedule on source
+    hpe3par_snapshot:
+      storage_system_ip: 192.168.67.7
+      storage_system_password: 3pardata
+      storage_system_username: 3paradm
+      state: create_schedule
+      schedule_name: my_ansible_sc
+      base_volume_name: volume_ansible_a 
+      read_only: True
+      expiration_time: 3
+      retention_time: 3
+      expiration_unit: Hours 
+      retention_unit: Hours
+      task_freq: "0 * * * *"
+
+  - pause:
+      prompt: "Press Enter"
+
+  - name: Modify Schedule from source
+    hpe3par_snapshot:
+      storage_system_ip: 192.168.67.7
+      storage_system_password: 3pardata
+      storage_system_username: 3paradm
+      state: modify_schedule
+      schedule_name: my_ansible_sc
+      new_schedule_name: ansible_sc
+      task_freq: yearly
+
+  - pause:
+      prompt: "Press Enter"
+
+  - name: Suspend Schedule on source
+    hpe3par_snapshot:
+      storage_system_ip: 192.168.67.7
+      storage_system_password: 3pardata
+      storage_system_username: 3paradm
+      state: suspend_schedule
+      schedule_name: ansible_sc
+
+  - pause:
+      prompt: "Press Enter"
+
+
+  - name: Resume Schedule from source
+    hpe3par_snapshot:
+      storage_system_ip: 192.168.67.7
+      storage_system_password: 3pardata
+      storage_system_username: 3paradm
+      state: resume_schedule
+      schedule_name: ansible_sc
+
+  - pause:
+      prompt: "Press Enter"
+
+  - name: Delete Schedule on source
+    hpe3par_snapshot:
+      storage_system_ip: 192.168.67.7
+      storage_system_password: 3pardata
+      storage_system_username: 3paradm
+      state: delete_schedule
+      schedule_name: ansible_sc
+        
