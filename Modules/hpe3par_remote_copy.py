@@ -237,11 +237,11 @@ options:
       - stop
       - synchronize
       - recover
-      - admitlink
-      - dismisslink
-      - admittarget
-      - dismisstarget
-      - startrcopy
+      - admit_link
+      - dismiss_link
+      - admit_target
+      - dismiss_target
+      - start_rcopy
     description:
       - "Whether the specified Remote Copy Group should exist or not. State
        also provides actions to modify Remote copy Group ,add/remove volumes,
@@ -422,7 +422,7 @@ EXAMPLES = r'''
       storage_system_ip: 10.10.10.1
       storage_system_password: password
       storage_system_username: username
-      state: dismisslink
+      state: dismiss_link
       target_name: CSSOS-SSA06
       source_port: 0:3:1
       target_port_wwn_or_ip: 192.168.1.2
@@ -432,7 +432,7 @@ EXAMPLES = r'''
       storage_system_ip: 10.10.10.1
       storage_system_password: password
       storage_system_username: username
-      state: dismisslink
+      state: dismiss_link
       target_name: CSSOS-SSA06
       source_port: "1:3:1"
       target_port_wwn_or_ip: 192.168.2.2
@@ -442,7 +442,7 @@ EXAMPLES = r'''
       storage_system_ip: 10.10.10.1
       storage_system_password: password
       storage_system_username: username
-      state: admitlink
+      state: admit_link
       target_name: CSSOS-SSA06
       source_port: 0:3:1
       target_port_wwn_or_ip: 192.168.1.2
@@ -452,7 +452,7 @@ EXAMPLES = r'''
       storage_system_ip: 10.10.10.1
       storage_system_password: password
       storage_system_username: username
-      state: admitlink
+      state: admit_link
       target_name: CSSOS-SSA06
       source_port: "1:3:1"
       target_port_wwn_or_ip: 192.168.2.2
@@ -462,7 +462,7 @@ EXAMPLES = r'''
       storage_system_ip: 10.10.10.1
       storage_system_password: password
       storage_system_username: username
-      state: startrcopy
+      state: start_rcopy
 '''
 
 RETURN = r'''
@@ -503,7 +503,7 @@ def create_remote_copy_group(
         for key in dict1.keys():
             if key == 'target_name':
                 if dict1[key] is None:
-                    return (False, False, "Remote Copy Group create failed.Target name is null", {})
+                    return (False, False, "Remote Copy Group create failed. Target name is null", {})
                 else:
                     target['targetName']=dict1.get(key)
                     target_names_list.append(dict1.get(key))
@@ -515,7 +515,7 @@ def create_remote_copy_group(
                 elif dict1.get(key) == 'async':
                     target['mode'] = 4
                 else:
-                    return (False, False, "Remote Copy Group create failed.Target mode is invalid", {}) 
+                    return (False, False, "Remote Copy Group create failed. Target mode is invalid", {}) 
             elif key == 'user_cpg':
                 target['userCPG']=dict1.get(key)
             elif key == 'snap_cpg':
@@ -655,7 +655,7 @@ def add_volume_to_remote_copy_group(
         for key in dict1.keys():
             if key == 'target_name':
                 if dict1[key] is None:
-                    return (False, False, "Remote Copy Group create failed.Target name is null", {})
+                    return (False, False, "Remote Copy Group create failed. Target name is null", {})
                 else:
                     target['targetName'] = dict1.get(key)
                     target_names_list.append(dict1.get(key))
@@ -845,7 +845,7 @@ def delete_remote_copy_group(
     finally:
         client_obj.logout()
     return (True, True, "Deleted Remote Copy Group %s successfully." % remote_copy_group_name, {})
-
+'''
 def recover_remote_copy_group(
             client_obj,
             storage_system_username,
@@ -909,7 +909,7 @@ def recover_remote_copy_group(
     finally:
         client_obj.logout()
     return (True, True, "Recovered Remote Copy Group %s successfully." % remote_copy_group_name, {})
-
+'''
 def admit_remote_copy_links(
             client_obj,
             storage_system_username,
@@ -973,9 +973,9 @@ def dismiss_remote_copy_links(
         return (False, False, "Dismiss remote copy link failed. Storage system IP address is null", {})
     try:
         client_obj.login(storage_system_username, storage_system_password)
-        client_obj.setSSHOptions(storage_system_ip, storage_system_username, storage_system_password)
         if target_name == client_obj.getStorageSystemInfo()['name']:
             return (False, False, "Source and target cannot be same. Source and target both are %s" % target_name, {})
+        client_obj.setSSHOptions(storage_system_ip, storage_system_username, storage_system_password)
         if not client_obj.rcopyLinkExists(target_name, source_port, target_port_wwn_or_ip):
             return (True, False, "Remote copy link %s:%s already not present." % (source_port, target_port_wwn_or_ip), {})
         else:
@@ -1032,16 +1032,16 @@ def admit_remote_copy_target(
     if target_name is None:
         return (False, False, "Admit remote copy target failed. Target name is null", {})
     if storage_system_ip is None:
-        return (False, False, "SSH to 3par storage system failed. Storage system IP address is null", {})
+        return (False, False, "Admit remote copy target failed. Storage system IP address is null", {})
     if target_mode is None:
         return (False, False, "Admit remote copy target failed. Mode is null", {})
     if remote_copy_group_name is None:
         return (False, False, "Admit remote copy target failed. Remote copy group name is null", {})
     try:
         client_obj.login(storage_system_username, storage_system_password)
-        client_obj.setSSHOptions(storage_system_ip, storage_system_username, storage_system_password)
         if target_name == client_obj.getStorageSystemInfo()['name']:
             return (False, False, "Source and target cannot be same. Source and target both are %s" % target_name, {})
+        client_obj.setSSHOptions(storage_system_ip, storage_system_username, storage_system_password)
         #checking existance of remote_copy_group_name
         if not client_obj.remoteCopyGroupExists(remote_copy_group_name):
             return (True, False, "Remote Copy Group is not present", {})
@@ -1075,14 +1075,14 @@ def dismiss_remote_copy_target(
     if target_name is None:
         return (False, False, "Dismiss remote copy target failed. Target name is null", {})
     if storage_system_ip is None:
-        return (False, False, "SSH to 3par storage system failed. Storage system IP address is null", {})
+        return (False, False, "Dismiss remote copy target failed. Storage system IP address is null", {})
     if remote_copy_group_name is None:
         return (False, False, "Dismiss remote copy target failed. Remote copy group name is null", {})
     try:
         client_obj.login(storage_system_username, storage_system_password)
-        client_obj.setSSHOptions(storage_system_ip, storage_system_username, storage_system_password)
         if target_name == client_obj.getStorageSystemInfo()['name']:
             return (False, False, "Source and target cannot be same. Source and target both are %s" % target_name, {})
+        client_obj.setSSHOptions(storage_system_ip, storage_system_username, storage_system_password)
 
         #checking existance of remote_copy_group_name
         if not client_obj.remoteCopyGroupExists(remote_copy_group_name):
@@ -1105,8 +1105,8 @@ def main():
     fields = {
         "state": {
             "required": True,
-            "choices": ['present', 'absent', 'modify', 'add_volume', 'remove_volume', 'start', 'stop', 'synchronize', 'recover', 'admitlink', 
-            'dismisslink','admittarget','dismisstarget', 'startrcopy'],
+            "choices": ['present', 'absent', 'modify', 'add_volume', 'remove_volume', 'start', 'stop', 'synchronize', 'recover', 'admit_link', 
+            'dismiss_link','admit_target','dismiss_target', 'start_rcopy'],
             "type": 'str'
         },
         "storage_system_ip": {
@@ -1366,23 +1366,23 @@ def main():
             target_name,
             full_sync
         )
-    elif module.params["state"] == "recover":
-        return_status, changed, msg, issue_attr_dict = recover_remote_copy_group(
-            client_obj,
-            storage_system_username,
-            storage_system_password,
-            remote_copy_group_name,
-            recovery_action,
-            target_name,
-            skip_start,
-            skip_sync,
-            discard_new_data,
-            skip_promote,
-            no_snapshot,
-            stop_groups,
-            local_groups_direction
-        )
-    elif module.params["state"] == "admitlink":
+#    elif module.params["state"] == "recover":
+#        return_status, changed, msg, issue_attr_dict = recover_remote_copy_group(
+#            client_obj,
+#            storage_system_username,
+#            storage_system_password,
+#            remote_copy_group_name,
+#            recovery_action,
+#            target_name,
+#            skip_start,
+#            skip_sync,
+#            discard_new_data,
+#            skip_promote,
+#            no_snapshot,
+#            stop_groups,
+#            local_groups_direction
+#        )
+    elif module.params["state"] == "admit_link":
         return_status, changed, msg, issue_attr_dict = admit_remote_copy_links(
             client_obj,
             storage_system_username,
@@ -1392,7 +1392,7 @@ def main():
             source_port,
             target_port_wwn_or_ip
         )
-    elif module.params["state"] == "dismisslink":
+    elif module.params["state"] == "dismiss_link":
         return_status, changed, msg, issue_attr_dict = dismiss_remote_copy_links(
             client_obj,
             storage_system_username,
@@ -1402,14 +1402,14 @@ def main():
             source_port,
             target_port_wwn_or_ip
         )		
-    elif module.params["state"] == "startrcopy":
+    elif module.params["state"] == "start_rcopy":
         return_status, changed, msg, issue_attr_dict = start_remote_copy_service(
             client_obj,
             storage_system_username,
             storage_system_password,
             storage_system_ip,
         )		
-    elif module.params["state"] == "admittarget":
+    elif module.params["state"] == "admit_target":
         return_status, changed, msg, issue_attr_dict = admit_remote_copy_target(
             client_obj,
             storage_system_username,
@@ -1420,7 +1420,7 @@ def main():
             remote_copy_group_name,
             local_remote_volume_pair_list
         )		
-    elif module.params["state"] == "dismisstarget":
+    elif module.params["state"] == "dismiss_target":
         return_status, changed, msg, issue_attr_dict = dismiss_remote_copy_target(
             client_obj,
             storage_system_username,
