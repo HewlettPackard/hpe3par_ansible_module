@@ -2112,7 +2112,7 @@ hpe3par\_snapshot - Manage HPE 3PAR Snapshots
 Synopsis
 --------
 
--   On HPE 3PAR - Create Snapshot. - Delete Snapshot. - Modify Snapshot.
+-   On HPE 3PAR - Create Snapshot. - Delete Snapshot. - Modify Snapshot. - Create Schedule. - Modify Schedule. - Suspend Schedule. - Resume Schedule. - Delete Schedule.
 
 Parameters
 ----------
@@ -2241,6 +2241,24 @@ Required with action present</div>
                                                                                             </div>
             </td>
         </tr>
+                            <tr class="return-value-column">
+                            <td>
+                <div class="outer-elbow-container">
+                                            <div class="elbow-key">
+                        <b>new_schedule_name</b>
+                                                                            </div>
+                </div>
+            </td>
+                            <td>
+                <div class="cell-border">
+                                                                                                                                                                                        </div>
+            </td>
+                                                            <td>
+                <div class="cell-border">
+                                                                                <div>New Name of the schedule.</div>
+                                                                                            </div>
+            </td>
+        </tr>            
                             <tr class="return-value-column">
                             <td>
                 <div class="outer-elbow-container">
@@ -2389,6 +2407,42 @@ Required with action present</div>
                             <td>
                 <div class="outer-elbow-container">
                                             <div class="elbow-key">
+                        <b>schedule_name</b>
+                        <br/><div style="font-size: small; color: red">required</div>                                                    </div>
+                </div>
+            </td>
+                            <td>
+                <div class="cell-border">
+                                                                                                                                                                                        </div>
+            </td>
+                                                            <td>
+                <div class="cell-border">
+                                                                                <div>Specifies name of the schedule.</div>
+                                                                                            </div>
+            </td>
+        </tr>  
+                            <tr class="return-value-column">
+                            <td>
+                <div class="outer-elbow-container">
+                                            <div class="elbow-key">
+                        <b>task_freq</b>
+                                                                            </div>
+                </div>
+            </td>
+                            <td>
+                <div class="cell-border">
+                                                                                                                                                                                        </div>
+            </td>
+                                                            <td>
+                <div class="cell-border">
+                                                                                <div>Frequency as special string for the schedule to be created.</div>
+                                                                                            </div>
+            </td>
+        </tr>                
+                            <tr class="return-value-column">
+                            <td>
+                <div class="outer-elbow-container">
+                                            <div class="elbow-key">
                         <b>state</b>
                         <br/><div style="font-size: small; color: red">required</div>                                                    </div>
                 </div>
@@ -2472,47 +2526,73 @@ Examples
 ``` {.sourceCode .yaml}
 - name: Create Volume snasphot my_ansible_snapshot
   hpe3par_snapshot:
-    storage_system_ip="{{ storage_system_ip }}"
-    storage_system_username="{{ storage_system_username }}"
-    storage_system_password="{{ storage_system_password }}"
-    state=present
-    snapshot_name="{{ snapshot_name }}"
-    base_volume_name="{{ base_volume_name }}"
-    read_only=False
-
+    storage_system_ip: 10.10.10.1
+    storage_system_username: username
+    storage_system_password: password
+    state: present
+    snapshot_name: snap-volume
+    base_volume_name: test_volume
+    read_only: False
+    
 - name: Restore offline Volume snasphot my_ansible_snapshot
   hpe3par_snapshot:
-    storage_system_ip="{{ storage_system_ip }}"
-    storage_system_username="{{ storage_system_username }}"
-    storage_system_password="{{ storage_system_password }}"
-    state=restore_offline
-    snapshot_name="{{ snapshot_name }}"
-    priority="MEDIUM"
-
+    storage_system_ip: 10.10.10.1
+    storage_system_username: username
+    storage_system_password: password
+    state: restore_offline
+    snapshot_name: snap-volume
+    priority: MEDIUM
+    
 - name: Restore offline Volume snasphot my_ansible_snapshot
   hpe3par_snapshot:
-    storage_system_ip="{{ storage_system_ip }}"
-    storage_system_username="{{ storage_system_username }}"
-    storage_system_password="{{ storage_system_password }}"
-    state=restore_online
-    snapshot_name="{{ snapshot_name }}"
-
+    storage_system_ip: 10.10.10.1
+    storage_system_username: username
+    storage_system_password: password
+    state: restore_online
+    snapshot_name: snap-volume
+    
 - name: Modify/rename snasphot my_ansible_snapshot to my_ansible_snapshot_renamed
   hpe3par_snapshot:
-    storage_system_ip="{{ storage_system_ip }}"
-    storage_system_username="{{ storage_system_username }}"
-    storage_system_password="{{ storage_system_password }}"
-    state=modify
-    snapshot_name="{{ snapshot_name }}"
-    new_name="{{ new_name }}"
-
+    storage_system_ip: 10.10.10.1
+    storage_system_username: username
+    storage_system_password: password
+    state: modify
+    snapshot_name: snap-volume
+    new_name: snapshot-volume
+    
 - name: Delete snasphot my_ansible_snapshot_renamed
   hpe3par_snapshot:
-    storage_system_ip="{{ storage_system_ip }}"
-    storage_system_username="{{ storage_system_username }}"
-    storage_system_password="{{ storage_system_password }}"
-    state=absent
-    snapshot_name="{{ snapshot_name }}"
+    storage_system_ip: 10.10.10.1
+    storage_system_username: username
+    storage_system_password: password
+    state: absent
+    snapshot_name: snap-volume
+    
+- name: Create schedule my_ansible_sc
+  hpe3par_snapshot:
+    storage_system_ip: 10.10.10.1
+    storage_system_username: username
+    storage_system_password: password
+    state: create_schedule
+    schedule_name: my_ansible_sc
+    base_volume_name: test_volume
+    
+- name: Modify schedule my_ansible_sc
+  hpe3par_snapshot:
+    storage_system_ip: 10.10.10.1
+    storage_system_username: username
+    storage_system_password: password
+    state: create_schedule
+    schedule_name: my_ansible_sc
+    new_schedule_name: test_ansible_sc
+- name: Delete schedule my_ansible_sc
+
+  hpe3par_snapshot:
+    storage_system_ip: 10.10.10.1
+    storage_system_username: username
+    storage_system_password: password
+    state: delete_schedule
+    schedule_name: my_ansible_sc   
 ```
 
 ### Author
