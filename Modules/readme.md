@@ -2245,24 +2245,6 @@ Required with action present</div>
                             <td>
                 <div class="outer-elbow-container">
                                             <div class="elbow-key">
-                        <b>new_schedule_name</b>
-                                                                            </div>
-                </div>
-            </td>
-                            <td>
-                <div class="cell-border">
-                                                                                                                                                                                        </div>
-            </td>
-                                                            <td>
-                <div class="cell-border">
-                                                                                <div>New Name of the schedule.</div>
-                                                                                            </div>
-            </td>
-        </tr>            
-                            <tr class="return-value-column">
-                            <td>
-                <div class="outer-elbow-container">
-                                            <div class="elbow-key">
                         <b>priority</b>
                                                                             </div>
                 </div>
@@ -2407,72 +2389,6 @@ Required with action present</div>
                             <td>
                 <div class="outer-elbow-container">
                                             <div class="elbow-key">
-                        <b>schedule_name</b>
-                        <br/><div style="font-size: small; color: red">required</div>                                                    </div>
-                </div>
-            </td>
-                            <td>
-                <div class="cell-border">
-                                                                                                                                                                                        </div>
-            </td>
-                                                            <td>
-                <div class="cell-border">
-                                                                                <div>Specifies name of the schedule.</div>
-                                                                                            </div>
-            </td>
-<<<<<<< HEAD
-        </tr>     
-                            <tr class="return-value-column">
-                            <td>
-                <div class="outer-elbow-container">
-                                            <div class="elbow-key">
-                        <b>new_schedule_name</b>
-                                                                           </div>
-                </div>
-            </td>
-                            <td>
-                <div class="cell-border">
-                                                                                                                                                                                        </div>
-            </td>
-                                                            <td>
-                <div class="cell-border">
-                                                                                <div>New Name of the schedule.</div>
-                                                                                            </div>
-            </td>
-        </tr>   
-=======
-        </tr>  
->>>>>>> 19aeae9dd6261f1f1ea6dc6940171eca9bb15702
-                            <tr class="return-value-column">
-                            <td>
-                <div class="outer-elbow-container">
-                                            <div class="elbow-key">
-                        <b>task_freq</b>
-<<<<<<< HEAD
-                                                                           </div>
-=======
-                                                                            </div>
->>>>>>> 19aeae9dd6261f1f1ea6dc6940171eca9bb15702
-                </div>
-            </td>
-                            <td>
-                <div class="cell-border">
-                                                                                                                                                                                        </div>
-            </td>
-                                                            <td>
-                <div class="cell-border">
-                                                                                <div>Frequency as special string for the schedule to be created.</div>
-                                                                                            </div>
-            </td>
-<<<<<<< HEAD
-        </tr>          
-=======
-        </tr>                
->>>>>>> 19aeae9dd6261f1f1ea6dc6940171eca9bb15702
-                            <tr class="return-value-column">
-                            <td>
-                <div class="outer-elbow-container">
-                                            <div class="elbow-key">
                         <b>state</b>
                         <br/><div style="font-size: small; color: red">required</div>                                                    </div>
                 </div>
@@ -2556,107 +2472,47 @@ Examples
 ``` {.sourceCode .yaml}
 - name: Create Volume snasphot my_ansible_snapshot
   hpe3par_snapshot:
-    storage_system_ip: 10.10.10.1
-    storage_system_username: username
-    storage_system_password: password
-    state: present
-    snapshot_name: snap-volume
-    base_volume_name: test_volume
-    read_only: False
-    
+    storage_system_ip="{{ storage_system_ip }}"
+    storage_system_username="{{ storage_system_username }}"
+    storage_system_password="{{ storage_system_password }}"
+    state=present
+    snapshot_name="{{ snapshot_name }}"
+    base_volume_name="{{ base_volume_name }}"
+    read_only=False
+
 - name: Restore offline Volume snasphot my_ansible_snapshot
   hpe3par_snapshot:
-    storage_system_ip: 10.10.10.1
-    storage_system_username: username
-    storage_system_password: password
-    state: restore_offline
-    snapshot_name: snap-volume
-    priority: MEDIUM
-    
+    storage_system_ip="{{ storage_system_ip }}"
+    storage_system_username="{{ storage_system_username }}"
+    storage_system_password="{{ storage_system_password }}"
+    state=restore_offline
+    snapshot_name="{{ snapshot_name }}"
+    priority="MEDIUM"
+
 - name: Restore offline Volume snasphot my_ansible_snapshot
   hpe3par_snapshot:
-    storage_system_ip: 10.10.10.1
-    storage_system_username: username
-    storage_system_password: password
-    state: restore_online
-    snapshot_name: snap-volume
-    
+    storage_system_ip="{{ storage_system_ip }}"
+    storage_system_username="{{ storage_system_username }}"
+    storage_system_password="{{ storage_system_password }}"
+    state=restore_online
+    snapshot_name="{{ snapshot_name }}"
+
 - name: Modify/rename snasphot my_ansible_snapshot to my_ansible_snapshot_renamed
   hpe3par_snapshot:
-    storage_system_ip: 10.10.10.1
-    storage_system_username: username
-    storage_system_password: password
-    state: modify
-    snapshot_name: snap-volume
-    new_name: snapshot-volume
-    
+    storage_system_ip="{{ storage_system_ip }}"
+    storage_system_username="{{ storage_system_username }}"
+    storage_system_password="{{ storage_system_password }}"
+    state=modify
+    snapshot_name="{{ snapshot_name }}"
+    new_name="{{ new_name }}"
+
 - name: Delete snasphot my_ansible_snapshot_renamed
   hpe3par_snapshot:
-<<<<<<< HEAD
     storage_system_ip="{{ storage_system_ip }}"
     storage_system_username="{{ storage_system_username }}"
     storage_system_password="{{ storage_system_password }}"
     state=absent
     snapshot_name="{{ snapshot_name }}"
-    
-- name: Create schedule my_ansible_sc
-  hpe3par_snapshot:
-    storage_system_ip="{{ storage_system_ip }}"
-    storage_system_username="{{ storage_system_username }}"
-    storage_system_password="{{ storage_system_password }}"
-    state: create_schedule
-    schedule_name="{{ schedule_name }}"
-    base_volume_name="{{ base_volume_name }}"
-    
-- name: Modify schedule my_ansible_sc
-  hpe3par_snapshot:
-    storage_system_ip="{{ storage_system_ip }}"
-    storage_system_username="{{ storage_system_username }}"
-    storage_system_password="{{ storage_system_password }}"
-    state: create_schedule
-    schedule_name="{{ schedule_name }}"
-    new_schedule_name="{{ new_schedule_name }}"
-    
-- name: Delete schedule my_ansible_sc
-  hpe3par_snapshot:
-    storage_system_ip="{{ storage_system_ip }}"
-    storage_system_username="{{ storage_system_username }}"
-    storage_system_password="{{ storage_system_password }}"
-    state: delete_schedule
-    schedule_name: my_ansible_sc       
-=======
-    storage_system_ip: 10.10.10.1
-    storage_system_username: username
-    storage_system_password: password
-    state: absent
-    snapshot_name: snap-volume
-    
-- name: Create schedule my_ansible_sc
-  hpe3par_snapshot:
-    storage_system_ip: 10.10.10.1
-    storage_system_username: username
-    storage_system_password: password
-    state: create_schedule
-    schedule_name: my_ansible_sc
-    base_volume_name: test_volume
-    
-- name: Modify schedule my_ansible_sc
-  hpe3par_snapshot:
-    storage_system_ip: 10.10.10.1
-    storage_system_username: username
-    storage_system_password: password
-    state: create_schedule
-    schedule_name: my_ansible_sc
-    new_schedule_name: test_ansible_sc
-- name: Delete schedule my_ansible_sc
-
-  hpe3par_snapshot:
-    storage_system_ip: 10.10.10.1
-    storage_system_username: username
-    storage_system_password: password
-    state: delete_schedule
-    schedule_name: my_ansible_sc   
->>>>>>> 19aeae9dd6261f1f1ea6dc6940171eca9bb15702
 ```
 
 ### Author
@@ -3123,7 +2979,6 @@ Required with action present, change_user_cpg</div>
                                                                                             </div>
             </td>
         </tr>
-        
                             <tr class="return-value-column">
                             <td>
                 <div class="outer-elbow-container">
