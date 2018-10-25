@@ -1,4 +1,4 @@
-source
+ource
 
 :   hpe3par\_cpg.py
 
@@ -2389,6 +2389,60 @@ Required with action present</div>
                             <td>
                 <div class="outer-elbow-container">
                                             <div class="elbow-key">
+                        <b>schedule_name</b>
+                        <br/><div style="font-size: small; color: red">required</div>                                                    </div>
+                </div>
+            </td>
+                            <td>
+                <div class="cell-border">
+                                                                                                                                                                                        </div>
+            </td>
+                                                            <td>
+                <div class="cell-border">
+                                                                                <div>Specifies name of the schedule.</div>
+                                                                                            </div>
+            </td>
+        </tr>   
+                            <tr class="return-value-column">
+                            <td>
+                <div class="outer-elbow-container">
+                                            <div class="elbow-key">
+                        <b>new_schedule_name</b>
+                                                                         </div>
+                </div>
+            </td>
+                            <td>
+                <div class="cell-border">
+                                                                                                                                                                                        </div>
+            </td>
+                                                            <td>
+                <div class="cell-border">
+                                                                                <div>New Name of the schedule.</div>
+                                                                                            </div>
+            </td>
+        </tr>       
+                            <tr class="return-value-column">
+                            <td>
+                <div class="outer-elbow-container">
+                                            <div class="elbow-key">
+                        <b>task_freq</b>
+                                                                         </div>
+                </div>
+            </td>
+                            <td>
+                <div class="cell-border">
+                                                                                                                                                                                        </div>
+            </td>
+                                                            <td>
+                <div class="cell-border">
+                                                                                <div>Frequency as special string for the schedule to be created.</div>
+                                                                                            </div>
+            </td>
+        </tr>               
+                            <tr class="return-value-column">
+                            <td>
+                <div class="outer-elbow-container">
+                                            <div class="elbow-key">
                         <b>state</b>
                         <br/><div style="font-size: small; color: red">required</div>                                                    </div>
                 </div>
@@ -2513,11 +2567,53 @@ Examples
     storage_system_password="{{ storage_system_password }}"
     state=absent
     snapshot_name="{{ snapshot_name }}"
+
+- name: Create schedule my_ansible_sc
+  hpe3par_snapshot:
+    storage_system_ip="{{ storage_system_ip }}"
+    storage_system_username="{{ storage_system_username }}"
+    storage_system_password="{{ storage_system_password }}"
+    state=create_schedule
+    schedule_name="{{ storage_system_password }}"
+    base_volume_name="{{ storage_system_password }}"
+    
+- name: Modify schedule my_ansible_sc
+  hpe3par_snapshot:
+    storage_system_ip="{{ storage_system_ip }}"
+    storage_system_username="{{ storage_system_username }}"
+    storage_system_password="{{ storage_system_password }}"
+    state=modify_schedule
+    schedule_name="{{ schedule_name }}"
+    new_schedule_name="{{ new_schedule_name }}"
+
+- name: Suspend schedule my_ansible_sc
+  hpe3par_snapshot:
+    storage_system_ip="{{ storage_system_ip }}"
+    storage_system_username="{{ storage_system_username }}"
+    storage_system_password="{{ storage_system_password }}"
+    state=suspend_schedule
+    schedule_name="{{ schedule_name }}"    
+
+- name: Resume schedule my_ansible_sc
+  hpe3par_snapshot:
+    storage_system_ip="{{ storage_system_ip }}"
+    storage_system_username="{{ storage_system_username }}"
+    storage_system_password="{{ storage_system_password }}"
+    state=resume_schedule
+    schedule_name="{{ schedule_name }}"    
+    
+- name: Delete schedule my_ansible_sc
+  hpe3par_snapshot:
+    storage_system_ip="{{ storage_system_ip }}"
+    storage_system_username="{{ storage_system_username }}"
+    storage_system_password="{{ storage_system_password }}"
+    state=delete_schedule
+    schedule_name="{{ schedule_name }}"
 ```
 
 ### Author
 
--   Farhan Nomani (<nomani@hpe.com>)
+-   Nirupama Nirmal (<nirupama-nirmal.nirmal@hpe.com>)
 
 source
 
