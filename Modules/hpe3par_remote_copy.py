@@ -845,7 +845,7 @@ def delete_remote_copy_group(
     finally:
         client_obj.logout()
     return (True, True, "Deleted Remote Copy Group %s successfully." % remote_copy_group_name, {})
-
+'''
 def recover_remote_copy_group(
             client_obj,
             storage_system_username,
@@ -909,7 +909,7 @@ def recover_remote_copy_group(
     finally:
         client_obj.logout()
     return (True, True, "Recovered Remote Copy Group %s successfully." % remote_copy_group_name, {})
-
+'''
 def admit_remote_copy_links(
             client_obj,
             storage_system_username,
