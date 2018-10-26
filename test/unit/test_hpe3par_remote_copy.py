@@ -28,8 +28,8 @@ class TestHpe3parRemoteCopy(unittest.TestCase):
     fields = {
         "state": {
             "required": True,
-            "choices": ['present', 'absent', 'modify', 'add_volume', 'remove_volume', 'start', 'stop', 'synchronize', 'recover', 'admitlink', 
-            'dismisslink','admittarget','dismisstarget', 'startrcopy'],
+            "choices": ['present', 'absent', 'modify', 'add_volume', 'remove_volume', 'start', 'stop', 'synchronize', 'recover', 'admit_link', 
+            'dismiss_link','admit_target','dismiss_target', 'start_rcopy'],
             "type": 'str'
         },
         "storage_system_ip": {
@@ -52,7 +52,13 @@ class TestHpe3parRemoteCopy(unittest.TestCase):
         "domain": {
             "type": "str"
         },
-        "targets": {
+        "remote_copy_targets": {
+            "type": "list"
+        },
+        "modify_targets": {
+            "type": "list"
+        },
+        "admit_volume_targets": {
             "type": "list"
         },
         "local_user_cpg": {
@@ -170,7 +176,9 @@ class TestHpe3parRemoteCopy(unittest.TestCase):
             'storage_system_password': 'PASS',
             'remote_copy_group_name': 'rcg_name_1',
             'domain': 'test_domain',
-            'targets': [{'targetName': 'CSSOS-SSA04','mode': 1}],
+            'remote_copy_targets': [{'target_name': 'CSSOS-SSA04','target_mode': 'sync'}],
+            'admit_volume_targets': [{'target_name': 'CSSOS-SSA04','sec_volume_name': 'demo_volume_1'}],
+            'modify_targets': [{'target_name': 'CSSOS-SSA04','remote_user_cpg': 'FC_r1','remote_snap_cpg': 'FC_r6'}],
             'local_user_cpg': 'localusrcpg1',
             'local_snap_cpg': 'snap_cpg1',
             'keep_snap': False,
@@ -220,7 +228,9 @@ class TestHpe3parRemoteCopy(unittest.TestCase):
             'storage_system_password': 'PASS',
             'remote_copy_group_name': 'rcg_name_1',
             'domain': 'test_domain',
-            'targets': [{'targetName': 'CSSOS-SSA04','mode': 1}],
+            'remote_copy_targets': [{'target_name': 'CSSOS-SSA04','target_mode': 'sync'}],
+            'admit_volume_targets': [{'target_name': 'CSSOS-SSA04','sec_volume_name': 'demo_volume_1'}],
+            'modify_targets': [{'target_name': 'CSSOS-SSA04','remote_user_cpg': 'FC_r1','remote_snap_cpg': 'FC_r6'}],
             'local_user_cpg': 'localusrcpg1',
             'local_snap_cpg': 'snap_cpg1',
             'keep_snap': False,
@@ -231,7 +241,7 @@ class TestHpe3parRemoteCopy(unittest.TestCase):
             'skip_initial_sync': False,
             'different_secondary_wwn': False,
             'remove_secondary_volume': False,
-            'target_name': 'targetName1',
+            'target_name': 'target_name1',
             'starting_snapshots': ['volName1','snapShot1'],
             'no_snapshot': False,
             'no_resync_snapshot': False,
@@ -276,7 +286,9 @@ class TestHpe3parRemoteCopy(unittest.TestCase):
             'storage_system_password': 'PASS',
             'remote_copy_group_name': 'rcg_name_1',
             'domain': 'test_domain',
-            'targets': [{'targetName': 'CSSOS-SSA04','mode': 1}],
+            'remote_copy_targets': [{'target_name': 'CSSOS-SSA04','target_mode': 'sync'}],
+            'admit_volume_targets': [{'target_name': 'CSSOS-SSA04','sec_volume_name': 'demo_volume_1'}],
+            'modify_targets': [{'target_name': 'CSSOS-SSA04','remote_user_cpg': 'FC_r1','remote_snap_cpg': 'FC_r6'}],
             'local_user_cpg': 'localusrcpg1',
             'local_snap_cpg': 'snap_cpg1',
             'keep_snap': False,
@@ -287,7 +299,7 @@ class TestHpe3parRemoteCopy(unittest.TestCase):
             'skip_initial_sync': False,
             'different_secondary_wwn': False,
             'remove_secondary_volume': False,
-            'target_name': 'targetName1',
+            'target_name': 'target_name1',
             'starting_snapshots': ['volName1','snapShot1'],
             'no_snapshot': False,
             'no_resync_snapshot': False,
@@ -332,7 +344,9 @@ class TestHpe3parRemoteCopy(unittest.TestCase):
             'storage_system_password': 'PASS',
             'remote_copy_group_name': 'rcg_name_1',
             'domain': 'test_domain',
-            'targets': [{'targetName': 'CSSOS-SSA04','mode': 1}],
+            'remote_copy_targets': [{'target_name': 'CSSOS-SSA04','target_mode': 'sync'}],
+            'admit_volume_targets': [{'target_name': 'CSSOS-SSA04','sec_volume_name': 'demo_volume_1'}],
+            'modify_targets': [{'target_name': 'CSSOS-SSA04','remote_user_cpg': 'FC_r1','remote_snap_cpg': 'FC_r6'}],
             'local_user_cpg': 'localusrcpg1',
             'local_snap_cpg': 'snap_cpg1',
             'keep_snap': False,
@@ -343,7 +357,7 @@ class TestHpe3parRemoteCopy(unittest.TestCase):
             'skip_initial_sync': False,
             'different_secondary_wwn': False,
             'remove_secondary_volume': False,
-            'target_name': 'targetName1',
+            'target_name': 'target_name1',
             'starting_snapshots': ['volName1','snapShot1'],
             'no_snapshot': False,
             'no_resync_snapshot': False,
@@ -388,7 +402,9 @@ class TestHpe3parRemoteCopy(unittest.TestCase):
             'storage_system_password': 'PASS',
             'remote_copy_group_name': 'rcg_name_1',
             'domain': 'test_domain',
-            'targets': [{'targetName': 'CSSOS-SSA04','mode': 1}],
+            'remote_copy_targets': [{'target_name': 'CSSOS-SSA04','target_mode': 'sync'}],
+            'admit_volume_targets': [{'target_name': 'CSSOS-SSA04','sec_volume_name': 'demo_volume_1'}],
+            'modify_targets': [{'target_name': 'CSSOS-SSA04','remote_user_cpg': 'FC_r1','remote_snap_cpg': 'FC_r6'}],
             'local_user_cpg': 'localusrcpg1',
             'local_snap_cpg': 'snap_cpg1',
             'keep_snap': False,
@@ -399,7 +415,7 @@ class TestHpe3parRemoteCopy(unittest.TestCase):
             'skip_initial_sync': False,
             'different_secondary_wwn': False,
             'remove_secondary_volume': False,
-            'target_name': 'targetName1',
+            'target_name': 'target_name1',
             'starting_snapshots': ['volName1','snapShot1'],
             'no_snapshot': False,
             'no_resync_snapshot': False,
@@ -445,7 +461,9 @@ class TestHpe3parRemoteCopy(unittest.TestCase):
             'storage_system_password': 'PASS',
             'remote_copy_group_name': 'rcg_name_1',
             'domain': 'test_domain',
-            'targets': [{'targetName': 'CSSOS-SSA04','mode': 1}],
+            'remote_copy_targets': [{'target_name': 'CSSOS-SSA04','target_mode': 'sync'}],
+            'admit_volume_targets': [{'target_name': 'CSSOS-SSA04','sec_volume_name': 'demo_volume_1'}],
+            'modify_targets': [{'target_name': 'CSSOS-SSA04','remote_user_cpg': 'FC_r1','remote_snap_cpg': 'FC_r6'}],
             'local_user_cpg': 'localusrcpg1',
             'local_snap_cpg': 'snap_cpg1',
             'keep_snap': False,
@@ -456,7 +474,7 @@ class TestHpe3parRemoteCopy(unittest.TestCase):
             'skip_initial_sync': False,
             'different_secondary_wwn': False,
             'remove_secondary_volume': False,
-            'target_name': 'targetName1',
+            'target_name': 'target_name1',
             'starting_snapshots': ['volName1','snapShot1'],
             'no_snapshot': False,
             'no_resync_snapshot': False,
@@ -485,7 +503,7 @@ class TestHpe3parRemoteCopy(unittest.TestCase):
         instance.exit_json.assert_called_with(
             changed=True, msg="Removed volume from Remote Copy Group successfully.")
         # AnsibleModule.fail_json should not be called
-        self.assertEqual(instance.fail_json.call_count, 0)	
+        self.assertEqual(instance.fail_json.call_count, 0)
 
     @mock.patch('Modules.hpe3par_remote_copy.client')
     @mock.patch('Modules.hpe3par_remote_copy.AnsibleModule')
@@ -501,7 +519,9 @@ class TestHpe3parRemoteCopy(unittest.TestCase):
             'storage_system_password': 'PASS',
             'remote_copy_group_name': 'rcg_name_1',
             'domain': 'test_domain',
-            'targets': [{'targetName': 'CSSOS-SSA04','mode': 1}],
+            'remote_copy_targets': [{'target_name': 'CSSOS-SSA04','target_mode': 'sync'}],
+            'admit_volume_targets': [{'target_name': 'CSSOS-SSA04','sec_volume_name': 'demo_volume_1'}],
+            'modify_targets': [{'target_name': 'CSSOS-SSA04','remote_user_cpg': 'FC_r1','remote_snap_cpg': 'FC_r6'}],
             'local_user_cpg': 'localusrcpg1',
             'local_snap_cpg': 'snap_cpg1',
             'keep_snap': False,
@@ -512,7 +532,7 @@ class TestHpe3parRemoteCopy(unittest.TestCase):
             'skip_initial_sync': False,
             'different_secondary_wwn': False,
             'remove_secondary_volume': False,
-            'target_name': 'targetName1',
+            'target_name': 'target_name1',
             'starting_snapshots': ['volName1','snapShot1'],
             'no_snapshot': False,
             'no_resync_snapshot': False,
@@ -557,7 +577,9 @@ class TestHpe3parRemoteCopy(unittest.TestCase):
             'storage_system_password': 'PASS',
             'remote_copy_group_name': 'rcg_name_1',
             'domain': 'test_domain',
-            'targets': [{'targetName': 'CSSOS-SSA04','mode': 1}],
+            'remote_copy_targets': [{'target_name': 'CSSOS-SSA04','target_mode': 'sync'}],
+            'admit_volume_targets': [{'target_name': 'CSSOS-SSA04','sec_volume_name': 'demo_volume_1'}],
+            'modify_targets': [{'target_name': 'CSSOS-SSA04','remote_user_cpg': 'FC_r1','remote_snap_cpg': 'FC_r6'}],
             'local_user_cpg': 'localusrcpg1',
             'local_snap_cpg': 'snap_cpg1',
             'keep_snap': False,
@@ -568,7 +590,7 @@ class TestHpe3parRemoteCopy(unittest.TestCase):
             'skip_initial_sync': False,
             'different_secondary_wwn': False,
             'remove_secondary_volume': False,
-            'target_name': 'targetName1',
+            'target_name': 'target_name1',
             'starting_snapshots': ['volName1','snapShot1'],
             'no_snapshot': False,
             'no_resync_snapshot': False,
@@ -597,8 +619,7 @@ class TestHpe3parRemoteCopy(unittest.TestCase):
         instance.exit_json.assert_called_with(
             changed=True, msg="Stopped Remote Copy Group successfully.")
         # AnsibleModule.fail_json should not be called
-        self.assertEqual(instance.fail_json.call_count, 0)	
-
+        self.assertEqual(instance.fail_json.call_count, 0)
 
     @mock.patch('Modules.hpe3par_remote_copy.client')
     @mock.patch('Modules.hpe3par_remote_copy.AnsibleModule')
@@ -614,7 +635,9 @@ class TestHpe3parRemoteCopy(unittest.TestCase):
             'storage_system_password': 'PASS',
             'remote_copy_group_name': 'rcg_name_1',
             'domain': 'test_domain',
-            'targets': [{'targetName': 'CSSOS-SSA04','mode': 1}],
+            'remote_copy_targets': [{'target_name': 'CSSOS-SSA04','target_mode': 'sync'}],
+            'admit_volume_targets': [{'target_name': 'CSSOS-SSA04','sec_volume_name': 'demo_volume_1'}],
+            'modify_targets': [{'target_name': 'CSSOS-SSA04','remote_user_cpg': 'FC_r1','remote_snap_cpg': 'FC_r6'}],
             'local_user_cpg': 'localusrcpg1',
             'local_snap_cpg': 'snap_cpg1',
             'keep_snap': False,
@@ -625,7 +648,7 @@ class TestHpe3parRemoteCopy(unittest.TestCase):
             'skip_initial_sync': False,
             'different_secondary_wwn': False,
             'remove_secondary_volume': False,
-            'target_name': 'targetName1',
+            'target_name': 'target_name1',
             'starting_snapshots': ['volName1','snapShot1'],
             'no_snapshot': False,
             'no_resync_snapshot': False,
@@ -654,63 +677,7 @@ class TestHpe3parRemoteCopy(unittest.TestCase):
         instance.exit_json.assert_called_with(
             changed=True, msg="Synchronized Remote Copy Group successfully.")
         # AnsibleModule.fail_json should not be called
-        self.assertEqual(instance.fail_json.call_count, 0)	
-
-    @mock.patch('Modules.hpe3par_remote_copy.client')
-    @mock.patch('Modules.hpe3par_remote_copy.AnsibleModule')
-    @mock.patch('Modules.hpe3par_remote_copy.recover_remote_copy_group')
-    def test_main_exit_recover_remote_copy_group(self, mock_recover_remote_copy_group, mock_module, mock_client):
-        """
-        hpe3par flash cache - success check
-        """
-        PARAMS_FOR_PRESENT = {
-            'state': 'recover',
-            'storage_system_ip': '192.168.0.1',
-            'storage_system_username': 'USER',
-            'storage_system_password': 'PASS',
-            'remote_copy_group_name': 'rcg_name_1',
-            'domain': 'test_domain',
-            'targets': [{'targetName': 'CSSOS-SSA04','mode': 1}],
-            'local_user_cpg': 'localusrcpg1',
-            'local_snap_cpg': 'snap_cpg1',
-            'keep_snap': False,
-            'unset_user_cpg': False,
-            'unset_snap_cpg': False,
-            'snapshot_name': 'snapshot_1',
-            'volume_auto_creation': False,
-            'skip_initial_sync': False,
-            'different_secondary_wwn': False,
-            'remove_secondary_volume': False,
-            'target_name': 'targetName1',
-            'starting_snapshots': ['volName1','snapShot1'],
-            'no_snapshot': False,
-            'no_resync_snapshot': False,
-            'full_sync': False,
-            'recovery_action': 'REVERSE_GROUP',
-            'skip_start': False,
-            'skip_sync': False,
-            'discard_new_data': False,
-            'skip_promote': False,
-            'stop_groups': False,
-            'local_groups_direction': False,
-            'volume_name': 'volume_1',
-            'source_port': '0:3:1',
-            'target_port_wwn_or_ip': '192.168.1.2',
-            'local_remote_volume_pair_list': [('local_v1','remote_v1'),('local_v2','remote_v2')],
-            'target_mode': 'sync'
-        }
-        # This creates a instance of the AnsibleModule mock.
-        mock_module.params = PARAMS_FOR_PRESENT
-        mock_module.return_value = mock_module
-        instance = mock_module.return_value
-        mock_recover_remote_copy_group.return_value = (
-            True, True, "Recovered Remote Copy Group successfully.", {})
-        hpe3par_remote_copy.main()
-        # AnsibleModule.exit_json should be called
-        instance.exit_json.assert_called_with(
-            changed=True, msg="Recovered Remote Copy Group successfully.")
-        # AnsibleModule.fail_json should not be called
-        self.assertEqual(instance.fail_json.call_count, 0)    
+        self.assertEqual(instance.fail_json.call_count, 0)
 
     @mock.patch('Modules.hpe3par_remote_copy.client')
     @mock.patch('Modules.hpe3par_remote_copy.AnsibleModule')
@@ -720,13 +687,15 @@ class TestHpe3parRemoteCopy(unittest.TestCase):
         hpe3par flash cache - success check
         """
         PARAMS_FOR_PRESENT = {
-            'state': 'admitlink',
+            'state': 'admit_link',
             'storage_system_ip': '192.168.0.1',
             'storage_system_username': 'USER',
             'storage_system_password': 'PASS',
             'remote_copy_group_name': 'rcg_name_1',
             'domain': 'test_domain',
-            'targets': [{'targetName': 'CSSOS-SSA04','mode': 1}],
+            'remote_copy_targets': [{'target_name': 'CSSOS-SSA04','target_mode': 'sync'}],
+            'admit_volume_targets': [{'target_name': 'CSSOS-SSA04','sec_volume_name': 'demo_volume_1'}],
+            'modify_targets': [{'target_name': 'CSSOS-SSA04','remote_user_cpg': 'FC_r1','remote_snap_cpg': 'FC_r6'}],
             'local_user_cpg': 'localusrcpg1',
             'local_snap_cpg': 'snap_cpg1',
             'keep_snap': False,
@@ -737,7 +706,7 @@ class TestHpe3parRemoteCopy(unittest.TestCase):
             'skip_initial_sync': False,
             'different_secondary_wwn': False,
             'remove_secondary_volume': False,
-            'target_name': 'targetName1',
+            'target_name': 'target_name1',
             'starting_snapshots': ['volName1','snapShot1'],
             'no_snapshot': False,
             'no_resync_snapshot': False,
@@ -776,13 +745,15 @@ class TestHpe3parRemoteCopy(unittest.TestCase):
         hpe3par flash cache - success check
         """
         PARAMS_FOR_PRESENT = {
-            'state': 'dismisslink',
+            'state': 'dismiss_link',
             'storage_system_ip': '192.168.0.1',
             'storage_system_username': 'USER',
             'storage_system_password': 'PASS',
             'remote_copy_group_name': 'rcg_name_1',
             'domain': 'test_domain',
-            'targets': [{'targetName': 'CSSOS-SSA04','mode': 1}],
+            'remote_copy_targets': [{'target_name': 'CSSOS-SSA04','target_mode': 'sync'}],
+            'admit_volume_targets': [{'target_name': 'CSSOS-SSA04','sec_volume_name': 'demo_volume_1'}],
+            'modify_targets': [{'target_name': 'CSSOS-SSA04','remote_user_cpg': 'FC_r1','remote_snap_cpg': 'FC_r6'}],
             'local_user_cpg': 'localusrcpg1',
             'local_snap_cpg': 'snap_cpg1',
             'keep_snap': False,
@@ -793,7 +764,7 @@ class TestHpe3parRemoteCopy(unittest.TestCase):
             'skip_initial_sync': False,
             'different_secondary_wwn': False,
             'remove_secondary_volume': False,
-            'target_name': 'targetName1',
+            'target_name': 'target_name1',
             'starting_snapshots': ['volName1','snapShot1'],
             'no_snapshot': False,
             'no_resync_snapshot': False,
@@ -832,13 +803,15 @@ class TestHpe3parRemoteCopy(unittest.TestCase):
         hpe3par flash cache - success check
         """
         PARAMS_FOR_PRESENT = {
-            'state': 'startrcopy',
+            'state': 'start_rcopy',
             'storage_system_ip': '192.168.0.1',
             'storage_system_username': 'USER',
             'storage_system_password': 'PASS',
             'remote_copy_group_name': 'rcg_name_1',
             'domain': 'test_domain',
-            'targets': [{'targetName': 'CSSOS-SSA04','mode': 1}],
+            'remote_copy_targets': [{'target_name': 'CSSOS-SSA04','target_mode': 'sync'}],
+            'admit_volume_targets': [{'target_name': 'CSSOS-SSA04','sec_volume_name': 'demo_volume_1'}],
+            'modify_targets': [{'target_name': 'CSSOS-SSA04','remote_user_cpg': 'FC_r1','remote_snap_cpg': 'FC_r6'}],
             'local_user_cpg': 'localusrcpg1',
             'local_snap_cpg': 'snap_cpg1',
             'keep_snap': False,
@@ -849,7 +822,7 @@ class TestHpe3parRemoteCopy(unittest.TestCase):
             'skip_initial_sync': False,
             'different_secondary_wwn': False,
             'remove_secondary_volume': False,
-            'target_name': 'targetName1',
+            'target_name': 'target_name1',
             'starting_snapshots': ['volName1','snapShot1'],
             'no_snapshot': False,
             'no_resync_snapshot': False,
@@ -888,13 +861,15 @@ class TestHpe3parRemoteCopy(unittest.TestCase):
         hpe3par flash cache - success check
         """
         PARAMS_FOR_PRESENT = {
-            'state': 'admittarget',
+            'state': 'admit_target',
             'storage_system_ip': '192.168.0.1',
             'storage_system_username': 'USER',
             'storage_system_password': 'PASS',
             'remote_copy_group_name': 'rcg_name_1',
             'domain': 'test_domain',
-            'targets': [{'targetName': 'CSSOS-SSA04','mode': 1}],
+            'remote_copy_targets': [{'target_name': 'CSSOS-SSA04','target_mode': 'sync'}],
+            'admit_volume_targets': [{'target_name': 'CSSOS-SSA04','sec_volume_name': 'demo_volume_1'}],
+            'modify_targets': [{'target_name': 'CSSOS-SSA04','remote_user_cpg': 'FC_r1','remote_snap_cpg': 'FC_r6'}],
             'local_user_cpg': 'localusrcpg1',
             'local_snap_cpg': 'snap_cpg1',
             'keep_snap': False,
@@ -905,7 +880,7 @@ class TestHpe3parRemoteCopy(unittest.TestCase):
             'skip_initial_sync': False,
             'different_secondary_wwn': False,
             'remove_secondary_volume': False,
-            'target_name': 'targetName1',
+            'target_name': 'target_name1',
             'starting_snapshots': ['volName1','snapShot1'],
             'no_snapshot': False,
             'no_resync_snapshot': False,
@@ -946,13 +921,15 @@ class TestHpe3parRemoteCopy(unittest.TestCase):
         hpe3par flash cache - success check
         """
         PARAMS_FOR_PRESENT = {
-            'state': 'dismisstarget',
+            'state': 'dismiss_target',
             'storage_system_ip': '192.168.0.1',
             'storage_system_username': 'USER',
             'storage_system_password': 'PASS',
             'remote_copy_group_name': 'rcg_name_1',
             'domain': 'test_domain',
-            'targets': [{'targetName': 'CSSOS-SSA04','mode': 1}],
+            'remote_copy_targets': [{'target_name': 'CSSOS-SSA04','target_mode': 'sync'}],
+            'admit_volume_targets': [{'target_name': 'CSSOS-SSA04','sec_volume_name': 'demo_volume_1'}],
+            'modify_targets': [{'target_name': 'CSSOS-SSA04','remote_user_cpg': 'FC_r1','remote_snap_cpg': 'FC_r6'}],
             'local_user_cpg': 'localusrcpg1',
             'local_snap_cpg': 'snap_cpg1',
             'keep_snap': False,
@@ -963,7 +940,7 @@ class TestHpe3parRemoteCopy(unittest.TestCase):
             'skip_initial_sync': False,
             'different_secondary_wwn': False,
             'remove_secondary_volume': False,
-            'target_name': 'targetName1',
+            'target_name': 'target_name1',
             'starting_snapshots': ['volName1','snapShot1'],
             'no_snapshot': False,
             'no_resync_snapshot': False,
@@ -994,7 +971,6 @@ class TestHpe3parRemoteCopy(unittest.TestCase):
         # AnsibleModule.fail_json should not be called
         self.assertEqual(instance.fail_json.call_count, 0)
 
- 
     @mock.patch('Modules.hpe3par_remote_copy.client')
     def test_create_remote_copy_group(self, mock_client):
         mock_client.HPE3ParClient.login.return_value = True
@@ -1007,7 +983,7 @@ class TestHpe3parRemoteCopy(unittest.TestCase):
                                                 'PASS',
                                                 'rcg_1',
                                                 'test_domain',
-                                                [{'targetName': 'CSSOS-SSA04','mode': 1}],
+                                                [{'target_name': 'CSSOS-SSA04','target_mode': 'sync'}],
                                                 'localusrcpg1',
                                                 'snap_cpg1'
                                                 ), (True, True, "Created Remote Copy Group %s successfully." % 'rcg_1', {}))
@@ -1017,7 +993,7 @@ class TestHpe3parRemoteCopy(unittest.TestCase):
                                                 'PASS',
                                                 'rcg_1',
                                                 'test_domain',
-                                                [{'targetName': 'CSSOS-SSA04','mode': 1}],
+                                                [{'target_name': 'CSSOS-SSA04','target_mode': 'sync'}],
                                                 'localusrcpg1',
                                                 'snap_cpg1'
                                                 ), (True, False, "Remote Copy Group already present", {}))
@@ -1026,7 +1002,7 @@ class TestHpe3parRemoteCopy(unittest.TestCase):
                                                 'PASS',
                                                 'rcg_1',
                                                 'test_domain',
-                                                [{'targetName': 'CSSOS-SSA04','mode': 1}],
+                                                [{'target_name': 'CSSOS-SSA04','target_mode': 'sync'}],
                                                 'localusrcpg1',
                                                 'snap_cpg1'
                                                 ), (False, False, "Remote Copy Group create failed. Storage system username or password is null", {}))
@@ -1035,7 +1011,7 @@ class TestHpe3parRemoteCopy(unittest.TestCase):
                                                 'PASS',
                                                 None,
                                                 'test_domain',
-                                                [{'targetName': 'CSSOS-SSA04','mode': 1}],
+                                                [{'target_name': 'CSSOS-SSA04','target_mode': 'sync'}],
                                                 'localusrcpg1',
                                                 'snap_cpg1'
                                                 ), (False, False, "Remote Copy Group create failed. Remote Copy Group name is null", {}))
@@ -1044,7 +1020,7 @@ class TestHpe3parRemoteCopy(unittest.TestCase):
                                                 'PASS',
                                                 'remotesdfssfsdssdfsdfdfsfsdfsdfsdfsfsdfsfsdfsdfsdf',
                                                 'test_domain',
-                                                [{'targetName': 'CSSOS-SSA04','mode': 1}],
+                                                [{'target_name': 'CSSOS-SSA04','target_mode': 'sync'}],
                                                 'localusrcpg1',
                                                 'snap_cpg1'
                                                 ), (False, False, "Remote Copy Group create failed. Remote Copy Group name must be atleast 1 character and not more than 31 characters", {}))
@@ -1054,7 +1030,7 @@ class TestHpe3parRemoteCopy(unittest.TestCase):
                                                 'PASS',
                                                 'rcg_1',
                                                 'test_domain',
-                                                [{'targetName': 'CSSOS-SSA04','mode': 1}],
+                                                [{'target_name': 'CSSOS-SSA04','target_mode': 'sync'}],
                                                 None,
                                                 'snap_cpg1'
                                                 ), (False, False, "Either both local_user_cpg and local_snap_cpg must be present, or none of them must be present", {}))
@@ -1144,7 +1120,7 @@ class TestHpe3parRemoteCopy(unittest.TestCase):
                                                 'CSSOS-SSA04',
                                                 ['volName1','snapShot1']
                                                 ), (False, False, "Start Remote Copy Group failed. Remote Copy Group name must be atleast 1 character and not more than 31 characters", {}))
- 
+
     @mock.patch('Modules.hpe3par_remote_copy.client')
     def test_stop_remote_copy_group(self, mock_client):
         mock_client.HPE3ParClient.login.return_value = True
@@ -1182,7 +1158,7 @@ class TestHpe3parRemoteCopy(unittest.TestCase):
                                                 'remotesdfssfsdssdfsdfdfsfsdfsdfsdfsfsdfsfsdfsdfsdf',
                                                 True,
                                                 'CSSOS-SSA04'
-                                                ), (False, False, "Stop Remote Copy Group failed. Remote Copy Group name must be atleast 1 character and not more than 31 characters", {}))                                        
+                                                ), (False, False, "Stop Remote Copy Group failed. Remote Copy Group name must be atleast 1 character and not more than 31 characters", {}))
 
     @mock.patch('Modules.hpe3par_remote_copy.client')
     def test_add_volume_to_remote_copy_group(self, mock_client):
@@ -1197,7 +1173,7 @@ class TestHpe3parRemoteCopy(unittest.TestCase):
                                                 'PASS',
                                                 'rcg_1',
                                                 'volume_1',
-                                                [{'targetName': 'CSSOS-SSA04','mode': 1}],
+                                                [{'target_name': 'CSSOS-SSA04','sec_volume_name': 'volume_1'}],
                                                 'snapshot_1',
                                                 False,
                                                 False,
@@ -1209,7 +1185,7 @@ class TestHpe3parRemoteCopy(unittest.TestCase):
                                                 'PASS',
                                                 'rcg_1',
                                                 'volume_1',
-                                                [{'targetName': 'CSSOS-SSA04','mode': 1}],
+                                                [{'target_name': 'CSSOS-SSA04','sec_volume_name': 'volume_1'}],
                                                 'snapshot_1',
                                                 False,
                                                 False,
@@ -1222,7 +1198,7 @@ class TestHpe3parRemoteCopy(unittest.TestCase):
                                                 'PASS',
                                                 'rcg_1',
                                                 'volume_1',
-                                                [{'targetName': 'CSSOS-SSA04','mode': 1}],
+                                                [{'target_name': 'CSSOS-SSA04','sec_volume_name': 'volume_1'}],
                                                 'snapshot_1',
                                                 False,
                                                 False,
@@ -1233,7 +1209,7 @@ class TestHpe3parRemoteCopy(unittest.TestCase):
                                                 'PASS',
                                                 'rcg_1',
                                                 'volume_1',
-                                                [{'targetName': 'CSSOS-SSA04','mode': 1}],
+                                                [{'target_name': 'CSSOS-SSA04','sec_volume_name': 'volume_1'}],
                                                 'snapshot_1',
                                                 False,
                                                 False,
@@ -1244,7 +1220,7 @@ class TestHpe3parRemoteCopy(unittest.TestCase):
                                                 'PASS',
                                                 None,
                                                 'volume_1',
-                                                [{'targetName': 'CSSOS-SSA04','mode': 1}],
+                                                [{'target_name': 'CSSOS-SSA04','sec_volume_name': 'volume_1'}],
                                                 'snapshot_1',
                                                 False,
                                                 False,
@@ -1255,7 +1231,7 @@ class TestHpe3parRemoteCopy(unittest.TestCase):
                                                 'PASS',
                                                 'remotesdfssfsdssdfsdfdfsfsdfsdfsdfsfsdfsfsdfsdfsdf',
                                                 'volume_1',
-                                                [{'targetName': 'CSSOS-SSA04','mode': 1}],
+                                                [{'target_name': 'CSSOS-SSA04','sec_volume_name': 'volume_1'}],
                                                 'snapshot_1',
                                                 False,
                                                 False,
@@ -1266,7 +1242,7 @@ class TestHpe3parRemoteCopy(unittest.TestCase):
                                                 'PASS',
                                                 'rcg_1',
                                                 None,
-                                                [{'targetName': 'CSSOS-SSA04','mode': 1}],
+                                                [{'target_name': 'CSSOS-SSA04','sec_volume_name': 'volume_1'}],
                                                 'snapshot_1',
                                                 False,
                                                 False,
@@ -1277,7 +1253,7 @@ class TestHpe3parRemoteCopy(unittest.TestCase):
                                                 'PASS',
                                                 'rcg_1',
                                                 'remotesdfssfsdssdfsdfdfsfsdfsdfsdfsfsdfsfsdfsdfsdf',
-                                                [{'targetName': 'CSSOS-SSA04','mode': 1}],
+                                                [{'target_name': 'CSSOS-SSA04','sec_volume_name': 'volume_1'}],
                                                 'snapshot_1',
                                                 False,
                                                 False,
@@ -1288,7 +1264,7 @@ class TestHpe3parRemoteCopy(unittest.TestCase):
                                                 'PASS',
                                                 'rcg_1',
                                                 'volume_1',
-                                                [{'targetName': 'CSSOS-SSA04','mode': 1}],
+                                                [{'target_name': 'CSSOS-SSA04','sec_volume_name': 'volume_1'}],
                                                 'snapshot_1',
                                                 True,
                                                 False,
@@ -1299,7 +1275,7 @@ class TestHpe3parRemoteCopy(unittest.TestCase):
                                                 'PASS',
                                                 'rcg_1',
                                                 'volume_1',
-                                                [{'targetName': 'CSSOS-SSA04','mode': 1}],
+                                                [{'target_name': 'CSSOS-SSA04','sec_volume_name': 'volume_1'}],
                                                 'snapshot_1',
                                                 False,
                                                 True,
@@ -1310,7 +1286,7 @@ class TestHpe3parRemoteCopy(unittest.TestCase):
                                                 'PASS',
                                                 'rcg_1',
                                                 'volume_1',
-                                                [{'targetName': 'CSSOS-SSA04','mode': 1}],
+                                                [{'target_name': 'CSSOS-SSA04','sec_volume_name': 'volume_1'}],
                                                 None,
                                                 False,
                                                 False,
@@ -1434,7 +1410,7 @@ class TestHpe3parRemoteCopy(unittest.TestCase):
                                                 False,
                                                 'CSSOS-SSA04',
                                                 False
-                                                ), (False, False, "Synchronize Remote Copy Group failed. Remote Copy Group name must be atleast 1 character and not more than 31 characters", {}))                                        
+                                                ), (False, False, "Synchronize Remote Copy Group failed. Remote Copy Group name must be atleast 1 character and not more than 31 characters", {}))
 
     @mock.patch('Modules.hpe3par_remote_copy.client')
     def test_modify_remote_copy_group(self, mock_client):
@@ -1450,7 +1426,7 @@ class TestHpe3parRemoteCopy(unittest.TestCase):
                                                 'rcg_1',
                                                 'localusrcpg1',
                                                 'snap_cpg1',
-                                                [{'targetName': 'CSSOS-SSA04','mode': 1}],
+                                                [{'target_name': 'CSSOS-SSA04','remote_user_cpg': 'FC_r1','remote_snap_cpg':'FC_r6'}],
                                                 False,
                                                 False
                                                 ), (True, True, "Modify Remote Copy Group %s successfully." % 'rcg_1', {}))
@@ -1462,7 +1438,7 @@ class TestHpe3parRemoteCopy(unittest.TestCase):
                                                 'rcg_1',
                                                 'localusrcpg1',
                                                 'snap_cpg1',
-                                                [{'targetName': 'CSSOS-SSA04','mode': 1}],
+                                                [{'target_name': 'CSSOS-SSA04','remote_user_cpg': 'FC_r1','remote_snap_cpg':'FC_r6'}],
                                                 False,
                                                 False
                                                 ), (True, False, "Remote Copy Group not present", {}))
@@ -1472,7 +1448,7 @@ class TestHpe3parRemoteCopy(unittest.TestCase):
                                                 'rcg_1',
                                                 'localusrcpg1',
                                                 'snap_cpg1',
-                                                [{'targetName': 'CSSOS-SSA04','mode': 1}],
+                                                [{'target_name': 'CSSOS-SSA04','remote_user_cpg': 'FC_r1','remote_snap_cpg':'FC_r6'}],
                                                 False,
                                                 False
                                                 ), (False, False, "Remote Copy Group modify failed. Storage system username or password is null", {}))
@@ -1482,7 +1458,7 @@ class TestHpe3parRemoteCopy(unittest.TestCase):
                                                 None,
                                                 'localusrcpg1',
                                                 'snap_cpg1',
-                                                [{'targetName': 'CSSOS-SSA04','mode': 1}],
+                                                [{'target_name': 'CSSOS-SSA04','remote_user_cpg': 'FC_r1','remote_snap_cpg':'FC_r6'}],
                                                 False,
                                                 False
                                                 ), (False, False, "Remote Copy Group modify failed. Remote Copy Group name is null", {}))
@@ -1492,10 +1468,10 @@ class TestHpe3parRemoteCopy(unittest.TestCase):
                                                 'remotesdfssfsdssdfsdfdfsfsdfsdfsdfsfsdfsfsdfsdfsdf',
                                                 'localusrcpg1',
                                                 'snap_cpg1',
-                                                [{'targetName': 'CSSOS-SSA04','mode': 1}],
+                                                [{'target_name': 'CSSOS-SSA04','remote_user_cpg': 'FC_r1','remote_snap_cpg':'FC_r6'}],
                                                 False,
                                                 False
-                                                ), (False, False, "Remote Copy Group modify failed. Remote Copy Group name must be atleast 1 character and not more than 31 characters", {})) 
+                                                ), (False, False, "Remote Copy Group modify failed. Remote Copy Group name must be atleast 1 character and not more than 31 characters", {}))
 
     @mock.patch('Modules.hpe3par_remote_copy.client')
     def test_admit_remote_copy_links(self, mock_client):
@@ -1509,7 +1485,7 @@ class TestHpe3parRemoteCopy(unittest.TestCase):
                                                 'USER',
                                                 'PASS',
                                                 '192.168.0.1',
-                                                'targetName1',
+                                                'target_name1',
                                                 '0:3:1',
                                                 '192.168.1.2'
                                                 ), (True, True, "Admit remote copy link %s:%s successful." % ('0:3:1', '192.168.1.2'), {}))
@@ -1519,7 +1495,7 @@ class TestHpe3parRemoteCopy(unittest.TestCase):
                                                 'USER',
                                                 'PASS',
                                                 '192.168.0.1',
-                                                'targetName1',
+                                                'target_name1',
                                                 '0:3:1',
                                                 '192.168.1.2'
                                                 ), (True, False, "Admit remote copy link %s:%s already exists." % ('0:3:1', '192.168.1.2'), {}))
@@ -1527,7 +1503,7 @@ class TestHpe3parRemoteCopy(unittest.TestCase):
                                                 None,
                                                 'PASS',
                                                 '192.168.0.1',
-                                                'targetName1',
+                                                'target_name1',
                                                 '0:3:1',
                                                 '192.168.1.2'
                                                 ), (False, False, "Admit remote copy link failed. Storage system username or password is null", {}))
@@ -1535,10 +1511,10 @@ class TestHpe3parRemoteCopy(unittest.TestCase):
                                                 'USER',
                                                 'PASS',
                                                 None,
-                                                'targetName1',
+                                                'target_name1',
                                                 '0:3:1',
                                                 '192.168.1.2'
-                                                ), (False, False, "SSH to 3par storage system failed. Storage system IP address is null", {}))
+                                                ), (False, False, "Admit remote copy link failed. Storage system IP address is null", {}))
         self.assertEqual(hpe3par_remote_copy.admit_remote_copy_links(mock_client.HPE3ParClient,
                                                 'USER',
                                                 'PASS',
@@ -1551,7 +1527,7 @@ class TestHpe3parRemoteCopy(unittest.TestCase):
                                                 'USER',
                                                 'PASS',
                                                 '192.168.0.1',
-                                                'targetName1',
+                                                'target_name1',
                                                 None,
                                                 '192.168.1.2'
                                                 ), (False, False, "Admit remote copy link failed. Source port address is null", {}))
@@ -1559,7 +1535,7 @@ class TestHpe3parRemoteCopy(unittest.TestCase):
                                                 'USER',
                                                 'PASS',
                                                 '192.168.0.1',
-                                                'targetName1',
+                                                'target_name1',
                                                 '0:3:1',
                                                 None
                                                 ), (False, False, "Admit remote copy link failed. Target port WWN/IP is null", {}))
@@ -1576,7 +1552,7 @@ class TestHpe3parRemoteCopy(unittest.TestCase):
                                                 'USER',
                                                 'PASS',
                                                 '192.168.0.1',
-                                                'targetName1',
+                                                'target_name1',
                                                 '0:3:1',
                                                 '192.168.1.2'
                                                 ), (True, True, "Dismiss remote copy link %s:%s successful." % ('0:3:1', '192.168.1.2'), {}))
@@ -1586,7 +1562,7 @@ class TestHpe3parRemoteCopy(unittest.TestCase):
                                                 'USER',
                                                 'PASS',
                                                 '192.168.0.1',
-                                                'targetName1',
+                                                'target_name1',
                                                 '0:3:1',
                                                 '192.168.1.2'
                                                 ), (True, False, "Remote copy link %s:%s already not present." % ('0:3:1', '192.168.1.2'), {}))
@@ -1594,7 +1570,7 @@ class TestHpe3parRemoteCopy(unittest.TestCase):
                                                 None,
                                                 'PASS',
                                                 '192.168.0.1',
-                                                'targetName1',
+                                                'target_name1',
                                                 '0:3:1',
                                                 '192.168.1.2'
                                                 ), (False, False, "Dismiss remote copy link failed. Storage system username or password is null", {}))
@@ -1602,7 +1578,7 @@ class TestHpe3parRemoteCopy(unittest.TestCase):
                                                 'USER',
                                                 'PASS',
                                                 None,
-                                                'targetName1',
+                                                'target_name1',
                                                 '0:3:1',
                                                 '192.168.1.2'
                                                 ), (False, False, "Dismiss remote copy link failed. Storage system IP address is null", {}))
@@ -1618,7 +1594,7 @@ class TestHpe3parRemoteCopy(unittest.TestCase):
                                                 'USER',
                                                 'PASS',
                                                 '192.168.0.1',
-                                                'targetName1',
+                                                'target_name1',
                                                 None,
                                                 '192.168.1.2'
                                                 ), (False, False, "Dismiss remote copy link failed. Source port address is null", {}))
@@ -1626,11 +1602,10 @@ class TestHpe3parRemoteCopy(unittest.TestCase):
                                                 'USER',
                                                 'PASS',
                                                 '192.168.0.1',
-                                                'targetName1',
+                                                'target_name1',
                                                 '0:3:1',
                                                 None
                                                 ), (False, False, "Dismiss remote copy link failed. Target port WWN/IP is null", {}))
-
 
     @mock.patch('Modules.hpe3par_remote_copy.client')
     def test_start_remote_copy_service(self, mock_client):
@@ -1676,11 +1651,11 @@ class TestHpe3parRemoteCopy(unittest.TestCase):
                                                 'USER',
                                                 'PASS',
                                                 '192.168.0.1',
-                                                'targetName1',
+                                                'target_name1',
                                                 'sync',
                                                 'rcg_1',
                                                 [('local_v1','remote_v1'),('local_v2','remote_v2')]
-                                                ), (True, True, "Admit remote copy target %s successful in remote copy group %s." % ('targetName1', 'rcg_1'), {}))
+                                                ), (True, True, "Admit remote copy target %s successful in remote copy group %s." % ('target_name1', 'rcg_1'), {}))
 
         mock_client.HPE3ParClient.remoteCopyGroupExists.return_value = False
 
@@ -1688,7 +1663,7 @@ class TestHpe3parRemoteCopy(unittest.TestCase):
                                                 'USER',
                                                 'PASS',
                                                 '192.168.0.1',
-                                                'targetName1',
+                                                'target_name1',
                                                 'sync',
                                                 'rcg_1',
                                                 [('local_v1','remote_v1'),('local_v2','remote_v2')]
@@ -1698,7 +1673,7 @@ class TestHpe3parRemoteCopy(unittest.TestCase):
                                                 None,
                                                 'PASS',
                                                 '192.168.0.1',
-                                                'targetName1',
+                                                'target_name1',
                                                 'sync',
                                                 'rcg_1',
                                                 [('local_v1','remote_v1'),('local_v2','remote_v2')]
@@ -1716,16 +1691,16 @@ class TestHpe3parRemoteCopy(unittest.TestCase):
                                                 'USER',
                                                 'PASS',
                                                 None,
-                                                'targetName1',
+                                                'target_name1',
                                                 'sync',
                                                 'rcg_1',
                                                 [('local_v1','remote_v1'),('local_v2','remote_v2')]
-                                                ), (False, False, "SSH to 3par storage system failed. Storage system IP address is null", {}))
+                                                ), (False, False, "Admit remote copy target failed. Storage system IP address is null", {}))
         self.assertEqual(hpe3par_remote_copy.admit_remote_copy_target(mock_client.HPE3ParClient,
                                                 'USER',
                                                 'PASS',
                                                 '192.168.0.1',
-                                                'targetName1',
+                                                'target_name1',
                                                 None,
                                                 'rcg_1',
                                                 [('local_v1','remote_v1'),('local_v2','remote_v2')]
@@ -1734,7 +1709,7 @@ class TestHpe3parRemoteCopy(unittest.TestCase):
                                                 'USER',
                                                 'PASS',
                                                 '192.168.0.1',
-                                                'targetName1',
+                                                'target_name1',
                                                 'sync',
                                                 None,
                                                 [('local_v1','remote_v1'),('local_v2','remote_v2')]
@@ -1746,7 +1721,7 @@ class TestHpe3parRemoteCopy(unittest.TestCase):
                                                 'USER',
                                                 'PASS',
                                                 '192.168.0.1',
-                                                'targetName1',
+                                                'target_name1',
                                                 'sync',
                                                 'rcg_1',
                                                 [('local_v1','remote_v1'),('local_v2','remote_v2')]
@@ -1765,9 +1740,9 @@ class TestHpe3parRemoteCopy(unittest.TestCase):
                                                 'USER',
                                                 'PASS',
                                                 '192.168.0.1',
-                                                'targetName1',
+                                                'target_name1',
                                                 'rcg_1',
-                                                ), (True, True, "Dismiss remote copy target %s successful." % 'targetName1', {}))
+                                                ), (True, True, "Dismiss remote copy target %s successful." % 'target_name1', {}))
 
         mock_client.HPE3ParClient.remoteCopyGroupExists.return_value = False
 
@@ -1775,7 +1750,7 @@ class TestHpe3parRemoteCopy(unittest.TestCase):
                                                 'USER',
                                                 'PASS',
                                                 '192.168.0.1',
-                                                'targetName1',
+                                                'target_name1',
                                                 'rcg_1'
                                                 ), (True, False, "Remote Copy Group is not present", {}))
 
@@ -1783,7 +1758,7 @@ class TestHpe3parRemoteCopy(unittest.TestCase):
                                                 None,
                                                 'PASS',
                                                 '192.168.0.1',
-                                                'targetName1',
+                                                'target_name1',
                                                 'rcg_1',
                                                 ), (False, False, "Dismiss remote copy target failed. Storage system username or password is null", {}))
         self.assertEqual(hpe3par_remote_copy.dismiss_remote_copy_target(mock_client.HPE3ParClient,
@@ -1797,14 +1772,14 @@ class TestHpe3parRemoteCopy(unittest.TestCase):
                                                 'USER',
                                                 'PASS',
                                                 None,
-                                                'targetName1',
+                                                'target_name1',
                                                 'rcg_1'
-                                                ), (False, False, "SSH to 3par storage system failed. Storage system IP address is null", {}))
+                                                ), (False, False, "Dismiss remote copy target failed. Storage system IP address is null", {}))
         self.assertEqual(hpe3par_remote_copy.dismiss_remote_copy_target(mock_client.HPE3ParClient,
                                                 'USER',
                                                 'PASS',
                                                 '192.168.0.1',
-                                                'targetName1',
+                                                'target_name1',
                                                 None,
                                                 ), (False, False, "Dismiss remote copy target failed. Remote copy group name is null", {}))
 
@@ -1814,7 +1789,7 @@ class TestHpe3parRemoteCopy(unittest.TestCase):
                                                 'USER',
                                                 'PASS',
                                                 '192.168.0.1',
-                                                'targetName1',
+                                                'target_name1',
                                                 'rcg_1'
                                                 ), (True, False, "Dismiss remote copy target failed.Target is already not present", {}))
 

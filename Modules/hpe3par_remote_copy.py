@@ -845,7 +845,7 @@ def delete_remote_copy_group(
     finally:
         client_obj.logout()
     return (True, True, "Deleted Remote Copy Group %s successfully." % remote_copy_group_name, {})
-'''
+
 def recover_remote_copy_group(
             client_obj,
             storage_system_username,
@@ -909,7 +909,7 @@ def recover_remote_copy_group(
     finally:
         client_obj.logout()
     return (True, True, "Recovered Remote Copy Group %s successfully." % remote_copy_group_name, {})
-'''
+
 def admit_remote_copy_links(
             client_obj,
             storage_system_username,
@@ -932,7 +932,7 @@ def admit_remote_copy_links(
     if target_port_wwn_or_ip is None:
         return (False, False, "Admit remote copy link failed. Target port WWN/IP is null", {})
     if storage_system_ip is None:
-        return (False, False, "SSH to 3par storage system failed. Storage system IP address is null", {})
+        return (False, False, "Admit remote copy link failed. Storage system IP address is null", {})
     try:
         client_obj.login(storage_system_username, storage_system_password)
         if target_name == client_obj.getStorageSystemInfo()['name']:
@@ -1401,14 +1401,14 @@ def main():
             target_name,
             source_port,
             target_port_wwn_or_ip
-        )		
+        )
     elif module.params["state"] == "start_rcopy":
         return_status, changed, msg, issue_attr_dict = start_remote_copy_service(
             client_obj,
             storage_system_username,
             storage_system_password,
             storage_system_ip,
-        )		
+        )
     elif module.params["state"] == "admit_target":
         return_status, changed, msg, issue_attr_dict = admit_remote_copy_target(
             client_obj,
@@ -1419,7 +1419,7 @@ def main():
             target_mode,
             remote_copy_group_name,
             local_remote_volume_pair_list
-        )		
+        )
     elif module.params["state"] == "dismiss_target":
         return_status, changed, msg, issue_attr_dict = dismiss_remote_copy_target(
             client_obj,
@@ -1428,7 +1428,7 @@ def main():
             storage_system_ip,
             target_name,
             remote_copy_group_name
-        )		
+        )
     if return_status:
         if issue_attr_dict:
             module.exit_json(changed=changed, msg=msg, issue=issue_attr_dict)
