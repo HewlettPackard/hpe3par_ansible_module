@@ -28,6 +28,7 @@ This is developed as a set of modules and example playbooks to provision the fol
 * [Volume Snapshot](Modules/readme.md#hpe3par_snapshot---manage-hpe-3par-snapshots)
 * [QOS](Modules/readme.md#hpe3par_qos---manage-hpe-3par-qos-rules)
 * [Flash Cache](Modules/readme.md#hpe3par_flash_cache---manage-hpe-3par-flash-cache)
+* [Remote Copy](Modules/readme.md#hpe3par_remote_copy---manage-hpe-3par-remote-copy)
 
 
 ## Examples

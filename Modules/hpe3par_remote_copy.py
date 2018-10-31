@@ -28,13 +28,13 @@ ANSIBLE_METADATA = {'metadata_version': '1.1',
 
 DOCUMENTATION = r'''
 ---
-author: "Hewlett Packard Enterprise (ecostor@groups.ext.hpe.com)"
+author: "Arshad Ansari(arshad.alam.ansari@hpe.com)"
 description: "On HPE 3PAR - Create Remote Copy Group. - Modify Remote Copy
  Group. - Add Volumes to Remote Copy Group. - Remove Volumes from Remote
  Synchronize Remote Copy Group. - Recover Remote Copy Group. - Delete Remote
  Copy Group. - Admit Remote Copy Group. - Dismiss Remote Copy Group.
  - Start Remote Copy Group. - Admit Remote Copy Target. - Dismiss Remote Copy
- Target.
+ Target."
 module: hpe3par_remote_copy
 options:
   remote_copy_group_name:
@@ -266,7 +266,7 @@ requirements:
   - "Ansible - 2.4"
   - "hpe3par_sdk 1.0.0"
   - "WSAPI service should be enabled on the 3PAR storage array."
-short_description: "Manage HPE 3PAR Host"
+short_description: "Manage HPE 3PAR Remote Copy"
 version_added: "2.4"
 '''
 
