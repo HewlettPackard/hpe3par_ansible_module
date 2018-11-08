@@ -1,0 +1,192 @@
+- hosts: localhost
+  tasks:
+  - name: Load Storage System Vars
+    include_vars: 'properties/storage_system_properties.yml'
+
+  - name: Create volume on source
+    hpe3par_volume:
+      storage_system_ip: 10.10.10.1
+      storage_system_password: password
+      storage_system_username: username
+      state: present
+      volume_name: demo_volume_1
+      size: 1024
+      size_unit: MiB
+      cpg: FC_r1
+      snap_cpg: FC_r1
+
+  - name: Create volume on source
+    hpe3par_volume:
+      storage_system_ip: 10.10.10.1
+      storage_system_password: password
+      storage_system_username: username
+      state: present
+      volume_name: demo_volume_2
+      size: 1024
+      size_unit: MiB
+      cpg: FC_r1
+      snap_cpg: FC_r1     
+
+  - name: Create volume on target
+    hpe3par_volume:
+      storage_system_ip: 10.10.10.1
+      storage_system_password: password
+      storage_system_username: username
+      state: present
+      volume_name: demo_volume_1
+      size: 1024
+      size_unit: MiB
+      cpg: FC_r1
+      snap_cpg: FC_r1     
+
+  - name: Create volume on target
+    hpe3par_volume:
+      storage_system_ip: 10.10.10.1
+      storage_system_password: password
+      storage_system_username: username
+      state: present
+      volume_name: demo_volume_2
+      size: 1024
+      size_unit: MiB
+      cpg: FC_r1
+      snap_cpg: FC_r1           
+
+  - name: Create Remote Copy Group farhan_rcg
+    hpe3par_remote_copy:
+      storage_system_ip: 10.10.10.1
+      storage_system_password: password
+      storage_system_username: username
+      state: present
+      remote_copy_group_name: farhan_rcg
+      remote_copy_targets:
+      - target_name: CSSOS-SSA06
+        target_mode: sync
+       
+  - name: Add volume to remote copy group
+    hpe3par_remote_copy:
+      storage_system_ip: 10.10.10.1
+      storage_system_password: password
+      storage_system_username: username
+      state: add_volume
+      remote_copy_group_name: farhan_rcg
+      volume_name: demo_volume_1
+      admit_volume_targets:
+      - target_name: CSSOS-SSA06
+        sec_volume_name: demo_volume_1
+        
+  - name: Add volume to remote copy group
+    hpe3par_remote_copy:
+      storage_system_ip: 10.10.10.1
+      storage_system_password: password
+      storage_system_username: username
+      state: add_volume
+      remote_copy_group_name: farhan_rcg
+      volume_name: demo_volume_2
+      admit_volume_targets:
+      - target_name: CSSOS-SSA06
+        sec_volume_name: demo_volume_2
+
+  - name: Modify Remote Copy Group farhan_rcg
+    hpe3par_remote_copy:
+      storage_system_ip: 10.10.10.1
+      storage_system_password: password
+      storage_system_username: username
+      state: modify
+      remote_copy_group_name: farhan_rcg
+      local_user_cpg: "FC_r1"
+      local_snap_cpg: "FC_r6"
+      unset_user_cpg: false
+      unset_snap_cpg: false
+      modify_targets:
+      - target_name: CSSOS-SSA06
+        remote_user_cpg: "FC_r1"
+        remote_snap_cpg: "FC_r6"
+        
+  - name: Start remote copy
+    hpe3par_remote_copy:
+      storage_system_ip: 10.10.10.1
+      storage_system_password: password
+      storage_system_username: username
+      remote_copy_group_name: farhan_rcg
+      state: start
+      
+  - name: Stop remote copy
+    hpe3par_remote_copy:
+      storage_system_ip: 10.10.10.1
+      storage_system_password: password
+      storage_system_username: username
+      remote_copy_group_name: farhan_rcg
+      state: stop
+      
+  - name: Remove volume from remote copy group
+    hpe3par_remote_copy:
+      storage_system_ip: 10.10.10.1
+      storage_system_password: password
+      storage_system_username: username
+      state: remove_volume
+      remote_copy_group_name: farhan_rcg
+      volume_name: demo_volume_1
+        
+  - name: Remove volume from remote copy group
+    hpe3par_remote_copy:
+      storage_system_ip: 10.10.10.1
+      storage_system_password: password
+      storage_system_username: username
+      state: remove_volume
+      remote_copy_group_name: farhan_rcg
+      volume_name: demo_volume_2
+        
+  - name: Remove Remote Copy Group farhan_rcg
+    hpe3par_remote_copy:
+      storage_system_ip: 10.10.10.1
+      storage_system_password: password
+      storage_system_username: username
+      state: absent 
+      remote_copy_group_name: farhan_rcg
+
+  - name: dismiss remote copy link
+    hpe3par_remote_copy:
+      storage_system_ip: 10.10.10.1
+      storage_system_password: password
+      storage_system_username: username
+      state: dismiss_link
+      target_name: CSSOS-SSA06
+      source_port: 0:3:1
+      target_port_wwn_or_ip: 192.168.1.2
+
+  - name: dismiss remote copy link
+    hpe3par_remote_copy:
+      storage_system_ip: 10.10.10.1
+      storage_system_password: password
+      storage_system_username: username
+      state: dismiss_link
+      target_name: CSSOS-SSA06
+      source_port: "1:3:1"
+      target_port_wwn_or_ip: 192.168.2.2
+
+  - name: Admit remote copy link
+    hpe3par_remote_copy:
+      storage_system_ip: 10.10.10.1
+      storage_system_password: password
+      storage_system_username: username
+      state: admit_link
+      target_name: CSSOS-SSA06
+      source_port: 0:3:1
+      target_port_wwn_or_ip: 192.168.1.2
+
+  - name: Admit remote copy link
+    hpe3par_remote_copy:
+      storage_system_ip: 10.10.10.1
+      storage_system_password: password
+      storage_system_username: username
+      state: admit_link
+      target_name: CSSOS-SSA06
+      source_port: "1:3:1"
+      target_port_wwn_or_ip: 192.168.2.2
+
+  - name: start remote copy service
+    hpe3par_remote_copy:
+      storage_system_ip: 10.10.10.1
+      storage_system_password: password
+      storage_system_username: username
+      state: start_rcopy
