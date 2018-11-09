@@ -498,28 +498,28 @@ def create_remote_copy_group(
         return (False, False, "Either both local_user_cpg and local_snap_cpg must be present, or none of them must be present", {})
     targets_transformed = []
     target_names_list = []
-    for dict1 in remote_copy_targets:
+    for target_dict in remote_copy_targets:
         target={}
-        for key in dict1.keys():
+        for key in target_dict.keys():
             if key == 'target_name':
-                if dict1[key] is None:
+                if target_dict[key] is None:
                     return (False, False, "Remote Copy Group create failed. Target name is null", {})
                 else:
-                    target['targetName']=dict1.get(key)
-                    target_names_list.append(dict1.get(key))
+                    target['targetName'] = target_dict.get(key)
+                    target_names_list.append(target_dict.get(key))
             elif key == 'target_mode':
-                if dict1.get(key) == 'sync':
+                if target_dict.get(key) == 'sync':
                     target['mode'] = 1
-                elif dict1.get(key) == 'periodic':
+                elif target_dict.get(key) == 'periodic':
                     target['mode'] = 3
-                elif dict1.get(key) == 'async':
+                elif target_dict.get(key) == 'async':
                     target['mode'] = 4
                 else:
                     return (False, False, "Remote Copy Group create failed. Target mode is invalid", {}) 
             elif key == 'user_cpg':
-                target['userCPG']=dict1.get(key)
+                target['userCPG'] = target_dict.get(key)
             elif key == 'snap_cpg':
-                target['snapCPG']=dict1.get(key)
+                target['snapCPG'] = target_dict.get(key)
             else:
                 return (False, False, "Remote Copy Group create failed. Wrong parameter name %s is given." % key, {}) 
         targets_transformed.append(target)
@@ -568,28 +568,28 @@ def modify_remote_copy_group(
         return (False, False, "Remote Copy Group modify failed. Remote Copy Group name must be atleast 1 character and not more than 31 characters", {})
     targets_transformed = []
     target_names_list = []
-    for dict1 in modify_targets:
+    for target_dict in modify_targets:
         target = {}
-        for key in dict1.keys():
+        for key in target_dict.keys():
             if key == 'target_name':
-                target['targetName'] = dict1.get(key)
-                target_names_list.append(dict1.get(key))
+                target['targetName'] = target_dict.get(key)
+                target_names_list.append(target_dict.get(key))
             elif key == 'remote_user_cpg':
-                target['remoteUserCPG'] = dict1.get(key)
+                target['remoteUserCPG'] = target_dict.get(key)
             elif key == 'remote_snap_cpg':
-                target['remoteSnapCPG'] = dict1.get(key)
+                target['remoteSnapCPG'] = target_dict.get(key)
             elif key == 'sync_period':
-                target['syncPeriod'] = dict1.get(key)
+                target['syncPeriod'] = target_dict.get(key)
             elif key == 'rm_sync_period':
-                target['rmSyncPeriod'] = dict1.get(key)
+                target['rmSyncPeriod'] = target_dict.get(key)
             elif key == 'target_mode':
-                target['mode'] = dict1.get(key)
+                target['mode'] = target_dict.get(key)
             elif key == 'snap_frequency':
-                target['snapFrequency'] = dict1.get(key)
+                target['snapFrequency'] = target_dict.get(key)
             elif key == 'rm_snap_frequency':
-                target['rmSnapFrequency'] = dict1.get(key)
+                target['rmSnapFrequency'] = target_dict.get(key)
             elif key == 'policies':
-                target['policies'] = dict1.get(key)
+                target['policies'] = target_dict.get(key)
             else:
                 return (False, False, "Remote Copy Group modification failed. Wrong parameter name %s is given." % key, {})
         targets_transformed.append(target)
@@ -646,24 +646,25 @@ def add_volume_to_remote_copy_group(
         return (False, False, "Add volume to Remote Copy Group failed. volumeAutoCreation cannot be true if snapshot name is given", {})
     if snapshot_name and skip_initial_sync:
         return (False, False, "Add volume to Remote Copy Group failed. skipInitialSync cannot be true if snapshot name is given", {})
-    if not snapshot_name and different_secondary_wwn:
-        return (False, False, "Add volume to Remote Copy Group failed. skipInitialSync cannot be true if snapshot name is not given", {})
+    if not volume_auto_creation and different_secondary_wwn:
+        return (False, False, "Add volume to Remote Copy Group failed. differentSecondaryWWN cannot be true if volumeAutoCreation is false", {})
     targets_transformed = []
     target_names_list = []
-    for dict1 in admit_volume_targets:
+    for target_dict in admit_volume_targets:
         target = {}
-        for key in dict1.keys():
+        for key in target_dict.keys():
             if key == 'target_name':
-                if dict1[key] is None:
+                if target_dict[key] is None:
                     return (False, False, "Remote Copy Group create failed. Target name is null", {})
                 else:
-                    target['targetName'] = dict1.get(key)
-                    target_names_list.append(dict1.get(key))
+                    target['targetName'] = target_dict.get(key)
+                    target_names_list.append(target_dict.get(key))
             elif key == 'sec_volume_name':
-                if dict1[key] is None:
+                if target_dict[key] is None:
                     return (False, False, "Remote Copy Group create failed. Secondary volume is null", {})
-                else:
-                    target['secVolumeName'] = dict1.get(key)
+                if len(target_dict[key]) < 1 or len(target_dict[key]) > 31:
+                    return (False, False, "Add volume to Remote Copy Group failed. Secondary volume name must be atleast 1 character and not more than 31 characters", {})
+                target['secVolumeName'] = target_dict.get(key)
             else:
                 return (False, False, "Remote Copy Group create failed. Wrong parameter name %s is given." % key, {}) 
         targets_transformed.append(target)
@@ -1049,8 +1050,8 @@ def admit_remote_copy_target(
         #Checking whether target name already present in remote copy
         #If it is already present then target add to remote copy group fails
         if client_obj.targetInRemoteCopyGroupExists(target_name, remote_copy_group_name):
-            return (True, False, "Admit remote copy target failed.Target is already present", {})
-        results=client_obj.admitRemoteCopyTarget(target_name, target_mode, remote_copy_group_name, local_remote_volume_pair_list)
+            return (True, False, "Admit remote copy target failed. Target is already present", {})
+        results = client_obj.admitRemoteCopyTarget(target_name, target_mode, remote_copy_group_name, local_remote_volume_pair_list)
     except Exception as e:
         return (False, False, "Admit remote copy target failed| %s" % (e), {})
     finally:
@@ -1086,14 +1087,15 @@ def dismiss_remote_copy_target(
 
         #checking existance of remote_copy_group_name
         if not client_obj.remoteCopyGroupExists(remote_copy_group_name):
-            return (True, False, "Remote Copy Group is not present", {})
+            return (True, False, "Remote Copy Group %s is not present" % remote_copy_group_name, {})
 
         #Checking whether target name already present in remote copy
         #If it is already present then target add to remote copy group fails
         if not client_obj.targetInRemoteCopyGroupExists(target_name, remote_copy_group_name):
-            return (True, False, "Dismiss remote copy target failed.Target is already not present", {})
+            return (True, False, "Dismiss remote copy target failed. Target %s is already not present in remote copy group %s"\
+                    % (target_name, remote_copy_group_name), {})
 
-        results=client_obj.dismissRemoteCopyTarget(target_name, remote_copy_group_name)
+        results = client_obj.dismissRemoteCopyTarget(target_name, remote_copy_group_name)
     except Exception as e:
         return (False, False, "Dismiss remote copy target failed| %s" % (e), {})
     finally:
