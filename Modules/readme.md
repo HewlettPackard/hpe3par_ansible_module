@@ -3768,3 +3768,705 @@ Examples
 ### Author
 
 -   Farhan Nomani (<nomani@hpe.com>)
+
+source
+
+:   hpe3par\_remote\_copy.py
+
+hpe3par\_remote\_copy - Manage HPE 3PAR Remote Copy
+===================================================
+
+Synopsis
+--------
+
+-   On HPE 3PAR - Create Remote Copy Group. - Modify Remote Copy Group.
+    - Add Volumes to Remote Copy Group. - Remove Volumes from Remote
+    Synchronize Remote Copy Group. - Recover Remote Copy Group. - Delete
+    Remote Copy Group. - Admit Remote Copy Group. - Dismiss Remote Copy
+    Group. - Start Remote Copy Group. - Admit Remote Copy Target. -
+    Dismiss Remote Copy Target.
+
+
+Parameters
+----------
+
+<table  border=0 cellpadding=0 class="documentation-table">
+    <tr>
+        <th colspan="1">Parameter</th>
+        <th>Choices/<font color="blue">Defaults</font></th>
+                    <th width="100%">Comments</th>
+    </tr>
+                <tr>
+                                                            <td colspan="1">
+                <b>admit_volume_targets</b>
+                                                                        </td>
+                            <td>
+                                                                                                                                                        </td>
+                                                            <td>
+                                                                    <div>Specify at least one pair of target_name and sec_volume_name.
+ Attributes are target_name, sec_volume_name.</div>
+                                                                            </td>
+        </tr>
+                            <tr>
+                                                            <td colspan="1">
+                <b>different_secondary_wwn</b>
+                <br/><div style="font-size: small; color: red">bool</div>                                                        </td>
+                            <td>
+                                                                                                                                                                                                                <ul><b>Choices:</b>
+                                                                                                                                                            <li><div style="color: blue"><b>no</b>&nbsp;&larr;</div></li>
+                                                                                                                                                                                            <li>yes</li>
+                                                                                </ul>
+                                                                        </td>
+                                                            <td>
+                                                                    <div>Setting differentSecondaryWWN to true, 
+ ensures that the system uses a different WWN on the secondary volume. Defaults to false. Use with volumeAutoCreation only.</div>
+                                                                            </td>
+        </tr>
+                            <tr>
+                                                            <td colspan="1">
+                <b>discard_new_data</b>
+                <br/><div style="font-size: small; color: red">bool</div>                                                        </td>
+                            <td>
+                                                                                                                                                                                                                <ul><b>Choices:</b>
+                                                                                                                                                            <li><div style="color: blue"><b>no</b>&nbsp;&larr;</div></li>
+                                                                                                                                                                                            <li>yes</li>
+                                                                                </ul>
+                                                                        </td>
+                                                            <td>
+                                                                    <div>If true and the group has multiple targets, do not check other targets of the group to see if newer data should be pushed from them. Valid for FAILOVER operation only.</div>
+                                                                            </td>
+        </tr>
+                            <tr>
+                                                            <td colspan="1">
+                <b>domain</b>
+                                                                        </td>
+                            <td>
+                                                                                                                                                        </td>
+                                                            <td>
+                                                                    <div>Specifies the domain in which to create the Remote Copy group.</div>
+                                                                            </td>
+        </tr>
+                            <tr>
+                                                            <td colspan="1">
+                <b>full_sync</b>
+                <br/><div style="font-size: small; color: red">bool</div>                                                        </td>
+                            <td>
+                                                                                                                                                                                                                <ul><b>Choices:</b>
+                                                                                                                                                            <li><div style="color: blue"><b>no</b>&nbsp;&larr;</div></li>
+                                                                                                                                                                                            <li>yes</li>
+                                                                                </ul>
+                                                                        </td>
+                                                            <td>
+                                                                    <div>Enables (true) or disables (false) forcing a full synchronization of the Remote Copy group, even if the volumes are already synchronized. Applies only to volume groups in synchronous mode, and can be used to resynchronize volumes that have become inconsistent.</div>
+                                                                            </td>
+        </tr>
+                            <tr>
+                                                            <td colspan="1">
+                <b>keep_snap</b>
+                <br/><div style="font-size: small; color: red">bool</div>                                                        </td>
+                            <td>
+                                                                                                                                                                                                                <ul><b>Choices:</b>
+                                                                                                                                                            <li><div style="color: blue"><b>no</b>&nbsp;&larr;</div></li>
+                                                                                                                                                                                            <li>yes</li>
+                                                                                </ul>
+                                                                        </td>
+                                                            <td>
+                                                                    <div>Enables (true) or disables (false) retention 
+ of the local volume resynchronization snapshot.</div>
+                                                                            </td>
+        </tr>
+                            <tr>
+                                                            <td colspan="1">
+                <b>local_groups_direction</b>
+                <br/><div style="font-size: small; color: red">bool</div>                                                        </td>
+                            <td>
+                                                                                                                                                                                                                <ul><b>Choices:</b>
+                                                                                                                                                            <li><div style="color: blue"><b>no</b>&nbsp;&larr;</div></li>
+                                                                                                                                                                                            <li>yes</li>
+                                                                                </ul>
+                                                                        </td>
+                                                            <td>
+                                                                    <div>If true, the groups direction is changed only on the system where the operation is run. Valid for REVERSE operation only.</div>
+                                                                            </td>
+        </tr>
+                            <tr>
+                                                            <td colspan="1">
+                <b>local_remote_volume_pair_list</b>
+                                                                        </td>
+                            <td>
+                                                                                                                                                        </td>
+                                                            <td>
+                                                                    <div>Is a list of tuples , where each tuple contains primary and secondary volumes i.e. [(primary_vv1,secondary_vv1),(primary_vv2 ,secondary_vv2)].</div>
+                                                                            </td>
+        </tr>
+                            <tr>
+                                                            <td colspan="1">
+                <b>local_snap_cpg</b>
+                                                                        </td>
+                            <td>
+                                                                                                                                                        </td>
+                                                            <td>
+                                                                    <div>Specifies the local snap CPG used for auto-created volumes.</div>
+                                                                            </td>
+        </tr>
+                            <tr>
+                                                            <td colspan="1">
+                <b>local_user_cpg</b>
+                                                                        </td>
+                            <td>
+                                                                                                                                                        </td>
+                                                            <td>
+                                                                    <div>Specifies the local user CPG used for auto-created volumes.</div>
+                                                                            </td>
+        </tr>
+                            <tr>
+                                                            <td colspan="1">
+                <b>modify_targets</b>
+                                                                        </td>
+                            <td>
+                                                                                                                                                        </td>
+                                                            <td>
+                                                                    <div>Specifies the attributes of the target of the Remote Copy group.
+ Attributes are target_name, remote_user_cpg, remote_snap_cpg,
+ sync_period, rm_sync_period, target_mode, snap_frequency, rm_snap_frequency, policies.</div>
+                                                                            </td>
+        </tr>
+                            <tr>
+                                                            <td colspan="1">
+                <b>no_resync_snapshot</b>
+                <br/><div style="font-size: small; color: red">bool</div>                                                        </td>
+                            <td>
+                                                                                                                                                                                                                <ul><b>Choices:</b>
+                                                                                                                                                            <li><div style="color: blue"><b>no</b>&nbsp;&larr;</div></li>
+                                                                                                                                                                                            <li>yes</li>
+                                                                                </ul>
+                                                                        </td>
+                                                            <td>
+                                                                    <div>Enables (true) or disables (false) saving the resynchronization snapshot. Applicable only to Remote Copy groups in asychronous periodic mode.</div>
+                                                                            </td>
+        </tr>
+                            <tr>
+                                                            <td colspan="1">
+                <b>no_snapshot</b>
+                <br/><div style="font-size: small; color: red">bool</div>                                                        </td>
+                            <td>
+                                                                                                                                                                                                                <ul><b>Choices:</b>
+                                                                                                                                                            <li><div style="color: blue"><b>no</b>&nbsp;&larr;</div></li>
+                                                                                                                                                                                            <li>yes</li>
+                                                                                </ul>
+                                                                        </td>
+                                                            <td>
+                                                                    <div>If true, this option turns off creation of snapshots in synchronous and periodic modes, and deletes the current synchronization snapshots.</div>
+                                                                            </td>
+        </tr>
+                            <tr>
+                                                            <td colspan="1">
+                <b>recovery_action</b>
+                                                                        </td>
+                            <td>
+                                                                                                                        <ul><b>Choices:</b>
+                                                                                                                                                            <li>REVERSE_GROUP</li>
+                                                                                                                                                                                            <li>FAILOVER_GROUP</li>
+                                                                                                                                                                                            <li>SWITCHOVER_GROUP</li>
+                                                                                                                                                                                            <li>RECOVER_GROUP</li>
+                                                                                                                                                                                            <li>RESTORE_GROUP</li>
+                                                                                                                                                                                            <li>OVERRIDE_GROUP</li>
+                                                                                                                                                                                            <li>CLX_DR</li>
+                                                                                </ul>
+                                                                        </td>
+                                                            <td>
+                                                                    <div>Specifies the action to be taken on the specified group.</div>
+                                                                            </td>
+        </tr>
+                            <tr>
+                                                            <td colspan="1">
+                <b>remote_copy_group_name</b>
+                                                                        </td>
+                            <td>
+                                                                                                                                                        </td>
+                                                            <td>
+                                                                    <div>Specifies the name of the Remote Copy group to create.</div>
+                                                                            </td>
+        </tr>
+                            <tr>
+                                                            <td colspan="1">
+                <b>remote_copy_targets</b>
+                                                                        </td>
+                            <td>
+                                                                                                                                                        </td>
+                                                            <td>
+                                                                    <div>Specifies the attributes of the target of the Remote Copy group.
+ Attributes are target_name, target_mode, user_cpg, snap_cpg.</div>
+                                                                            </td>
+        </tr>
+                            <tr>
+                                                            <td colspan="1">
+                <b>remove_secondary_volume</b>
+                <br/><div style="font-size: small; color: red">bool</div>                                                        </td>
+                            <td>
+                                                                                                                                                                                                                <ul><b>Choices:</b>
+                                                                                                                                                            <li><div style="color: blue"><b>no</b>&nbsp;&larr;</div></li>
+                                                                                                                                                                                            <li>yes</li>
+                                                                                </ul>
+                                                                        </td>
+                                                            <td>
+                                                                    <div>Enables (true) or disables (false) deletion of the remote volume on the secondary array from the system. Defaults to false. Do not use with keepSnap.</div>
+                                                                            </td>
+        </tr>
+                            <tr>
+                                                            <td colspan="1">
+                <b>skip_initial_sync</b>
+                <br/><div style="font-size: small; color: red">bool</div>                                                        </td>
+                            <td>
+                                                                                                                                                                                                                <ul><b>Choices:</b>
+                                                                                                                                                            <li><div style="color: blue"><b>no</b>&nbsp;&larr;</div></li>
+                                                                                                                                                                                            <li>yes</li>
+                                                                                </ul>
+                                                                        </td>
+                                                            <td>
+                                                                    <div>If skipInitialSync is set to true, the volume should skip the initial sync. 
+ This is for the admission of volumes that have been presynced with the target volume. 
+ This cannot be set to true if the snapshot name is specified.</div>
+                                                                            </td>
+        </tr>
+                            <tr>
+                                                            <td colspan="1">
+                <b>skip_promote</b>
+                <br/><div style="font-size: small; color: red">bool</div>                                                        </td>
+                            <td>
+                                                                                                                                                                                                                <ul><b>Choices:</b>
+                                                                                                                                                            <li><div style="color: blue"><b>no</b>&nbsp;&larr;</div></li>
+                                                                                                                                                                                            <li>yes</li>
+                                                                                </ul>
+                                                                        </td>
+                                                            <td>
+                                                                    <div>If true, the snapshots of the groups that are switched from secondary to primary are not promoted to the base volume. Valid for FAILOVER and REVERSE operations only.</div>
+                                                                            </td>
+        </tr>
+                            <tr>
+                                                            <td colspan="1">
+                <b>skip_start</b>
+                <br/><div style="font-size: small; color: red">bool</div>                                                        </td>
+                            <td>
+                                                                                                                                                                                                                <ul><b>Choices:</b>
+                                                                                                                                                            <li><div style="color: blue"><b>no</b>&nbsp;&larr;</div></li>
+                                                                                                                                                                                            <li>yes</li>
+                                                                                </ul>
+                                                                        </td>
+                                                            <td>
+                                                                    <div>If true, groups are not started after role reversal is completed. Valid for only FAILOVER, RECOVER, and RESTORE operations.</div>
+                                                                            </td>
+        </tr>
+                            <tr>
+                                                            <td colspan="1">
+                <b>skip_sync</b>
+                <br/><div style="font-size: small; color: red">bool</div>                                                        </td>
+                            <td>
+                                                                                                                                                                                                                <ul><b>Choices:</b>
+                                                                                                                                                            <li><div style="color: blue"><b>no</b>&nbsp;&larr;</div></li>
+                                                                                                                                                                                            <li>yes</li>
+                                                                                </ul>
+                                                                        </td>
+                                                            <td>
+                                                                    <div>If true, the groups are not synchronized after role reversal is completed. Valid for FAILOVER, RECOVER, and RESTORE operations only.</div>
+                                                                            </td>
+        </tr>
+                            <tr>
+                                                            <td colspan="1">
+                <b>snapshot_name</b>
+                                                                        </td>
+                            <td>
+                                                                                                                                                        </td>
+                                                            <td>
+                                                                    <div>The optional read-only snapshotName is a starting snapshot when 
+ the group is started without performing a full resynchronization. 
+ Instead, for synchronized groups, the volume synchronizes deltas 
+ between this snapshotName and the base volume. For periodic groups, 
+ the volume synchronizes deltas between this snapshotName and a snapshot of the base.</div>
+                                                                            </td>
+        </tr>
+                            <tr>
+                                                            <td colspan="1">
+                <b>source_port</b>
+                                                                        </td>
+                            <td>
+                                                                                                                                                        </td>
+                                                            <td>
+                                                                    <div>node:slot:port Specifies the node, slot, and port of the Ethernet port on the local system Ethernet port on the local system.</div>
+                                                                            </td>
+        </tr>
+                            <tr>
+                                                            <td colspan="1">
+                <b>starting_snapshots</b>
+                                                                        </td>
+                            <td>
+                                                                                                                                                        </td>
+                                                            <td>
+                                                                    <div>When used, you must specify all the volumes inthe group. While specifying the pair, the starting snapshot is optional. When not used, the system performs a full resynchronization of the volume.</div>
+                                                                            </td>
+        </tr>
+                            <tr>
+                                                            <td colspan="1">
+                <b>state</b>
+                                    <br/><div style="font-size: small; color: red">required</div>                                    </td>
+                            <td>
+                                                                                                                        <ul><b>Choices:</b>
+                                                                                                                                                            <li>present</li>
+                                                                                                                                                                                            <li>absent</li>
+                                                                                                                                                                                            <li>modify</li>
+                                                                                                                                                                                            <li>add_volume</li>
+                                                                                                                                                                                            <li>remove_volume</li>
+                                                                                                                                                                                            <li>start</li>
+                                                                                                                                                                                            <li>stop</li>
+                                                                                                                                                                                            <li>synchronize</li>
+                                                                                                                                                                                            <li>recover</li>
+                                                                                                                                                                                            <li>admit_link</li>
+                                                                                                                                                                                            <li>dismiss_link</li>
+                                                                                                                                                                                            <li>admit_target</li>
+                                                                                                                                                                                            <li>dismiss_target</li>
+                                                                                                                                                                                            <li>start_rcopy</li>
+                                                                                </ul>
+                                                                        </td>
+                                                            <td>
+                                                                    <div>Whether the specified Remote Copy Group should exist or not. State also provides actions to modify Remote copy Group ,add/remove volumes, start/stop/synchronize/recover remote copy group, Add/remove remote copy link, start remote copy services, admit/dismiss target.</div>
+                                                                            </td>
+        </tr>
+                            <tr>
+                                                            <td colspan="1">
+                <b>stop_groups</b>
+                <br/><div style="font-size: small; color: red">bool</div>                                                        </td>
+                            <td>
+                                                                                                                                                                                                                <ul><b>Choices:</b>
+                                                                                                                                                            <li><div style="color: blue"><b>no</b>&nbsp;&larr;</div></li>
+                                                                                                                                                                                            <li>yes</li>
+                                                                                </ul>
+                                                                        </td>
+                                                            <td>
+                                                                    <div>If true, the groups are stopped before performing the reverse operation. Valid for REVERSE operation only.</div>
+                                                                            </td>
+        </tr>
+                            <tr>
+                                                            <td colspan="1">
+                <b>storage_system_ip</b>
+                                    <br/><div style="font-size: small; color: red">required</div>                                    </td>
+                            <td>
+                                                                                                                                                        </td>
+                                                            <td>
+                                                                    <div>The storage system IP address.</div>
+                                                                            </td>
+        </tr>
+                            <tr>
+                                                            <td colspan="1">
+                <b>storage_system_password</b>
+                                    <br/><div style="font-size: small; color: red">required</div>                                    </td>
+                            <td>
+                                                                                                                                                        </td>
+                                                            <td>
+                                                                    <div>The storage system password.</div>
+                                                                            </td>
+        </tr>
+                            <tr>
+                                                            <td colspan="1">
+                <b>storage_system_username</b>
+                                    <br/><div style="font-size: small; color: red">required</div>                                    </td>
+                            <td>
+                                                                                                                                                        </td>
+                                                            <td>
+                                                                    <div>The storage system user name.</div>
+                                                                            </td>
+        </tr>
+                            <tr>
+                                                            <td colspan="1">
+                <b>target_mode</b>
+                                                                        </td>
+                            <td>
+                                                                                                                        <ul><b>Choices:</b>
+                                                                                                                                                            <li>sync</li>
+                                                                                                                                                                                            <li>periodic</li>
+                                                                                                                                                                                            <li>async</li>
+                                                                                </ul>
+                                                                        </td>
+                                                            <td>
+                                                                    <div>Specifies the mode of the target as either synchronous (sync), asynchronous periodic (periodic), or asynchronous streaming (async).</div>
+                                                                            </td>
+        </tr>
+                            <tr>
+                                                            <td colspan="1">
+                <b>target_name</b>
+                                                                        </td>
+                            <td>
+                                                                                                                                                        </td>
+                                                            <td>
+                                                                    <div>Specifies the target name associated with the Remote Copy group to be created.</div>
+                                                                            </td>
+        </tr>
+                            <tr>
+                                                            <td colspan="1">
+                <b>target_port_wwn_or_ip</b>
+                                                                        </td>
+                            <td>
+                                                                                                                                                        </td>
+                                                            <td>
+                                                                    <div>IP/WWN address of the peer port on the target system.</div>
+                                                                            </td>
+        </tr>
+                            <tr>
+                                                            <td colspan="1">
+                <b>unset_snap_cpg</b>
+                <br/><div style="font-size: small; color: red">bool</div>                                                        </td>
+                            <td>
+                                                                                                                                                                                                                <ul><b>Choices:</b>
+                                                                                                                                                            <li><div style="color: blue"><b>no</b>&nbsp;&larr;</div></li>
+                                                                                                                                                                                            <li>yes</li>
+                                                                                </ul>
+                                                                        </td>
+                                                            <td>
+                                                                    <div>Enables (true) or disables (false) setting the 
+ localSnapCPG and remoteSnapCPG of the Remote Copy group.</div>
+                                                                            </td>
+        </tr>
+                            <tr>
+                                                            <td colspan="1">
+                <b>unset_user_cpg</b>
+                <br/><div style="font-size: small; color: red">bool</div>                                                        </td>
+                            <td>
+                                                                                                                                                                                                                <ul><b>Choices:</b>
+                                                                                                                                                            <li><div style="color: blue"><b>no</b>&nbsp;&larr;</div></li>
+                                                                                                                                                                                            <li>yes</li>
+                                                                                </ul>
+                                                                        </td>
+                                                            <td>
+                                                                    <div>Enables (true) or disables (false) setting the localUserCPG and 
+ remoteUserCPG of the Remote Copy group.</div>
+                                                                            </td>
+        </tr>
+                            <tr>
+                                                            <td colspan="1">
+                <b>volume_auto_creation</b>
+                <br/><div style="font-size: small; color: red">bool</div>                                                        </td>
+                            <td>
+                                                                                                                                                                                                                <ul><b>Choices:</b>
+                                                                                                                                                            <li><div style="color: blue"><b>no</b>&nbsp;&larr;</div></li>
+                                                                                                                                                                                            <li>yes</li>
+                                                                                </ul>
+                                                                        </td>
+                                                            <td>
+                                                                    <div>If volumeAutoCreation is set to true, 
+ the secondary volumes should be created automatically 
+ on the target using the CPG. associated with the Remote Copy group on that target. This cannot be set to true if the snapshot name is specified.</div>
+                                                                            </td>
+        </tr>
+                            <tr>
+                                                            <td colspan="1">
+                <b>volume_name</b>
+                                                                        </td>
+                            <td>
+                                                                                                                                                        </td>
+                                                            <td>
+                                                                    <div>Specifies the name of the existing virtual volume to be admitted to an existing Remote Copy group.</div>
+                                                                            </td>
+        </tr>
+                    </table>
+<br/>
+Examples
+--------
+
+``` {.sourceCode .yaml+jinja}
+- hosts: localhost
+  tasks:
+  - name: Load Storage System Vars
+    include_vars: 'properties/storage_system_properties.yml'
+
+  - name: Create volume on source
+    hpe3par_volume:
+      storage_system_ip: 10.10.10.1
+      storage_system_password: password
+      storage_system_username: username
+      state: present
+      volume_name: demo_volume_1
+      size: 1024
+      size_unit: MiB
+      cpg: FC_r1
+      snap_cpg: FC_r1
+
+  - name: Create volume on source
+    hpe3par_volume:
+      storage_system_ip: 10.10.10.1
+      storage_system_password: password
+      storage_system_username: username
+      state: present
+      volume_name: demo_volume_2
+      size: 1024
+      size_unit: MiB
+      cpg: FC_r1
+      snap_cpg: FC_r1     
+
+  - name: Create volume on target
+    hpe3par_volume:
+      storage_system_ip: 10.10.10.1
+      storage_system_password: password
+      storage_system_username: username
+      state: present
+      volume_name: demo_volume_1
+      size: 1024
+      size_unit: MiB
+      cpg: FC_r1
+      snap_cpg: FC_r1     
+
+  - name: Create volume on target
+    hpe3par_volume:
+      storage_system_ip: 10.10.10.1
+      storage_system_password: password
+      storage_system_username: username
+      state: present
+      volume_name: demo_volume_2
+      size: 1024
+      size_unit: MiB
+      cpg: FC_r1
+      snap_cpg: FC_r1           
+
+  - name: Create Remote Copy Group farhan_rcg
+    hpe3par_remote_copy:
+      storage_system_ip: 10.10.10.1
+      storage_system_password: password
+      storage_system_username: username
+      state: present
+      remote_copy_group_name: farhan_rcg
+      remote_copy_targets:
+      - target_name: CSSOS-SSA06
+        target_mode: sync
+
+  - name: Add volume to remote copy group
+    hpe3par_remote_copy:
+      storage_system_ip: 10.10.10.1
+      storage_system_password: password
+      storage_system_username: username
+      state: add_volume
+      remote_copy_group_name: farhan_rcg
+      volume_name: demo_volume_1
+      admit_volume_targets:
+      - target_name: CSSOS-SSA06
+        sec_volume_name: demo_volume_1
+
+  - name: Add volume to remote copy group
+    hpe3par_remote_copy:
+      storage_system_ip: 10.10.10.1
+      storage_system_password: password
+      storage_system_username: username
+      state: add_volume
+      remote_copy_group_name: farhan_rcg
+      volume_name: demo_volume_2
+      admit_volume_targets:
+      - target_name: CSSOS-SSA06
+        sec_volume_name: demo_volume_2
+
+  - name: Modify Remote Copy Group farhan_rcg
+    hpe3par_remote_copy:
+      storage_system_ip: 10.10.10.1
+      storage_system_password: password
+      storage_system_username: username
+      state: modify
+      remote_copy_group_name: farhan_rcg
+      local_user_cpg: "FC_r1"
+      local_snap_cpg: "FC_r6"
+      unset_user_cpg: false
+      unset_snap_cpg: false
+      modify_targets:
+      - target_name: CSSOS-SSA06
+        remote_user_cpg: "FC_r1"
+        remote_snap_cpg: "FC_r6"
+
+  - name: Start remote copy
+    hpe3par_remote_copy:
+      storage_system_ip: 10.10.10.1
+      storage_system_password: password
+      storage_system_username: username
+      remote_copy_group_name: farhan_rcg
+      state: start
+
+  - name: Stop remote copy
+    hpe3par_remote_copy:
+      storage_system_ip: 10.10.10.1
+      storage_system_password: password
+      storage_system_username: username
+      remote_copy_group_name: farhan_rcg
+      state: stop
+
+  - name: Remove volume from remote copy group
+    hpe3par_remote_copy:
+      storage_system_ip: 10.10.10.1
+      storage_system_password: password
+      storage_system_username: username
+      state: remove_volume
+      remote_copy_group_name: farhan_rcg
+      volume_name: demo_volume_1
+
+  - name: Remove volume from remote copy group
+    hpe3par_remote_copy:
+      storage_system_ip: 10.10.10.1
+      storage_system_password: password
+      storage_system_username: username
+      state: remove_volume
+      remote_copy_group_name: farhan_rcg
+      volume_name: demo_volume_2
+
+  - name: Remove Remote Copy Group farhan_rcg
+    hpe3par_remote_copy:
+      storage_system_ip: 10.10.10.1
+      storage_system_password: password
+      storage_system_username: username
+      state: absent 
+      remote_copy_group_name: farhan_rcg
+
+  - name: dismiss remote copy link
+    hpe3par_remote_copy:
+      storage_system_ip: 10.10.10.1
+      storage_system_password: password
+      storage_system_username: username
+      state: dismiss_link
+      target_name: CSSOS-SSA06
+      source_port: 0:3:1
+      target_port_wwn_or_ip: 192.168.1.2
+
+  - name: dismiss remote copy link
+    hpe3par_remote_copy:
+      storage_system_ip: 10.10.10.1
+      storage_system_password: password
+      storage_system_username: username
+      state: dismiss_link
+      target_name: CSSOS-SSA06
+      source_port: "1:3:1"
+      target_port_wwn_or_ip: 192.168.2.2
+
+  - name: Admit remote copy link
+    hpe3par_remote_copy:
+      storage_system_ip: 10.10.10.1
+      storage_system_password: password
+      storage_system_username: username
+      state: admit_link
+      target_name: CSSOS-SSA06
+      source_port: 0:3:1
+      target_port_wwn_or_ip: 192.168.1.2
+
+  - name: Admit remote copy link
+    hpe3par_remote_copy:
+      storage_system_ip: 10.10.10.1
+      storage_system_password: password
+      storage_system_username: username
+      state: admit_link
+      target_name: CSSOS-SSA06
+      source_port: "1:3:1"
+      target_port_wwn_or_ip: 192.168.2.2
+
+  - name: start remote copy service
+    hpe3par_remote_copy:
+      storage_system_ip: 10.10.10.1
+      storage_system_password: password
+      storage_system_username: username
+      state: start_rcopy
+```
+
+### Author
+
+-   Arshad Ansari(<arshad.alam.ansari@hpe.com>)
+
