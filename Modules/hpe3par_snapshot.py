@@ -17,8 +17,6 @@
 # with this program.  If not, see <https://www.gnu.org/licenses/>
 
 from __future__ import absolute_import, division, print_function
-import re
-from ansible.module_utils.basic import AnsibleModule
 __metaclass__ = type
 
 
@@ -236,6 +234,7 @@ RETURN = r'''
 '''
 
 
+from ansible.module_utils.basic import AnsibleModule
 try:
     from hpe3par_sdk import client
 except ImportError:
