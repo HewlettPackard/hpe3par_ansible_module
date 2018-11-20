@@ -1,0 +1,85 @@
+- hosts: localhost
+  tasks:
+
+  - name: Load Storage System Vars
+    include_vars: 'properties/storage_system_properties.yml'
+
+  - name: Load Volume Vars
+    include_vars: 'properties/volume_properties.yml'
+
+  - name: Load Host Vars
+    include_vars: 'properties/host_properties.yml'
+
+  - name: Create Volume "{{ volume_name }}"
+    hpe3par_volume:
+      storage_system_ip: "{{ storage_system_ip }}"
+      storage_system_username: "{{ storage_system_username }}"
+      storage_system_password: "{{ storage_system_password }}"
+      state: present
+      volume_name: "{{ volume_name }}"
+      cpg: "{{ cpg }}"
+      size: "{{ size }}"
+      snap_cpg: "FC_r1"
+
+  
+  - name: Create Schedule on source
+    hpe3par_snapshot:
+      storage_system_ip: "{{ storage_system_ip }}"
+      storage_system_username: "{{ storage_system_username }}"
+      storage_system_password: "{{ storage_system_password }}"
+      state: create_schedule
+      schedule_name: my_ansible_sc
+      base_volume_name: volume_ansible_a 
+      read_only: True
+      expiration_time: 3
+      retention_time: 3
+      expiration_unit: Hours 
+      retention_unit: Hours
+      task_freq: "0 * * * *"
+
+
+  - name: Modify Schedule from source
+    hpe3par_snapshot:
+      storage_system_ip: "{{ storage_system_ip }}"
+      storage_system_username: "{{ storage_system_username }}"
+      storage_system_password: "{{ storage_system_password }}"
+      state: modify_schedule
+      schedule_name: my_ansible_sc
+      new_schedule_name: ansible_sc
+      task_freq: yearly
+
+
+  - name: Suspend Schedule on source
+    hpe3par_snapshot:
+      storage_system_ip: "{{ storage_system_ip }}"
+      storage_system_username: "{{ storage_system_username }}"
+      storage_system_password: "{{ storage_system_password }}"
+      state: suspend_schedule
+      schedule_name: ansible_sc
+
+
+  - name: Resume Schedule from source
+    hpe3par_snapshot:
+      storage_system_ip: "{{ storage_system_ip }}"
+      storage_system_username: "{{ storage_system_username }}"
+      storage_system_password: "{{ storage_system_password }}"
+      state: resume_schedule
+      schedule_name: ansible_sc
+
+
+  - name: Delete Schedule on source
+    hpe3par_snapshot:
+      storage_system_ip: "{{ storage_system_ip }}"
+      storage_system_username: "{{ storage_system_username }}"
+      storage_system_password: "{{ storage_system_password }}"
+      state: delete_schedule
+      schedule_name: ansible_sc
+
+  - name: Delete Volume "{{ volume_name }}"
+    hpe3par_volume:
+      storage_system_ip: "{{ storage_system_ip }}"
+      storage_system_username: "{{ storage_system_username }}"
+      storage_system_password: "{{ storage_system_password }}"
+      state: absent
+      volume_name: "{{ volume_name }}"
+ 
