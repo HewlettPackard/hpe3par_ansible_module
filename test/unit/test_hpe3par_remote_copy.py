@@ -157,8 +157,9 @@ class TestHpe3parRemoteCopy(unittest.TestCase):
             "choices": ['sync', 'periodic', 'async'],
             "type": 'str'
         },
-        "local_remote_volume_pair_list": {
-            "type": "list"
+        "local_remote_volume_pair_dict": {
+            "type": "dict",
+            "default": {}
         }
     }
 
@@ -204,7 +205,7 @@ class TestHpe3parRemoteCopy(unittest.TestCase):
             'volume_name': 'volume_1',
             'source_port': '0:3:1',
             'target_port_wwn_or_ip': '192.168.1.2',
-            'local_remote_volume_pair_list': [('local_v1','remote_v1'),('local_v2','remote_v2')],
+            'local_remote_volume_pair_dict': [('local_v1','remote_v1'),('local_v2','remote_v2')],
             'target_mode': 'sync'
         }
 
@@ -256,7 +257,7 @@ class TestHpe3parRemoteCopy(unittest.TestCase):
             'volume_name': 'volume_1',
             'source_port': '0:3:1',
             'target_port_wwn_or_ip': '192.168.1.2',
-            'local_remote_volume_pair_list': [('local_v1','remote_v1'),('local_v2','remote_v2')],
+            'local_remote_volume_pair_dict': [('local_v1','remote_v1'),('local_v2','remote_v2')],
             'target_mode': 'sync'
         }
         # This creates a instance of the AnsibleModule mock.
@@ -314,7 +315,7 @@ class TestHpe3parRemoteCopy(unittest.TestCase):
             'volume_name': 'volume_1',
             'source_port': '0:3:1',
             'target_port_wwn_or_ip': '192.168.1.2',
-            'local_remote_volume_pair_list': [('local_v1','remote_v1'),('local_v2','remote_v2')],
+            'local_remote_volume_pair_dict': [('local_v1','remote_v1'),('local_v2','remote_v2')],
             'target_mode': 'sync'
         }
         # This creates a instance of the AnsibleModule mock.
@@ -372,7 +373,7 @@ class TestHpe3parRemoteCopy(unittest.TestCase):
             'volume_name': 'volume_1',
             'source_port': '0:3:1',
             'target_port_wwn_or_ip': '192.168.1.2',
-            'local_remote_volume_pair_list': [('local_v1','remote_v1'),('local_v2','remote_v2')],
+            'local_remote_volume_pair_dict': [('local_v1','remote_v1'),('local_v2','remote_v2')],
             'target_mode': 'sync'
         }
         # This creates a instance of the AnsibleModule mock.
@@ -430,7 +431,7 @@ class TestHpe3parRemoteCopy(unittest.TestCase):
             'volume_name': 'volume_1',
             'source_port': '0:3:1',
             'target_port_wwn_or_ip': '192.168.1.2',
-            'local_remote_volume_pair_list': [('local_v1','remote_v1'),('local_v2','remote_v2')],
+            'local_remote_volume_pair_dict': [('local_v1','remote_v1'),('local_v2','remote_v2')],
             'target_mode': 'sync'
         }
         # This creates a instance of the AnsibleModule mock.
@@ -489,7 +490,7 @@ class TestHpe3parRemoteCopy(unittest.TestCase):
             'volume_name': 'volume_1',
             'source_port': '0:3:1',
             'target_port_wwn_or_ip': '192.168.1.2',
-            'local_remote_volume_pair_list': [('local_v1','remote_v1'),('local_v2','remote_v2')],
+            'local_remote_volume_pair_dict': [('local_v1','remote_v1'),('local_v2','remote_v2')],
             'target_mode': 'sync'
         }
         # This creates a instance of the AnsibleModule mock.
@@ -547,7 +548,7 @@ class TestHpe3parRemoteCopy(unittest.TestCase):
             'volume_name': 'volume_1',
             'source_port': '0:3:1',
             'target_port_wwn_or_ip': '192.168.1.2',
-            'local_remote_volume_pair_list': [('local_v1','remote_v1'),('local_v2','remote_v2')],
+            'local_remote_volume_pair_dict': [('local_v1','remote_v1'),('local_v2','remote_v2')],
             'target_mode': 'sync'
         }
         # This creates a instance of the AnsibleModule mock.
@@ -605,7 +606,7 @@ class TestHpe3parRemoteCopy(unittest.TestCase):
             'volume_name': 'volume_1',
             'source_port': '0:3:1',
             'target_port_wwn_or_ip': '192.168.1.2',
-            'local_remote_volume_pair_list': [('local_v1','remote_v1'),('local_v2','remote_v2')],
+            'local_remote_volume_pair_dict': [('local_v1','remote_v1'),('local_v2','remote_v2')],
             'target_mode': 'sync'
         }
         # This creates a instance of the AnsibleModule mock.
@@ -663,7 +664,7 @@ class TestHpe3parRemoteCopy(unittest.TestCase):
             'volume_name': 'volume_1',
             'source_port': '0:3:1',
             'target_port_wwn_or_ip': '192.168.1.2',
-            'local_remote_volume_pair_list': [('local_v1','remote_v1'),('local_v2','remote_v2')],
+            'local_remote_volume_pair_dict': [('local_v1','remote_v1'),('local_v2','remote_v2')],
             'target_mode': 'sync'
         }
         # This creates a instance of the AnsibleModule mock.
@@ -721,7 +722,7 @@ class TestHpe3parRemoteCopy(unittest.TestCase):
             'volume_name': 'volume_1',
             'source_port': '0:3:1',
             'target_port_wwn_or_ip': '192.168.1.2',
-            'local_remote_volume_pair_list': [('local_v1','remote_v1'),('local_v2','remote_v2')],
+            'local_remote_volume_pair_dict': [('local_v1','remote_v1'),('local_v2','remote_v2')],
             'target_mode': 'sync'
         }
         # This creates a instance of the AnsibleModule mock.
@@ -779,7 +780,7 @@ class TestHpe3parRemoteCopy(unittest.TestCase):
             'volume_name': 'volume_1',
             'source_port': '0:3:1',
             'target_port_wwn_or_ip': '192.168.1.2',
-            'local_remote_volume_pair_list': [('local_v1','remote_v1'),('local_v2','remote_v2')],
+            'local_remote_volume_pair_dict': [('local_v1','remote_v1'),('local_v2','remote_v2')],
             'target_mode': 'sync'
         }
         # This creates a instance of the AnsibleModule mock.
@@ -837,7 +838,7 @@ class TestHpe3parRemoteCopy(unittest.TestCase):
             'volume_name': 'volume_1',
             'source_port': '0:3:1',
             'target_port_wwn_or_ip': '192.168.1.2',
-            'local_remote_volume_pair_list': [('local_v1','remote_v1'),('local_v2','remote_v2')],
+            'local_remote_volume_pair_dict': [('local_v1','remote_v1'),('local_v2','remote_v2')],
             'target_mode': 'sync'
         }
         # This creates a instance of the AnsibleModule mock.
@@ -895,7 +896,7 @@ class TestHpe3parRemoteCopy(unittest.TestCase):
             'volume_name': 'volume_1',
             'source_port': '0:3:1',
             'target_port_wwn_or_ip': '192.168.1.2',
-            'local_remote_volume_pair_list': [('local_v1','remote_v1'),('local_v2','remote_v2')],
+            'local_remote_volume_pair_dict': [('local_v1','remote_v1'),('local_v2','remote_v2')],
             'target_mode': 'sync'
         }
         # This creates a instance of the AnsibleModule mock.
@@ -955,7 +956,7 @@ class TestHpe3parRemoteCopy(unittest.TestCase):
             'volume_name': 'volume_1',
             'source_port': '0:3:1',
             'target_port_wwn_or_ip': '192.168.1.2',
-            'local_remote_volume_pair_list': [('local_v1','remote_v1'),('local_v2','remote_v2')],
+            'local_remote_volume_pair_dict': [('local_v1','remote_v1'),('local_v2','remote_v2')],
             'target_mode': 'sync'
         }
         # This creates a instance of the AnsibleModule mock.

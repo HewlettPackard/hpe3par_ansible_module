@@ -221,11 +221,11 @@ options:
     description:
       - "Specifies the mode of the target as either synchronous (sync),
        asynchronous periodic (periodic), or asynchronous streaming (async).\n"
-  local_remote_volume_pair_list:
+  local_remote_volume_pair_dict:
     description:
-      - "Is a list of tuples , where each tuple contains primary and
-       secondary volumes i.e. [(primary_vv1,secondary_vv1),(primary_vv2
-       ,secondary_vv2)].\n"
+      - "Is a dictionary, where each item contains primary and
+       secondary volumes i.e. {'primary_vv1':'secondary_vv1','primary_vv2'
+       :'secondary_vv2'}.\n"
   state:
     choices:
       - present
@@ -324,6 +324,30 @@ EXAMPLES = r'''
       cpg: FC_r1
       snap_cpg: FC_r1           
 
+  - name: Create volume on target2
+    hpe3par_volume:
+      storage_system_ip: 10.10.10.1
+      storage_system_password: password
+      storage_system_username: username
+      state: present
+      volume_name: demo_volume_1
+      size: 1024
+      size_unit: MiB
+      cpg: FC_r1
+      snap_cpg: FC_r1
+
+  - name: Create volume on target2
+    hpe3par_volume:
+      storage_system_ip: 10.10.10.1
+      storage_system_password: password
+      storage_system_username: username
+      state: present
+      volume_name: demo_volume_2
+      size: 1024
+      size_unit: MiB
+      cpg: FC_r1
+      snap_cpg: FC_r1
+
   - name: Create Remote Copy Group farhan_rcg
     hpe3par_remote_copy:
       storage_system_ip: 10.10.10.1
@@ -333,7 +357,7 @@ EXAMPLES = r'''
       remote_copy_group_name: farhan_rcg
       remote_copy_targets:
       - target_name: CSSOS-SSA06
-        target_mode: sync
+        target_mode: periodic
        
   - name: Add volume to remote copy group
     hpe3par_remote_copy:
@@ -358,6 +382,26 @@ EXAMPLES = r'''
       admit_volume_targets:
       - target_name: CSSOS-SSA06
         sec_volume_name: demo_volume_2
+
+  - name: admit Remote Copy target
+    hpe3par_remote_copy:
+      storage_system_ip: 10.10.10.1
+      storage_system_password: password
+      storage_system_username: username
+      state: admit_target
+      remote_copy_group_name: farhan_rcg
+      target_name: CSSOS-SSA04
+      local_remote_volume_pair_dict: { demo_volume_1: demo_volume_1, demo_volume_2: demo_volume_2 }
+      target_mode: sync
+
+  - name: dismiss Remote Copy target
+    hpe3par_remote_copy:
+      storage_system_ip: 10.10.10.1
+      storage_system_password: password
+      storage_system_username: username
+      state: dismiss_target
+      remote_copy_group_name: farhan_rcg
+      target_name: CSSOS-SSA04
 
   - name: Modify Remote Copy Group farhan_rcg
     hpe3par_remote_copy:
@@ -1021,7 +1065,7 @@ def admit_remote_copy_target(
             target_name,
             target_mode,
             remote_copy_group_name,
-            local_remote_volume_pair_list
+            local_remote_volume_pair_dict
             ):
     if storage_system_username is None or storage_system_password is None:
         return (
@@ -1050,7 +1094,7 @@ def admit_remote_copy_target(
         #If it is already present then target add to remote copy group fails
         if client_obj.targetInRemoteCopyGroupExists(target_name, remote_copy_group_name):
             return (True, False, "Admit remote copy target failed.Target is already present", {})
-        results=client_obj.admitRemoteCopyTarget(target_name, target_mode, remote_copy_group_name, local_remote_volume_pair_list)
+        results=client_obj.admitRemoteCopyTarget(target_name, target_mode, remote_copy_group_name, local_remote_volume_pair_dict)
     except Exception as e:
         return (False, False, "Admit remote copy target failed| %s" % (e), {})
     finally:
@@ -1234,8 +1278,9 @@ def main():
             "choices": ['sync', 'periodic', 'async'],
             "type": 'str'
         },
-        "local_remote_volume_pair_list": {
-            "type": "list"
+        "local_remote_volume_pair_dict": {
+            "type": "dict",
+            "default": {}
         }
     }
     module = AnsibleModule(argument_spec=fields)
@@ -1276,7 +1321,7 @@ def main():
     skip_promote = module.params["skip_promote"]
     stop_groups = module.params["stop_groups"]
     local_groups_direction = module.params["local_groups_direction"]
-    local_remote_volume_pair_list = module.params["local_remote_volume_pair_list"]
+    local_remote_volume_pair_dict = module.params["local_remote_volume_pair_dict"]
     target_mode = module.params["target_mode"]
 
     wsapi_url = 'https://%s:8080/api/v1' % storage_system_ip
@@ -1418,7 +1463,7 @@ def main():
             target_name,
             target_mode,
             remote_copy_group_name,
-            local_remote_volume_pair_list
+            local_remote_volume_pair_dict
         )
     elif module.params["state"] == "dismiss_target":
         return_status, changed, msg, issue_attr_dict = dismiss_remote_copy_target(
