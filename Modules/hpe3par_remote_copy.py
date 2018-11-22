@@ -221,7 +221,7 @@ options:
     description:
       - "Specifies the mode of the target as either synchronous (sync),
        asynchronous periodic (periodic), or asynchronous streaming (async).\n"
-  local_remote_volume_pair_dict:
+  local_remote_volume_pair_list:
     description:
       - "Is a dictionary, where each item contains primary and
        secondary volumes i.e. {'primary_vv1':'secondary_vv1','primary_vv2'
@@ -242,6 +242,7 @@ options:
       - admit_target
       - dismiss_target
       - start_rcopy
+      - remote_copy_status
     description:
       - "Whether the specified Remote Copy Group should exist or not. State
        also provides actions to modify Remote copy Group ,add/remove volumes,
@@ -348,16 +349,16 @@ EXAMPLES = r'''
       cpg: FC_r1
       snap_cpg: FC_r1
 
-  - name: Create Remote Copy Group farhan_rcg
+  - name: Create Remote Copy Group test_rcg
     hpe3par_remote_copy:
       storage_system_ip: 10.10.10.1
       storage_system_password: password
       storage_system_username: username
       state: present
-      remote_copy_group_name: farhan_rcg
+      remote_copy_group_name: test_rcg
       remote_copy_targets:
       - target_name: CSSOS-SSA06
-        target_mode: periodic
+        target_mode: sync
        
   - name: Add volume to remote copy group
     hpe3par_remote_copy:
@@ -365,7 +366,7 @@ EXAMPLES = r'''
       storage_system_password: password
       storage_system_username: username
       state: add_volume
-      remote_copy_group_name: farhan_rcg
+      remote_copy_group_name: test_rcg
       volume_name: demo_volume_1
       admit_volume_targets:
       - target_name: CSSOS-SSA06
@@ -377,7 +378,7 @@ EXAMPLES = r'''
       storage_system_password: password
       storage_system_username: username
       state: add_volume
-      remote_copy_group_name: farhan_rcg
+      remote_copy_group_name: test_rcg
       volume_name: demo_volume_2
       admit_volume_targets:
       - target_name: CSSOS-SSA06
@@ -389,10 +390,27 @@ EXAMPLES = r'''
       storage_system_password: password
       storage_system_username: username
       state: admit_target
-      remote_copy_group_name: farhan_rcg
+      remote_copy_group_name: test_rcg
       target_name: CSSOS-SSA04
-      local_remote_volume_pair_dict: { demo_volume_1: demo_volume_1, demo_volume_2: demo_volume_2 }
-      target_mode: sync
+      local_remote_volume_pair_list:
+      - sourceVolumeName: demo_volume_1
+        targetVolumeName: demo_volume_1
+      - sourceVolumeName: demo_volume_2
+        targetVolumeName: demo_volume_2
+      target_mode: periodic
+
+  - name: remote copy group status
+    hpe3par_remote_copy:
+      storage_system_ip: 192.168.67.5
+      storage_system_password: 3pardata
+      storage_system_username: 3paradm
+      state: remote_copy_status
+      remote_copy_group_name: test_rcg
+    register: result
+
+  - debug:
+      msg: "{{ result.output.remote_copy_sync_status}}"
+
 
   - name: dismiss Remote Copy target
     hpe3par_remote_copy:
@@ -400,16 +418,16 @@ EXAMPLES = r'''
       storage_system_password: password
       storage_system_username: username
       state: dismiss_target
-      remote_copy_group_name: farhan_rcg
+      remote_copy_group_name: test_rcg
       target_name: CSSOS-SSA04
 
-  - name: Modify Remote Copy Group farhan_rcg
+  - name: Modify Remote Copy Group test_rcg
     hpe3par_remote_copy:
       storage_system_ip: 10.10.10.1
       storage_system_password: password
       storage_system_username: username
       state: modify
-      remote_copy_group_name: farhan_rcg
+      remote_copy_group_name: test_rcg
       local_user_cpg: "FC_r1"
       local_snap_cpg: "FC_r6"
       unset_user_cpg: false
@@ -424,7 +442,7 @@ EXAMPLES = r'''
       storage_system_ip: 10.10.10.1
       storage_system_password: password
       storage_system_username: username
-      remote_copy_group_name: farhan_rcg
+      remote_copy_group_name: test_rcg
       state: start
       
   - name: Stop remote copy
@@ -432,7 +450,7 @@ EXAMPLES = r'''
       storage_system_ip: 10.10.10.1
       storage_system_password: password
       storage_system_username: username
-      remote_copy_group_name: farhan_rcg
+      remote_copy_group_name: test_rcg
       state: stop
       
   - name: Remove volume from remote copy group
@@ -441,7 +459,7 @@ EXAMPLES = r'''
       storage_system_password: password
       storage_system_username: username
       state: remove_volume
-      remote_copy_group_name: farhan_rcg
+      remote_copy_group_name: test_rcg
       volume_name: demo_volume_1
         
   - name: Remove volume from remote copy group
@@ -450,16 +468,16 @@ EXAMPLES = r'''
       storage_system_password: password
       storage_system_username: username
       state: remove_volume
-      remote_copy_group_name: farhan_rcg
+      remote_copy_group_name: test_rcg
       volume_name: demo_volume_2
         
-  - name: Remove Remote Copy Group farhan_rcg
+  - name: Remove Remote Copy Group test_rcg
     hpe3par_remote_copy:
       storage_system_ip: 10.10.10.1
       storage_system_password: password
       storage_system_username: username
       state: absent 
-      remote_copy_group_name: farhan_rcg
+      remote_copy_group_name: test_rcg
 
   - name: dismiss remote copy link
     hpe3par_remote_copy:
@@ -1066,7 +1084,7 @@ def admit_remote_copy_target(
             target_name,
             target_mode,
             remote_copy_group_name,
-            local_remote_volume_pair_dict
+            local_remote_volume_pair_list
             ):
     if storage_system_username is None or storage_system_password is None:
         return (
@@ -1095,7 +1113,8 @@ def admit_remote_copy_target(
         #If it is already present then target add to remote copy group fails
         if client_obj.targetInRemoteCopyGroupExists(target_name, remote_copy_group_name):
             return (True, False, "Admit remote copy target failed.Target is already present", {})
-        results=client_obj.admitRemoteCopyTarget(target_name, target_mode, remote_copy_group_name, local_remote_volume_pair_dict)
+        optional = { 'volumePairs': local_remote_volume_pair_list }
+        results=client_obj.admitRemoteCopyTarget(target_name, target_mode, remote_copy_group_name, optional)
     except Exception as e:
         return (False, False, "Admit remote copy target failed| %s" % (e), {})
     finally:
@@ -1146,13 +1165,47 @@ def dismiss_remote_copy_target(
         client_obj.logout()
     return (True, True, "Dismiss remote copy target %s successful." % target_name, {})
 
+def remote_copy_group_status(
+            client_obj,
+            storage_system_username,
+            storage_system_password,
+            storage_system_ip,
+            remote_copy_group_name
+            ):
+    if storage_system_username is None or storage_system_password is None:
+        return (
+            False,
+            False,
+            "Dismiss remote copy target failed. Storage system username or password is null",
+            {})
+    if storage_system_ip is None:
+        return (False, False, "Dismiss remote copy target failed. Storage system IP address is null", {})
+    if remote_copy_group_name is None:
+        return (False, False, "Dismiss remote copy target failed. Remote copy group name is null", {})
+    try:
+        client_obj.login(storage_system_username, storage_system_password)
+        client_obj.setSSHOptions(storage_system_ip, storage_system_username, storage_system_password)
+
+        #checking existance of remote_copy_group_name
+        if not client_obj.remoteCopyGroupExists(remote_copy_group_name):
+            return (True, False, "Remote Copy Group %s is not present" % remote_copy_group_name, {})
+
+
+        remotecopy_status = client_obj.remoteCopyGroupStatusCheck(remote_copy_group_name)
+        if not remotecopy_status:
+            return (True, False, "Remote copy group %s status is failed " % (remote_copy_group_name), {"remote_copy_sync_status":remotecopy_status})
+    except Exception as e:
+        return (False, False, "Could not get remote copy group status | %s" % (e), {})
+    finally:
+        client_obj.logout()
+    return (True, False, "Remote copy group %s status is passed " % (remote_copy_group_name), {"remote_copy_sync_status":remotecopy_status})
 
 def main():
     fields = {
         "state": {
             "required": True,
             "choices": ['present', 'absent', 'modify', 'add_volume', 'remove_volume', 'start', 'stop', 'synchronize', 'recover', 'admit_link', 
-            'dismiss_link','admit_target','dismiss_target', 'start_rcopy'],
+            'dismiss_link','admit_target','dismiss_target', 'start_rcopy', 'remote_copy_status'],
             "type": 'str'
         },
         "storage_system_ip": {
@@ -1280,9 +1333,9 @@ def main():
             "choices": ['sync', 'periodic', 'async'],
             "type": 'str'
         },
-        "local_remote_volume_pair_dict": {
-            "type": "dict",
-            "default": {}
+        "local_remote_volume_pair_list": {
+            "type": "list",
+            "default": []
         }
     }
     module = AnsibleModule(argument_spec=fields)
@@ -1323,7 +1376,7 @@ def main():
     skip_promote = module.params["skip_promote"]
     stop_groups = module.params["stop_groups"]
     local_groups_direction = module.params["local_groups_direction"]
-    local_remote_volume_pair_dict = module.params["local_remote_volume_pair_dict"]
+    local_remote_volume_pair_list = module.params["local_remote_volume_pair_list"]
     target_mode = module.params["target_mode"]
 
     wsapi_url = 'https://%s:8080/api/v1' % storage_system_ip
@@ -1465,7 +1518,7 @@ def main():
             target_name,
             target_mode,
             remote_copy_group_name,
-            local_remote_volume_pair_dict
+            local_remote_volume_pair_list
         )
     elif module.params["state"] == "dismiss_target":
         return_status, changed, msg, issue_attr_dict = dismiss_remote_copy_target(
@@ -1476,9 +1529,17 @@ def main():
             target_name,
             remote_copy_group_name
         )
+    elif module.params["state"] == "remote_copy_status":
+        return_status, changed, msg, issue_attr_dict = remote_copy_group_status(
+            client_obj,
+            storage_system_username,
+            storage_system_password,
+            storage_system_ip,
+            remote_copy_group_name
+        )
     if return_status:
         if issue_attr_dict:
-            module.exit_json(changed=changed, msg=msg, issue=issue_attr_dict)
+            module.exit_json(changed=changed, msg=msg, output=issue_attr_dict)
         else:
             module.exit_json(changed=changed, msg=msg)
     else:
