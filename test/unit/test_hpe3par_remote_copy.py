@@ -29,7 +29,7 @@ class TestHpe3parRemoteCopy(unittest.TestCase):
         "state": {
             "required": True,
             "choices": ['present', 'absent', 'modify', 'add_volume', 'remove_volume', 'start', 'stop', 'synchronize', 'recover', 'admit_link', 
-            'dismiss_link','admit_target','dismiss_target', 'start_rcopy'],
+            'dismiss_link','admit_target','dismiss_target', 'start_rcopy', 'remote_copy_status'],
             "type": 'str'
         },
         "storage_system_ip": {
@@ -157,9 +157,9 @@ class TestHpe3parRemoteCopy(unittest.TestCase):
             "choices": ['sync', 'periodic', 'async'],
             "type": 'str'
         },
-        "local_remote_volume_pair_dict": {
-            "type": "dict",
-            "default": {}
+        "local_remote_volume_pair_list": {
+            "type": "list",
+            "default": []
         }
     }
 
@@ -205,7 +205,7 @@ class TestHpe3parRemoteCopy(unittest.TestCase):
             'volume_name': 'volume_1',
             'source_port': '0:3:1',
             'target_port_wwn_or_ip': '192.168.1.2',
-            'local_remote_volume_pair_dict': [('local_v1','remote_v1'),('local_v2','remote_v2')],
+            'local_remote_volume_pair_list': [('local_v1','remote_v1'),('local_v2','remote_v2')],
             'target_mode': 'sync'
         }
 
@@ -257,7 +257,7 @@ class TestHpe3parRemoteCopy(unittest.TestCase):
             'volume_name': 'volume_1',
             'source_port': '0:3:1',
             'target_port_wwn_or_ip': '192.168.1.2',
-            'local_remote_volume_pair_dict': [('local_v1','remote_v1'),('local_v2','remote_v2')],
+            'local_remote_volume_pair_list': [('local_v1','remote_v1'),('local_v2','remote_v2')],
             'target_mode': 'sync'
         }
         # This creates a instance of the AnsibleModule mock.
@@ -315,7 +315,7 @@ class TestHpe3parRemoteCopy(unittest.TestCase):
             'volume_name': 'volume_1',
             'source_port': '0:3:1',
             'target_port_wwn_or_ip': '192.168.1.2',
-            'local_remote_volume_pair_dict': [('local_v1','remote_v1'),('local_v2','remote_v2')],
+            'local_remote_volume_pair_list': [('local_v1','remote_v1'),('local_v2','remote_v2')],
             'target_mode': 'sync'
         }
         # This creates a instance of the AnsibleModule mock.
@@ -373,7 +373,7 @@ class TestHpe3parRemoteCopy(unittest.TestCase):
             'volume_name': 'volume_1',
             'source_port': '0:3:1',
             'target_port_wwn_or_ip': '192.168.1.2',
-            'local_remote_volume_pair_dict': [('local_v1','remote_v1'),('local_v2','remote_v2')],
+            'local_remote_volume_pair_list': [('local_v1','remote_v1'),('local_v2','remote_v2')],
             'target_mode': 'sync'
         }
         # This creates a instance of the AnsibleModule mock.
@@ -431,7 +431,7 @@ class TestHpe3parRemoteCopy(unittest.TestCase):
             'volume_name': 'volume_1',
             'source_port': '0:3:1',
             'target_port_wwn_or_ip': '192.168.1.2',
-            'local_remote_volume_pair_dict': [('local_v1','remote_v1'),('local_v2','remote_v2')],
+            'local_remote_volume_pair_list': [('local_v1','remote_v1'),('local_v2','remote_v2')],
             'target_mode': 'sync'
         }
         # This creates a instance of the AnsibleModule mock.
@@ -490,7 +490,7 @@ class TestHpe3parRemoteCopy(unittest.TestCase):
             'volume_name': 'volume_1',
             'source_port': '0:3:1',
             'target_port_wwn_or_ip': '192.168.1.2',
-            'local_remote_volume_pair_dict': [('local_v1','remote_v1'),('local_v2','remote_v2')],
+            'local_remote_volume_pair_list': [('local_v1','remote_v1'),('local_v2','remote_v2')],
             'target_mode': 'sync'
         }
         # This creates a instance of the AnsibleModule mock.
@@ -548,7 +548,7 @@ class TestHpe3parRemoteCopy(unittest.TestCase):
             'volume_name': 'volume_1',
             'source_port': '0:3:1',
             'target_port_wwn_or_ip': '192.168.1.2',
-            'local_remote_volume_pair_dict': [('local_v1','remote_v1'),('local_v2','remote_v2')],
+            'local_remote_volume_pair_list': [('local_v1','remote_v1'),('local_v2','remote_v2')],
             'target_mode': 'sync'
         }
         # This creates a instance of the AnsibleModule mock.
@@ -606,7 +606,7 @@ class TestHpe3parRemoteCopy(unittest.TestCase):
             'volume_name': 'volume_1',
             'source_port': '0:3:1',
             'target_port_wwn_or_ip': '192.168.1.2',
-            'local_remote_volume_pair_dict': [('local_v1','remote_v1'),('local_v2','remote_v2')],
+            'local_remote_volume_pair_list': [('local_v1','remote_v1'),('local_v2','remote_v2')],
             'target_mode': 'sync'
         }
         # This creates a instance of the AnsibleModule mock.
@@ -664,7 +664,7 @@ class TestHpe3parRemoteCopy(unittest.TestCase):
             'volume_name': 'volume_1',
             'source_port': '0:3:1',
             'target_port_wwn_or_ip': '192.168.1.2',
-            'local_remote_volume_pair_dict': [('local_v1','remote_v1'),('local_v2','remote_v2')],
+            'local_remote_volume_pair_list': [('local_v1','remote_v1'),('local_v2','remote_v2')],
             'target_mode': 'sync'
         }
         # This creates a instance of the AnsibleModule mock.
@@ -722,7 +722,7 @@ class TestHpe3parRemoteCopy(unittest.TestCase):
             'volume_name': 'volume_1',
             'source_port': '0:3:1',
             'target_port_wwn_or_ip': '192.168.1.2',
-            'local_remote_volume_pair_dict': [('local_v1','remote_v1'),('local_v2','remote_v2')],
+            'local_remote_volume_pair_list': [('local_v1','remote_v1'),('local_v2','remote_v2')],
             'target_mode': 'sync'
         }
         # This creates a instance of the AnsibleModule mock.
@@ -780,7 +780,7 @@ class TestHpe3parRemoteCopy(unittest.TestCase):
             'volume_name': 'volume_1',
             'source_port': '0:3:1',
             'target_port_wwn_or_ip': '192.168.1.2',
-            'local_remote_volume_pair_dict': [('local_v1','remote_v1'),('local_v2','remote_v2')],
+            'local_remote_volume_pair_list': [('local_v1','remote_v1'),('local_v2','remote_v2')],
             'target_mode': 'sync'
         }
         # This creates a instance of the AnsibleModule mock.
@@ -838,7 +838,7 @@ class TestHpe3parRemoteCopy(unittest.TestCase):
             'volume_name': 'volume_1',
             'source_port': '0:3:1',
             'target_port_wwn_or_ip': '192.168.1.2',
-            'local_remote_volume_pair_dict': [('local_v1','remote_v1'),('local_v2','remote_v2')],
+            'local_remote_volume_pair_list': [('local_v1','remote_v1'),('local_v2','remote_v2')],
             'target_mode': 'sync'
         }
         # This creates a instance of the AnsibleModule mock.
@@ -896,7 +896,7 @@ class TestHpe3parRemoteCopy(unittest.TestCase):
             'volume_name': 'volume_1',
             'source_port': '0:3:1',
             'target_port_wwn_or_ip': '192.168.1.2',
-            'local_remote_volume_pair_dict': [('local_v1','remote_v1'),('local_v2','remote_v2')],
+            'local_remote_volume_pair_list': [('local_v1','remote_v1'),('local_v2','remote_v2')],
             'target_mode': 'sync'
         }
         # This creates a instance of the AnsibleModule mock.
@@ -956,7 +956,7 @@ class TestHpe3parRemoteCopy(unittest.TestCase):
             'volume_name': 'volume_1',
             'source_port': '0:3:1',
             'target_port_wwn_or_ip': '192.168.1.2',
-            'local_remote_volume_pair_dict': [('local_v1','remote_v1'),('local_v2','remote_v2')],
+            'local_remote_volume_pair_list': [('local_v1','remote_v1'),('local_v2','remote_v2')],
             'target_mode': 'sync'
         }
         # This creates a instance of the AnsibleModule mock.
@@ -1292,7 +1292,7 @@ class TestHpe3parRemoteCopy(unittest.TestCase):
                                                 False,
                                                 False,
                                                 True
-                                                ), (False, False, "Add volume to Remote Copy Group failed. skipInitialSync cannot be true if snapshot name is not given", {}))
+                                                ), (False, False, "Add volume to Remote Copy Group failed. differentSecondaryWWN cannot be true if volumeAutoCreation is false", {}))
 
     @mock.patch('Modules.hpe3par_remote_copy.client')
     def test_remove_volume_from_remote_copy_group(self, mock_client):
@@ -1753,7 +1753,7 @@ class TestHpe3parRemoteCopy(unittest.TestCase):
                                                 '192.168.0.1',
                                                 'target_name1',
                                                 'rcg_1'
-                                                ), (True, False, "Remote Copy Group is not present", {}))
+                                                ), (True, False, "Remote Copy Group %s is not present" % 'rcg_1', {}))
 
         self.assertEqual(hpe3par_remote_copy.dismiss_remote_copy_target(mock_client.HPE3ParClient,
                                                 None,
@@ -1792,5 +1792,49 @@ class TestHpe3parRemoteCopy(unittest.TestCase):
                                                 '192.168.0.1',
                                                 'target_name1',
                                                 'rcg_1'
-                                                ), (True, False, "Dismiss remote copy target failed.Target is already not present", {}))
+                                                ), (True, False, "Dismiss remote copy target failed. Target %s is already not present in remote copy group %s" %('target_name1','rcg_1' ), {}))
 
+    @mock.patch('Modules.hpe3par_remote_copy.client')
+    def test_remote_copy_group_status(self, mock_client):
+        mock_client.HPE3ParClient.login.return_value = True
+        mock_client.HPE3ParClient.setSSHOptions.return_value = True
+        mock_client.HPE3ParClient.remoteCopyGroupExists.return_value = True
+        mock_client.HPE3ParClient.remoteCopyGroupStatusCheck.return_value = True
+
+        mock_client.HPE3ParClient.logout.return_value = True
+
+        self.assertEqual(hpe3par_remote_copy.remote_copy_group_status(mock_client.HPE3ParClient,
+                                                'USER',
+                                                'PASS',
+                                                '192.168.0.1',
+                                                'rcg_1',
+                                                ), (True, False, "Remote copy group %s status is complete" % 'rcg_1', {"remote_copy_sync_status":True}))
+
+        mock_client.HPE3ParClient.remoteCopyGroupStatusCheck.return_value = False
+        self.assertEqual(hpe3par_remote_copy.remote_copy_group_status(mock_client.HPE3ParClient,
+                                                'USER',
+                                                'PASS',
+                                                '192.168.0.1',
+                                                'rcg_1',
+                                                ), (True, False, "Remote copy group %s status is not in complete" % 'rcg_1', {"remote_copy_sync_status":False}))
+
+        self.assertEqual(hpe3par_remote_copy.remote_copy_group_status(mock_client.HPE3ParClient,
+                                                'USER',
+                                                'PASS',
+                                                '192.168.0.1',
+                                                None,
+                                                ), (False, False, "Remote copy group status failed. Remote copy group name is null", {}))
+
+        self.assertEqual(hpe3par_remote_copy.remote_copy_group_status(mock_client.HPE3ParClient,
+                                                'USER',
+                                                'PASS',
+                                                None,
+                                                'rcg_1',
+                                                ), (False, False, "Remote copy group status failed. Storage system IP address is null", {}))
+
+        self.assertEqual(hpe3par_remote_copy.remote_copy_group_status(mock_client.HPE3ParClient,
+                                                'USER',
+                                                None,
+                                                '192.168.0.1',
+                                                'rcg_1',
+                                                ), (False, False, "Remote copy group status failed. Storage system username or password is null", {}))

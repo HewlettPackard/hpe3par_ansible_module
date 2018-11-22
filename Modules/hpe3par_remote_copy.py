@@ -1176,12 +1176,12 @@ def remote_copy_group_status(
         return (
             False,
             False,
-            "Dismiss remote copy target failed. Storage system username or password is null",
+            "Remote copy group status failed. Storage system username or password is null",
             {})
     if storage_system_ip is None:
-        return (False, False, "Dismiss remote copy target failed. Storage system IP address is null", {})
+        return (False, False, "Remote copy group status failed. Storage system IP address is null", {})
     if remote_copy_group_name is None:
-        return (False, False, "Dismiss remote copy target failed. Remote copy group name is null", {})
+        return (False, False, "Remote copy group status failed. Remote copy group name is null", {})
     try:
         client_obj.login(storage_system_username, storage_system_password)
         client_obj.setSSHOptions(storage_system_ip, storage_system_username, storage_system_password)
@@ -1193,12 +1193,12 @@ def remote_copy_group_status(
 
         remotecopy_status = client_obj.remoteCopyGroupStatusCheck(remote_copy_group_name)
         if not remotecopy_status:
-            return (True, False, "Remote copy group %s status is failed " % (remote_copy_group_name), {"remote_copy_sync_status":remotecopy_status})
+            return (True, False, "Remote copy group %s status is not in complete" % (remote_copy_group_name), {"remote_copy_sync_status":remotecopy_status})
     except Exception as e:
         return (False, False, "Could not get remote copy group status | %s" % (e), {})
     finally:
         client_obj.logout()
-    return (True, False, "Remote copy group %s status is passed " % (remote_copy_group_name), {"remote_copy_sync_status":remotecopy_status})
+    return (True, False, "Remote copy group %s status is complete" % (remote_copy_group_name), {"remote_copy_sync_status":remotecopy_status})
 
 def main():
     fields = {
