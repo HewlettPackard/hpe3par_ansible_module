@@ -223,9 +223,9 @@ options:
        asynchronous periodic (periodic), or asynchronous streaming (async).\n"
   local_remote_volume_pair_list:
     description:
-      - "Is a dictionary, where each item contains primary and
-       secondary volumes i.e. {'primary_vv1':'secondary_vv1','primary_vv2'
-       :'secondary_vv2'}.\n"
+      - "Is a list of dictionaries, where each dictionary contains source and
+       target volumes pairs i.e. [{'sourceVolumeName':'secondary_vv1',
+       'targetVolumeName':'secondary_vv2'}, ..].\n"
   state:
     choices:
       - present

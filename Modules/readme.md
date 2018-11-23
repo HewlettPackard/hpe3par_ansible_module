@@ -3786,7 +3786,6 @@ Synopsis
     Group. - Start Remote Copy Group. - Admit Remote Copy Target. -
     Dismiss Remote Copy Target.
 
-
 Parameters
 ----------
 
@@ -3896,7 +3895,7 @@ Parameters
                             <td>
                                                                                                                                                         </td>
                                                             <td>
-                                                                    <div>Is a list of tuples , where each tuple contains primary and secondary volumes i.e. [(primary_vv1,secondary_vv1),(primary_vv2 ,secondary_vv2)].</div>
+                                                                    <div>Is a list of dictionaries, where each dictionary contains source and target volumes pairs i.e. [{'sourceVolumeName':'secondary_vv1', 'targetVolumeName':'secondary_vv2'}, ..].</div>
                                                                             </td>
         </tr>
                             <tr>
@@ -4125,6 +4124,7 @@ Parameters
                                                                                                                                                                                             <li>admit_target</li>
                                                                                                                                                                                             <li>dismiss_target</li>
                                                                                                                                                                                             <li>start_rcopy</li>
+                                                                                                                                                                                            <li>remote_copy_status</li>
                                                                                 </ul>
                                                                         </td>
                                                             <td>
@@ -4325,13 +4325,37 @@ Examples
       cpg: FC_r1
       snap_cpg: FC_r1           
 
-  - name: Create Remote Copy Group farhan_rcg
+  - name: Create volume on target2
+    hpe3par_volume:
+      storage_system_ip: 10.10.10.1
+      storage_system_password: password
+      storage_system_username: username
+      state: present
+      volume_name: demo_volume_1
+      size: 1024
+      size_unit: MiB
+      cpg: FC_r1
+      snap_cpg: FC_r1
+
+  - name: Create volume on target2
+    hpe3par_volume:
+      storage_system_ip: 10.10.10.1
+      storage_system_password: password
+      storage_system_username: username
+      state: present
+      volume_name: demo_volume_2
+      size: 1024
+      size_unit: MiB
+      cpg: FC_r1
+      snap_cpg: FC_r1
+
+  - name: Create Remote Copy Group test_rcg
     hpe3par_remote_copy:
       storage_system_ip: 10.10.10.1
       storage_system_password: password
       storage_system_username: username
       state: present
-      remote_copy_group_name: farhan_rcg
+      remote_copy_group_name: test_rcg
       remote_copy_targets:
       - target_name: CSSOS-SSA06
         target_mode: sync
@@ -4342,7 +4366,7 @@ Examples
       storage_system_password: password
       storage_system_username: username
       state: add_volume
-      remote_copy_group_name: farhan_rcg
+      remote_copy_group_name: test_rcg
       volume_name: demo_volume_1
       admit_volume_targets:
       - target_name: CSSOS-SSA06
@@ -4354,19 +4378,56 @@ Examples
       storage_system_password: password
       storage_system_username: username
       state: add_volume
-      remote_copy_group_name: farhan_rcg
+      remote_copy_group_name: test_rcg
       volume_name: demo_volume_2
       admit_volume_targets:
       - target_name: CSSOS-SSA06
         sec_volume_name: demo_volume_2
 
-  - name: Modify Remote Copy Group farhan_rcg
+  - name: admit Remote Copy target
+    hpe3par_remote_copy:
+      storage_system_ip: 10.10.10.1
+      storage_system_password: password
+      storage_system_username: username
+      state: admit_target
+      remote_copy_group_name: test_rcg
+      target_name: CSSOS-SSA04
+      local_remote_volume_pair_list:
+      - sourceVolumeName: demo_volume_1
+        targetVolumeName: demo_volume_1
+      - sourceVolumeName: demo_volume_2
+        targetVolumeName: demo_volume_2
+      target_mode: periodic
+
+  - name: remote copy group status
+    hpe3par_remote_copy:
+      storage_system_ip: 192.168.67.5
+      storage_system_password: 3pardata
+      storage_system_username: 3paradm
+      state: remote_copy_status
+      remote_copy_group_name: test_rcg
+    register: result
+
+  - debug:
+      msg: "{{ result.output.remote_copy_sync_status}}"
+
+
+  - name: dismiss Remote Copy target
+    hpe3par_remote_copy:
+      storage_system_ip: 10.10.10.1
+      storage_system_password: password
+      storage_system_username: username
+      state: dismiss_target
+      remote_copy_group_name: test_rcg
+      target_name: CSSOS-SSA04
+
+  - name: Modify Remote Copy Group test_rcg
     hpe3par_remote_copy:
       storage_system_ip: 10.10.10.1
       storage_system_password: password
       storage_system_username: username
       state: modify
-      remote_copy_group_name: farhan_rcg
+      remote_copy_group_name: test_rcg
       local_user_cpg: "FC_r1"
       local_snap_cpg: "FC_r6"
       unset_user_cpg: false
@@ -4381,7 +4442,7 @@ Examples
       storage_system_ip: 10.10.10.1
       storage_system_password: password
       storage_system_username: username
-      remote_copy_group_name: farhan_rcg
+      remote_copy_group_name: test_rcg
       state: start
 
   - name: Stop remote copy
@@ -4389,7 +4450,7 @@ Examples
       storage_system_ip: 10.10.10.1
       storage_system_password: password
       storage_system_username: username
-      remote_copy_group_name: farhan_rcg
+      remote_copy_group_name: test_rcg
       state: stop
 
   - name: Remove volume from remote copy group
@@ -4398,7 +4459,7 @@ Examples
       storage_system_password: password
       storage_system_username: username
       state: remove_volume
-      remote_copy_group_name: farhan_rcg
+      remote_copy_group_name: test_rcg
       volume_name: demo_volume_1
 
   - name: Remove volume from remote copy group
@@ -4407,16 +4468,16 @@ Examples
       storage_system_password: password
       storage_system_username: username
       state: remove_volume
-      remote_copy_group_name: farhan_rcg
+      remote_copy_group_name: test_rcg
       volume_name: demo_volume_2
 
-  - name: Remove Remote Copy Group farhan_rcg
+  - name: Remove Remote Copy Group test_rcg
     hpe3par_remote_copy:
       storage_system_ip: 10.10.10.1
       storage_system_password: password
       storage_system_username: username
       state: absent 
-      remote_copy_group_name: farhan_rcg
+      remote_copy_group_name: test_rcg
 
   - name: dismiss remote copy link
     hpe3par_remote_copy:
