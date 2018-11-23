@@ -29,7 +29,7 @@ class TestHpe3parRemoteCopy(unittest.TestCase):
         "state": {
             "required": True,
             "choices": ['present', 'absent', 'modify', 'add_volume', 'remove_volume', 'start', 'stop', 'synchronize', 'recover', 'admit_link', 
-            'dismiss_link','admit_target','dismiss_target', 'start_rcopy'],
+            'dismiss_link','admit_target','dismiss_target', 'start_rcopy', 'remote_copy_status'],
             "type": 'str'
         },
         "storage_system_ip": {
@@ -158,7 +158,8 @@ class TestHpe3parRemoteCopy(unittest.TestCase):
             "type": 'str'
         },
         "local_remote_volume_pair_list": {
-            "type": "list"
+            "type": "list",
+            "default": []
         }
     }
 
@@ -1081,6 +1082,7 @@ class TestHpe3parRemoteCopy(unittest.TestCase):
     def test_start_remote_copy_group(self, mock_client):
         mock_client.HPE3ParClient.login.return_value = True
         mock_client.HPE3ParClient.remoteCopyGroupExists.return_value = True
+        mock_client.HPE3ParClient.remoteCopyGroupStatusStartedCheck.return_value = False
         mock_client.HPE3ParClient.startRemoteCopy.return_value = True
         mock_client.HPE3ParClient.logout.return_value = True
         
@@ -1093,6 +1095,15 @@ class TestHpe3parRemoteCopy(unittest.TestCase):
                                                 'CSSOS-SSA04',
                                                 ['volName1','snapShot1']
                                                 ), (True, True, "Remote copy group %s started successfully." % 'rcg_1', {}))
+        mock_client.HPE3ParClient.remoteCopyGroupStatusStartedCheck.return_value = True
+        self.assertEqual(hpe3par_remote_copy.start_remote_copy_group(mock_client.HPE3ParClient,
+                                                'USER',
+                                                'PASS',
+                                                'rcg_1',
+                                                False,
+                                                'CSSOS-SSA04',
+                                                ['volName1','snapShot1']
+                                                ), (True, False, "Remote Copy Group is already started", {}))
 
         mock_client.HPE3ParClient.remoteCopyGroupExists.return_value = False
 
@@ -1126,6 +1137,7 @@ class TestHpe3parRemoteCopy(unittest.TestCase):
         mock_client.HPE3ParClient.login.return_value = True
         mock_client.HPE3ParClient.remoteCopyGroupExists.return_value = True
         mock_client.HPE3ParClient.stopRemoteCopy.return_value = True
+        mock_client.HPE3ParClient.remoteCopyGroupStatusStoppedCheck.return_value = False
         mock_client.HPE3ParClient.logout.return_value = True
         
 
@@ -1136,6 +1148,14 @@ class TestHpe3parRemoteCopy(unittest.TestCase):
                                                 True,
                                                 'CSSOS-SSA04'
                                                 ), (True, True, "Remote copy group %s stopped successfully." % 'rcg_1', {}))
+        mock_client.HPE3ParClient.remoteCopyGroupStatusStoppedCheck.return_value = True
+        self.assertEqual(hpe3par_remote_copy.stop_remote_copy_group(mock_client.HPE3ParClient,
+                                                'USER',
+                                                'PASS',
+                                                'rcg_1',
+                                                True,
+                                                'CSSOS-SSA04'
+                                                ), (True, False, "Remote Copy Group is already stopped", {}))
         mock_client.HPE3ParClient.remoteCopyGroupExists.return_value = False
 
         self.assertEqual(hpe3par_remote_copy.stop_remote_copy_group(mock_client.HPE3ParClient,
@@ -1291,7 +1311,7 @@ class TestHpe3parRemoteCopy(unittest.TestCase):
                                                 False,
                                                 False,
                                                 True
-                                                ), (False, False, "Add volume to Remote Copy Group failed. skipInitialSync cannot be true if snapshot name is not given", {}))
+                                                ), (False, False, "Add volume to Remote Copy Group failed. differentSecondaryWWN cannot be true if volumeAutoCreation is false", {}))
 
     @mock.patch('Modules.hpe3par_remote_copy.client')
     def test_remove_volume_from_remote_copy_group(self, mock_client):
@@ -1752,7 +1772,7 @@ class TestHpe3parRemoteCopy(unittest.TestCase):
                                                 '192.168.0.1',
                                                 'target_name1',
                                                 'rcg_1'
-                                                ), (True, False, "Remote Copy Group is not present", {}))
+                                                ), (True, False, "Remote Copy Group %s is not present" % 'rcg_1', {}))
 
         self.assertEqual(hpe3par_remote_copy.dismiss_remote_copy_target(mock_client.HPE3ParClient,
                                                 None,
@@ -1791,5 +1811,49 @@ class TestHpe3parRemoteCopy(unittest.TestCase):
                                                 '192.168.0.1',
                                                 'target_name1',
                                                 'rcg_1'
-                                                ), (True, False, "Dismiss remote copy target failed.Target is already not present", {}))
+                                                ), (True, False, "Dismiss remote copy target failed. Target %s is already not present in remote copy group %s" %('target_name1','rcg_1' ), {}))
 
+    @mock.patch('Modules.hpe3par_remote_copy.client')
+    def test_remote_copy_group_status(self, mock_client):
+        mock_client.HPE3ParClient.login.return_value = True
+        mock_client.HPE3ParClient.setSSHOptions.return_value = True
+        mock_client.HPE3ParClient.remoteCopyGroupExists.return_value = True
+        mock_client.HPE3ParClient.remoteCopyGroupStatusCheck.return_value = True
+
+        mock_client.HPE3ParClient.logout.return_value = True
+
+        self.assertEqual(hpe3par_remote_copy.remote_copy_group_status(mock_client.HPE3ParClient,
+                                                'USER',
+                                                'PASS',
+                                                '192.168.0.1',
+                                                'rcg_1',
+                                                ), (True, False, "Remote copy group %s status is complete" % 'rcg_1', {"remote_copy_sync_status":True}))
+
+        mock_client.HPE3ParClient.remoteCopyGroupStatusCheck.return_value = False
+        self.assertEqual(hpe3par_remote_copy.remote_copy_group_status(mock_client.HPE3ParClient,
+                                                'USER',
+                                                'PASS',
+                                                '192.168.0.1',
+                                                'rcg_1',
+                                                ), (True, False, "Remote copy group %s status is not in complete" % 'rcg_1', {"remote_copy_sync_status":False}))
+
+        self.assertEqual(hpe3par_remote_copy.remote_copy_group_status(mock_client.HPE3ParClient,
+                                                'USER',
+                                                'PASS',
+                                                '192.168.0.1',
+                                                None,
+                                                ), (False, False, "Remote copy group status failed. Remote copy group name is null", {}))
+
+        self.assertEqual(hpe3par_remote_copy.remote_copy_group_status(mock_client.HPE3ParClient,
+                                                'USER',
+                                                'PASS',
+                                                None,
+                                                'rcg_1',
+                                                ), (False, False, "Remote copy group status failed. Storage system IP address is null", {}))
+
+        self.assertEqual(hpe3par_remote_copy.remote_copy_group_status(mock_client.HPE3ParClient,
+                                                'USER',
+                                                None,
+                                                '192.168.0.1',
+                                                'rcg_1',
+                                                ), (False, False, "Remote copy group status failed. Storage system username or password is null", {}))
