@@ -808,12 +808,15 @@ def start_remote_copy_group(
     try:
         client_obj.login(storage_system_username, storage_system_password)
         if client_obj.remoteCopyGroupExists(remote_copy_group_name):
-            optional = {
-                'skipInitialSync': skip_initial_sync,
-                'targetName': target_name,
-                'startingSnapshots': starting_snapshots
-            }
-            client_obj.startRemoteCopy(remote_copy_group_name, optional)
+            if not client_obj.remoteCopyGroupStatusStartedCheck(remote_copy_group_name):
+                optional = {
+                    'skipInitialSync': skip_initial_sync,
+                    'targetName': target_name,
+                    'startingSnapshots': starting_snapshots
+                }
+                client_obj.startRemoteCopy(remote_copy_group_name, optional)
+            else:
+                return (True, False, "Remote Copy Group is already started", {})
         else:
             return (False, False, "Remote Copy Group not present", {})
     except Exception as e:
@@ -837,11 +840,14 @@ def stop_remote_copy_group(
     try:
         client_obj.login(storage_system_username, storage_system_password)
         if client_obj.remoteCopyGroupExists(remote_copy_group_name):
-            optional = {
-                'noSnapshot': no_snapshot,
-                'targetName': target_name
-            }
-            client_obj.stopRemoteCopy(remote_copy_group_name, optional)
+            if not client_obj.remoteCopyGroupStatusStoppedCheck(remote_copy_group_name):
+                optional = {
+                    'noSnapshot': no_snapshot,
+                    'targetName': target_name
+                }
+                client_obj.stopRemoteCopy(remote_copy_group_name, optional)
+            else:
+                return (True, False, "Remote Copy Group is already stopped", {})
         else:
             return (False, False, "Remote Copy Group not present", {})
     except Exception as e:

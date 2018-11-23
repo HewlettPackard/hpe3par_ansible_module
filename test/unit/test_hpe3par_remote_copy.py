@@ -1082,6 +1082,7 @@ class TestHpe3parRemoteCopy(unittest.TestCase):
     def test_start_remote_copy_group(self, mock_client):
         mock_client.HPE3ParClient.login.return_value = True
         mock_client.HPE3ParClient.remoteCopyGroupExists.return_value = True
+        mock_client.HPE3ParClient.remoteCopyGroupStatusStartedCheck.return_value = False
         mock_client.HPE3ParClient.startRemoteCopy.return_value = True
         mock_client.HPE3ParClient.logout.return_value = True
         
@@ -1094,6 +1095,15 @@ class TestHpe3parRemoteCopy(unittest.TestCase):
                                                 'CSSOS-SSA04',
                                                 ['volName1','snapShot1']
                                                 ), (True, True, "Remote copy group %s started successfully." % 'rcg_1', {}))
+        mock_client.HPE3ParClient.remoteCopyGroupStatusStartedCheck.return_value = True
+        self.assertEqual(hpe3par_remote_copy.start_remote_copy_group(mock_client.HPE3ParClient,
+                                                'USER',
+                                                'PASS',
+                                                'rcg_1',
+                                                False,
+                                                'CSSOS-SSA04',
+                                                ['volName1','snapShot1']
+                                                ), (True, False, "Remote Copy Group is already started", {}))
 
         mock_client.HPE3ParClient.remoteCopyGroupExists.return_value = False
 
@@ -1127,6 +1137,7 @@ class TestHpe3parRemoteCopy(unittest.TestCase):
         mock_client.HPE3ParClient.login.return_value = True
         mock_client.HPE3ParClient.remoteCopyGroupExists.return_value = True
         mock_client.HPE3ParClient.stopRemoteCopy.return_value = True
+        mock_client.HPE3ParClient.remoteCopyGroupStatusStoppedCheck.return_value = False
         mock_client.HPE3ParClient.logout.return_value = True
         
 
@@ -1137,6 +1148,14 @@ class TestHpe3parRemoteCopy(unittest.TestCase):
                                                 True,
                                                 'CSSOS-SSA04'
                                                 ), (True, True, "Remote copy group %s stopped successfully." % 'rcg_1', {}))
+        mock_client.HPE3ParClient.remoteCopyGroupStatusStoppedCheck.return_value = True
+        self.assertEqual(hpe3par_remote_copy.stop_remote_copy_group(mock_client.HPE3ParClient,
+                                                'USER',
+                                                'PASS',
+                                                'rcg_1',
+                                                True,
+                                                'CSSOS-SSA04'
+                                                ), (True, False, "Remote Copy Group is already stopped", {}))
         mock_client.HPE3ParClient.remoteCopyGroupExists.return_value = False
 
         self.assertEqual(hpe3par_remote_copy.stop_remote_copy_group(mock_client.HPE3ParClient,
