@@ -837,7 +837,7 @@ null", {}))
                                                           'Hours',
                                                           'Days',
                                                           'hourly'
-                                                          ), (False, False, "Expiration time must be greater than or equal to retention time", {}))
+                                                          ), (False, False, "Expiration time must be greater than retention time", {}))
 
         self.assertEqual(hpe3par_snapshot.create_schedule(mock_client.HPE3ParClient,
                                                           '192.168.0.1',
@@ -847,7 +847,7 @@ null", {}))
                                                           'base_volume',
                                                           True,
                                                           10,
-                                                          10,
+                                                          9,
                                                           'Hours',
                                                           'Days',
                                                           'hourly'
@@ -861,7 +861,7 @@ null", {}))
                                                           'base_volume',
                                                           True,
                                                           10,
-                                                          10,
+                                                          9,
                                                           'Hours',
                                                           'Hours',
                                                           'hourly'
@@ -877,7 +877,7 @@ null", {}))
                                                           'base_volume',
                                                           True,
                                                           10,
-                                                          10,
+                                                          9,
                                                           'Hours',
                                                           'Hours',
                                                           'hourly'
@@ -892,7 +892,7 @@ null", {}))
                                                           'base_volume',
                                                           True,
                                                           10,
-                                                          10,
+                                                          9,
                                                           'Hours',
                                                           'Hours',
                                                           'hourly'
@@ -906,7 +906,7 @@ null", {}))
                                                           'base_volume',
                                                           True,
                                                           10,
-                                                          10,
+                                                          9,
                                                           'Hours',
                                                           'Hours',
                                                           'hourly'
@@ -920,7 +920,7 @@ null", {}))
                                                           'base_volume111111111111111111111111',
                                                           True,
                                                           10,
-                                                          10,
+                                                          9,
                                                           'Hours',
                                                           'Hours',
                                                           'hourly'
@@ -934,7 +934,7 @@ null", {}))
                                                           'base_volume',
                                                           '',
                                                           10,
-                                                          10,
+                                                          9,
                                                           'Hours',
                                                           'Hours',
                                                           'hourly'
@@ -948,7 +948,7 @@ null", {}))
                                                           None,
                                                           True,
                                                           10,
-                                                          10,
+                                                          9,
                                                           'Hours',
                                                           'Hours',
                                                           '0 * * * *'
@@ -962,7 +962,7 @@ null", {}))
                                                           'base_volume',
                                                           True,
                                                           10,
-                                                          10,
+                                                          9,
                                                           'Hours',
                                                           'Hours',
                                                           '0 * * * *'
