@@ -641,7 +641,7 @@ atleast 1 character and not more than 31 characters", {})
         client_obj.setSSHOptions(storage_system_ip, storage_system_username,
                                  storage_system_password)
         if client_obj.scheduleExists(schedule_name):
-            if not client_obj.isScheduleSuspended(schedule_name):
+            if client_obj.isScheduleActive(schedule_name):
                 client_obj.suspendSchedule(schedule_name)
             else:
                 return (True, False, "Schedule status is already suspended", {})
