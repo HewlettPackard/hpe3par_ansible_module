@@ -610,7 +610,7 @@ is null",
         if client_obj.scheduleExists(schedule_name):
             client_obj.modifySchedule(schedule_name, schedule_opt)
         else:
-            return (True, False, "Schedule does not exist", {})
+            return (False, False, "Schedule does not exist", {})
 
     except Exception as e:
         return (False, False, "%s" %  e.msg.msg.replace("\"",""), {})
