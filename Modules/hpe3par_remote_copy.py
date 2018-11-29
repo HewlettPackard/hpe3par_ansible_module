@@ -908,7 +908,7 @@ def delete_remote_copy_group(
         if client_obj.remoteCopyGroupExists(remote_copy_group_name):
             client_obj.removeRemoteCopyGroup(remote_copy_group_name, keep_snap)
         else:
-            return (True, False, "Remote Copy Group is already present", {})
+            return (True, False, "Remote Copy Group is not present", {})
     except Exception as e:
         return (False, False, "Remote Copy Group delete failed | %s" % (e), {})
     finally:
@@ -1113,7 +1113,7 @@ def admit_remote_copy_target(
         client_obj.setSSHOptions(storage_system_ip, storage_system_username, storage_system_password)
         #checking existance of remote_copy_group_name
         if not client_obj.remoteCopyGroupExists(remote_copy_group_name):
-            return (True, False, "Remote Copy Group is not present", {})
+            return (False, False, "Remote Copy Group is not present", {})
 
         #Checking whether target name already present in remote copy
         #If it is already present then target add to remote copy group fails
@@ -1156,7 +1156,7 @@ def dismiss_remote_copy_target(
 
         #checking existance of remote_copy_group_name
         if not client_obj.remoteCopyGroupExists(remote_copy_group_name):
-            return (True, False, "Remote Copy Group %s is not present" % remote_copy_group_name, {})
+            return (False, False, "Remote Copy Group %s is not present" % remote_copy_group_name, {})
 
         #Checking whether target name already present in remote copy
         #If it is already present then target add to remote copy group fails
