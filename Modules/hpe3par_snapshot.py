@@ -526,9 +526,9 @@ than 19 characters", {})
 
     expiration_hours = convert_to_hours(expiration_time, expiration_unit)
     retention_hours = convert_to_hours(retention_time, retention_unit)
-    if expiration_hours <= retention_hours:
+    if expiration_hours and retention_hours and expiration_hours <= retention_hours:
         return (False, False, "Expiration time must be \
-greater than retention time", {})
+greater than retention time for non zero values", {})
 
     try:
         client_obj.login(storage_system_username, storage_system_password)
