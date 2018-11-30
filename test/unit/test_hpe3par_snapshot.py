@@ -837,7 +837,7 @@ null", {}))
                                                           'Hours',
                                                           'Days',
                                                           'hourly'
-                                                          ), (False, False, "Expiration time must be greater than retention time", {}))
+                                                          ), (False, False, "Expiration time must be greater than retention time for non zero values", {}))
 
         self.assertEqual(hpe3par_snapshot.create_schedule(mock_client.HPE3ParClient,
                                                           '192.168.0.1',
@@ -1065,7 +1065,7 @@ null", {}))
         mock_client.HPE3ParClient.login.return_value = None
         mock_client.HPE3ParClient.scheduleExists.return_value = True
         mock_client.HPE3ParClient.suspendSchedule.return_value = None
-        mock_client.HPE3ParClient.scheduleStatusSuspendedCheck.return_value = False
+        mock_client.HPE3ParClient.isScheduleActive.return_value = True
         mock_client.HPE3ParClient.logout.return_value = None
         self.assertEqual(hpe3par_snapshot.suspend_schedule(mock_client.HPE3ParClient,
                                                           '192.168.0.1',
@@ -1073,7 +1073,7 @@ null", {}))
                                                           'PASS',
                                                           'test_schedule'
                                                           ), (True, True, "Schedule suspended %s successfully." % 'test_schedule', {}))
-        mock_client.HPE3ParClient.scheduleStatusSuspendedCheck.return_value = True
+        mock_client.HPE3ParClient.isScheduleActive.return_value = False
         self.assertEqual(hpe3par_snapshot.suspend_schedule(mock_client.HPE3ParClient,
                                                           '192.168.0.1',
                                                           'USER',
@@ -1095,7 +1095,7 @@ null", {}))
                                                           'USER',
                                                           'PASS',
                                                           'test_schedule'
-                                                          ), (True, False, "Schedule does not exist", {}))
+                                                          ), (False, False, "Schedule does not exist", {}))
 
         self.assertEqual(hpe3par_snapshot.suspend_schedule(mock_client.HPE3ParClient,
                                                           '192.168.0.1',
@@ -1116,7 +1116,7 @@ null", {}))
         mock_client.HPE3ParClient.login.return_value = None
         mock_client.HPE3ParClient.scheduleExists.return_value = True
         mock_client.HPE3ParClient.resumeSchedule.return_value = None
-        mock_client.HPE3ParClient.scheduleStatusActiveCheck.return_value = False
+        mock_client.HPE3ParClient.isScheduleActive.return_value = False
         mock_client.HPE3ParClient.logout.return_value = None
         self.assertEqual(hpe3par_snapshot.resume_schedule(mock_client.HPE3ParClient,
                                                           '192.168.0.1',
@@ -1125,7 +1125,7 @@ null", {}))
                                                           'test_schedule'
                                                           ), (True, True, "Schedule resumed %s successfully." % 'test_schedule', {}))
 
-        mock_client.HPE3ParClient.scheduleStatusActiveCheck.return_value = True
+        mock_client.HPE3ParClient.isScheduleActive.return_value = True
         self.assertEqual(hpe3par_snapshot.resume_schedule(mock_client.HPE3ParClient,
                                                           '192.168.0.1',
                                                           'USER',
@@ -1147,7 +1147,7 @@ null", {}))
                                                           'USER',
                                                           'PASS',
                                                           'test_schedule'
-                                                          ), (True, False, "Schedule does not exist", {}))
+                                                          ), (False, False, "Schedule does not exist", {}))
 
         self.assertEqual(hpe3par_snapshot.resume_schedule(mock_client.HPE3ParClient,
                                                           '192.168.0.1',
