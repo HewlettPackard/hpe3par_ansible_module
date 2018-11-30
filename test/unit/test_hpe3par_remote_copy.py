@@ -1058,7 +1058,7 @@ class TestHpe3parRemoteCopy(unittest.TestCase):
                                                 'PASS',
                                                 'rcg_1',
                                                 False
-                                                ), (True, False, "Remote Copy Group is already present", {}))
+                                                ), (True, False, "Remote Copy Group is not present", {}))
         self.assertEqual(hpe3par_remote_copy.delete_remote_copy_group(mock_client.HPE3ParClient,
                                                 None,
                                                 'PASS',
@@ -1687,7 +1687,7 @@ class TestHpe3parRemoteCopy(unittest.TestCase):
                                                 'sync',
                                                 'rcg_1',
                                                 [('local_v1','remote_v1'),('local_v2','remote_v2')]
-                                                ), (True, False, "Remote Copy Group is not present", {}))
+                                                ), (False, False, "Remote Copy Group is not present", {}))
 
         self.assertEqual(hpe3par_remote_copy.admit_remote_copy_target(mock_client.HPE3ParClient,
                                                 None,
@@ -1772,7 +1772,7 @@ class TestHpe3parRemoteCopy(unittest.TestCase):
                                                 '192.168.0.1',
                                                 'target_name1',
                                                 'rcg_1'
-                                                ), (True, False, "Remote Copy Group %s is not present" % 'rcg_1', {}))
+                                                ), (False, False, "Remote Copy Group %s is not present" % 'rcg_1', {}))
 
         self.assertEqual(hpe3par_remote_copy.dismiss_remote_copy_target(mock_client.HPE3ParClient,
                                                 None,
