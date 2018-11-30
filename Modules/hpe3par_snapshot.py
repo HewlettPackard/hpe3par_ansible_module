@@ -647,7 +647,7 @@ atleast 1 character and not more than 31 characters", {})
             else:
                 return (True, False, "Schedule status is already suspended", {})
         else:
-            return (True, False, "Schedule does not exist", {})
+            return (False, False, "Schedule does not exist", {})
     except Exception as e:
         return (False, False, "Schedule suspended failed | %s" % (e), {})
     return (
@@ -688,7 +688,7 @@ atleast 1 character and not more than 31 characters", {})
             else:
                 return (True, False, "Schedule status is already active", {})
         else:
-            return (True, False, "Schedule does not exist", {})
+            return (False, False, "Schedule does not exist", {})
     except Exception as e:
         return (False, False, "Schedule resumed failed | %s" % (e), {})
     return (
