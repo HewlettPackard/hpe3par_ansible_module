@@ -671,7 +671,7 @@ def modify_remote_copy_group(
             }
             client_obj.modifyRemoteCopyGroup(remote_copy_group_name, optional)
         else:
-            return (True, False, "Remote Copy Group not present", {})
+            return (False, False, "Remote Copy Group not present", {})
     except Exception as e:
         return (False, False, "Remote Copy Group modify failed | %s" % (e), {})
     finally:
