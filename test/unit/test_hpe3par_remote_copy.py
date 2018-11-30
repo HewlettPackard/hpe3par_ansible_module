@@ -1461,7 +1461,7 @@ class TestHpe3parRemoteCopy(unittest.TestCase):
                                                 [{'target_name': 'CSSOS-SSA04','remote_user_cpg': 'FC_r1','remote_snap_cpg':'FC_r6'}],
                                                 False,
                                                 False
-                                                ), (True, False, "Remote Copy Group not present", {}))
+                                                ), (False, False, "Remote Copy Group not present", {}))
         self.assertEqual(hpe3par_remote_copy.modify_remote_copy_group(mock_client.HPE3ParClient,
                                                 None,
                                                 'PASS',
