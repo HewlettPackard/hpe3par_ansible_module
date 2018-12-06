@@ -1450,6 +1450,28 @@ class TestHpe3parRemoteCopy(unittest.TestCase):
                                                 False,
                                                 False
                                                 ), (True, True, "Modify Remote Copy Group %s successfully." % 'rcg_1', {}))
+
+        self.assertEqual(hpe3par_remote_copy.modify_remote_copy_group(mock_client.HPE3ParClient,
+                                                'USER',
+                                                'PASS',
+                                                'rcg_1',
+                                                'localusrcpg1',
+                                                'snap_cpg1',
+                                                [{'target_name': 'CSSOS-SSA04','remote_user_cpg': 'FC_r1','remote_snap_cpg':'FC_r6','snap_frequency':30}],
+                                                False,
+                                                False
+                                                ), (False, False, "Remote Copy Group modification failed. Valid range of snap_frequency is 300-31622400.", {}))
+
+        self.assertEqual(hpe3par_remote_copy.modify_remote_copy_group(mock_client.HPE3ParClient,
+                                                'USER',
+                                                'PASS',
+                                                'rcg_1',
+                                                'localusrcpg1',
+                                                'snap_cpg1',
+                                                [{'target_name': 'CSSOS-SSA04','remote_user_cpg': 'FC_r1','remote_snap_cpg':'FC_r6','sync_period':30}],
+                                                False,
+                                                False
+                                                ), (False, False, "Remote Copy Group modification failed. Valid range of sync_period is 300-31622400.", {}))
         mock_client.HPE3ParClient.remoteCopyGroupExists.return_value = False
 
         self.assertEqual(hpe3par_remote_copy.modify_remote_copy_group(mock_client.HPE3ParClient,
