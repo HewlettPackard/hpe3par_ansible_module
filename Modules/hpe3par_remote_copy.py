@@ -641,12 +641,16 @@ def modify_remote_copy_group(
             elif key == 'remote_snap_cpg':
                 target['remoteSnapCPG'] = target_dict.get(key)
             elif key == 'sync_period':
+                if target_dict[key] and target_dict[key] not in range(300, 31622401):
+                    return (False, False, "Remote Copy Group modification failed. Valid range of %s is 300-31622400." % key, {})
                 target['syncPeriod'] = target_dict.get(key)
             elif key == 'rm_sync_period':
                 target['rmSyncPeriod'] = target_dict.get(key)
             elif key == 'target_mode':
                 target['mode'] = target_dict.get(key)
             elif key == 'snap_frequency':
+                if target_dict[key] and target_dict[key] not in range(300, 31622401):
+                    return (False, False, "Remote Copy Group modification failed. Valid range of %s is 300-31622400." % key, {})
                 target['snapFrequency'] = target_dict.get(key)
             elif key == 'rm_snap_frequency':
                 target['rmSnapFrequency'] = target_dict.get(key)
