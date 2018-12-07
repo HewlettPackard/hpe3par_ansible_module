@@ -10,6 +10,5 @@ install:
   - sudo pip install mock
 
 script:
-  - cd hpe3par_ansible_module
   - export PYTHONPATH=$PWD:/usr/local/lib/python2.7/dist-packages:/usr/local/lib/python3.5/dist-packages
   - python -m pytest
