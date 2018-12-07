@@ -8,7 +8,6 @@ install:
   - sudo pip install ansible
   - sudo pip install pytest
   - sudo pip install mock
-  - sudo pip install tree
 
 script:
   - cd ..
