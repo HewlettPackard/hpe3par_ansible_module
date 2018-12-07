@@ -3,9 +3,9 @@
 The HPE 3PAR modules for Ansible enable automation of storage provisioning for the HPE 3PAR StoreServ array. The modules use the Python 3PAR SDK to communicate with the storage array over the WSAPI REST interface.
 
 ## Requirements
-* Ansible ver. 2.5
+* Ansible ver. 2.5, 2.6, 2.7
 * [hpe3par_sdk](https://pypi.org/project/hpe3par_sdk/)
-* 3PAR OS - 3.2.2 MU6, 3.3.1 MU1
+* 3PAR OS - 3.2.2 MU6, 3.3.1 MU3
 * WSAPI service should be enabled on the 3PAR storage array.
 
 ## Configuration
