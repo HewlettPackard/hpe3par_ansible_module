@@ -3,6 +3,7 @@ sudo: false
 language: python
 python:
     - "2.7"
+    - "3.5"
 install: 
   - sudo pip install ansible
   - sudo pip install pytest
@@ -20,5 +21,5 @@ script:
   - python setup.py install
   - cd ..
   - cd hpe3par_ansible_module
-  - export PYTHONPATH=$PWD:/usr/local/lib/python2.7/dist-packages
+  - export PYTHONPATH=$PWD:/usr/local/lib/python2.7/dist-packages:/usr/local/lib/python3.5/dist-packages
   - python -m pytest
