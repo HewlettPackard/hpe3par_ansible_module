@@ -10,15 +10,6 @@ install:
   - sudo pip install mock
 
 script:
-  - cd ..
-  - git clone https://github.com/hpe-storage/python-3parclient.git
-  - git clone https://github.com/HewlettPackard/hpe3par_python_sdk.git
-  - cd python-3parclient
-  - python setup.py install
-  - cd ..
-  - cd hpe3par_python_sdk
-  - python setup.py install
-  - cd ..
   - cd hpe3par_ansible_module
   - export PYTHONPATH=$PWD:/usr/local/lib/python2.7/dist-packages:/usr/local/lib/python3.5/dist-packages
   - python -m pytest
