@@ -1,0 +1,14 @@
+dist: xenial
+sudo: false
+language: python
+python:
+    - "2.7"
+    - "3.5"
+install: 
+  - sudo pip install ansible
+  - sudo pip install pytest
+  - sudo pip install mock
+
+script:
+  - export PYTHONPATH=$PWD:/usr/local/lib/python2.7/dist-packages:/usr/local/lib/python3.5/dist-packages
+  - python -m pytest
