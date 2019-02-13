@@ -5,7 +5,9 @@ The HPE 3PAR modules for Ansible enable automation of storage provisioning for t
 ## Requirements
 * Ansible ver. 2.5, 2.6, 2.7
 * [hpe3par_sdk](https://pypi.org/project/hpe3par_sdk/)
-* 3PAR OS - 3.2.2 MU6, 3.3.1 MU3
+* 3PAR OS
+  * 3.3.1 MU1, MU2, MU3, T05
+  * 3.2.2 MU4, MU6 
 * WSAPI service should be enabled on the 3PAR storage array.
 
 ## Configuration
