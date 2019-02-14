@@ -3781,10 +3781,9 @@ Synopsis
 
 -   On HPE 3PAR - Create Remote Copy Group. - Modify Remote Copy Group.
     - Add Volumes to Remote Copy Group. - Remove Volumes from Remote
-    Synchronize Remote Copy Group. - Recover Remote Copy Group. - Delete
-    Remote Copy Group. - Admit Remote Copy Group. - Dismiss Remote Copy
-    Group. - Start Remote Copy Group. - Admit Remote Copy Target. -
-    Dismiss Remote Copy Target.
+    Synchronize Remote Copy Group. - Delete Remote Copy Group. - Admit
+    Remote Copy Group. - Dismiss Remote Copy Group. - Start Remote Copy
+    Group. - Admit Remote Copy Target. - Dismiss Remote Copy Target.
 
 Parameters
 ----------
@@ -3803,7 +3802,8 @@ Parameters
                                                                                                                                                         </td>
                                                             <td>
                                                                     <div>Specify at least one pair of target_name and sec_volume_name.
- Attributes are target_name, sec_volume_name.</div>
+ Attributes are target_name, sec_volume_name.
+ Used with state[s] - add_volume</div>
                                                                             </td>
         </tr>
                             <tr>
@@ -3818,21 +3818,8 @@ Parameters
                                                                         </td>
                                                             <td>
                                                                     <div>Setting differentSecondaryWWN to true, 
- ensures that the system uses a different WWN on the secondary volume. Defaults to false. Use with volumeAutoCreation only.</div>
-                                                                            </td>
-        </tr>
-                            <tr>
-                                                            <td colspan="1">
-                <b>discard_new_data</b>
-                <br/><div style="font-size: small; color: red">bool</div>                                                        </td>
-                            <td>
-                                                                                                                                                                                                                <ul><b>Choices:</b>
-                                                                                                                                                            <li><div style="color: blue"><b>no</b>&nbsp;&larr;</div></li>
-                                                                                                                                                                                            <li>yes</li>
-                                                                                </ul>
-                                                                        </td>
-                                                            <td>
-                                                                    <div>If true and the group has multiple targets, do not check other targets of the group to see if newer data should be pushed from them. Valid for FAILOVER operation only.</div>
+ ensures that the system uses a different WWN on the secondary volume. Defaults to false. Use with volumeAutoCreation only.
+ Used with state[s] - add_volume</div>
                                                                             </td>
         </tr>
                             <tr>
@@ -3842,7 +3829,8 @@ Parameters
                             <td>
                                                                                                                                                         </td>
                                                             <td>
-                                                                    <div>Specifies the domain in which to create the Remote Copy group.</div>
+                                                                    <div>Specifies the domain in which to create the Remote Copy group.
+ Used with state[s] - present</div>
                                                                             </td>
         </tr>
                             <tr>
@@ -3856,7 +3844,8 @@ Parameters
                                                                                 </ul>
                                                                         </td>
                                                             <td>
-                                                                    <div>Enables (true) or disables (false) forcing a full synchronization of the Remote Copy group, even if the volumes are already synchronized. Applies only to volume groups in synchronous mode, and can be used to resynchronize volumes that have become inconsistent.</div>
+                                                                    <div>Enables (true) or disables (false) forcing a full synchronization of the Remote Copy group, even if the volumes are already synchronized. Applies only to volume groups in synchronous mode, and can be used to resynchronize volumes that have become inconsistent.
+ Used with state[s] - synchronize</div>
                                                                             </td>
         </tr>
                             <tr>
@@ -3871,21 +3860,8 @@ Parameters
                                                                         </td>
                                                             <td>
                                                                     <div>Enables (true) or disables (false) retention 
- of the local volume resynchronization snapshot.</div>
-                                                                            </td>
-        </tr>
-                            <tr>
-                                                            <td colspan="1">
-                <b>local_groups_direction</b>
-                <br/><div style="font-size: small; color: red">bool</div>                                                        </td>
-                            <td>
-                                                                                                                                                                                                                <ul><b>Choices:</b>
-                                                                                                                                                            <li><div style="color: blue"><b>no</b>&nbsp;&larr;</div></li>
-                                                                                                                                                                                            <li>yes</li>
-                                                                                </ul>
-                                                                        </td>
-                                                            <td>
-                                                                    <div>If true, the groups direction is changed only on the system where the operation is run. Valid for REVERSE operation only.</div>
+ of the local volume resynchronization snapshot.
+ Used with state[s] - absent, remove_volume</div>
                                                                             </td>
         </tr>
                             <tr>
@@ -3895,7 +3871,8 @@ Parameters
                             <td>
                                                                                                                                                         </td>
                                                             <td>
-                                                                    <div>Is a list of dictionaries, where each dictionary contains source and target volumes pairs i.e. [{'sourceVolumeName':'secondary_vv1', 'targetVolumeName':'secondary_vv2'}, ..].</div>
+                                                                    <div>Is a list of dictionaries, where each dictionary contains source and target volumes pairs i.e. [{&#x27;sourceVolumeName&#x27;:&#x27;secondary_vv1&#x27;, &#x27;targetVolumeName&#x27;:&#x27;secondary_vv2&#x27;}, ..].
+ Used with state[s] - admit_target</div>
                                                                             </td>
         </tr>
                             <tr>
@@ -3905,7 +3882,8 @@ Parameters
                             <td>
                                                                                                                                                         </td>
                                                             <td>
-                                                                    <div>Specifies the local snap CPG used for auto-created volumes.</div>
+                                                                    <div>Specifies the local snap CPG used for auto-created volumes.
+ Used with state[s] - present, modify</div>
                                                                             </td>
         </tr>
                             <tr>
@@ -3915,7 +3893,8 @@ Parameters
                             <td>
                                                                                                                                                         </td>
                                                             <td>
-                                                                    <div>Specifies the local user CPG used for auto-created volumes.</div>
+                                                                    <div>Specifies the local user CPG used for auto-created volumes.
+ Used with state[s] - present, modify</div>
                                                                             </td>
         </tr>
                             <tr>
@@ -3927,7 +3906,8 @@ Parameters
                                                             <td>
                                                                     <div>Specifies the attributes of the target of the Remote Copy group.
  Attributes are target_name, remote_user_cpg, remote_snap_cpg,
- sync_period, rm_sync_period, target_mode, snap_frequency, rm_snap_frequency, policies.</div>
+ sync_period, rm_sync_period, target_mode, snap_frequency, rm_snap_frequency, policies.
+ Used with state[s] - modify</div>
                                                                             </td>
         </tr>
                             <tr>
@@ -3941,7 +3921,8 @@ Parameters
                                                                                 </ul>
                                                                         </td>
                                                             <td>
-                                                                    <div>Enables (true) or disables (false) saving the resynchronization snapshot. Applicable only to Remote Copy groups in asychronous periodic mode.</div>
+                                                                    <div>Enables (true) or disables (false) saving the resynchronization snapshot. Applicable only to Remote Copy groups in asychronous periodic mode.
+ Used with state[s] - synchronize</div>
                                                                             </td>
         </tr>
                             <tr>
@@ -3955,26 +3936,8 @@ Parameters
                                                                                 </ul>
                                                                         </td>
                                                             <td>
-                                                                    <div>If true, this option turns off creation of snapshots in synchronous and periodic modes, and deletes the current synchronization snapshots.</div>
-                                                                            </td>
-        </tr>
-                            <tr>
-                                                            <td colspan="1">
-                <b>recovery_action</b>
-                                                                        </td>
-                            <td>
-                                                                                                                        <ul><b>Choices:</b>
-                                                                                                                                                            <li>REVERSE_GROUP</li>
-                                                                                                                                                                                            <li>FAILOVER_GROUP</li>
-                                                                                                                                                                                            <li>SWITCHOVER_GROUP</li>
-                                                                                                                                                                                            <li>RECOVER_GROUP</li>
-                                                                                                                                                                                            <li>RESTORE_GROUP</li>
-                                                                                                                                                                                            <li>OVERRIDE_GROUP</li>
-                                                                                                                                                                                            <li>CLX_DR</li>
-                                                                                </ul>
-                                                                        </td>
-                                                            <td>
-                                                                    <div>Specifies the action to be taken on the specified group.</div>
+                                                                    <div>If true, this option turns off creation of snapshots in synchronous and periodic modes, and deletes the current synchronization snapshots.
+ Used with state[s] - stop</div>
                                                                             </td>
         </tr>
                             <tr>
@@ -3984,7 +3947,10 @@ Parameters
                             <td>
                                                                                                                                                         </td>
                                                             <td>
-                                                                    <div>Specifies the name of the Remote Copy group to create.</div>
+                                                                    <div>Specifies the name of the Remote Copy group to create.
+ Used with state[s] - present, absent, modify, add_volume,
+ remove_volume, start, stop, synchronize, admit_target,
+ dismiss_target, remote_copy_status</div>
                                                                             </td>
         </tr>
                             <tr>
@@ -3995,7 +3961,8 @@ Parameters
                                                                                                                                                         </td>
                                                             <td>
                                                                     <div>Specifies the attributes of the target of the Remote Copy group.
- Attributes are target_name, target_mode, user_cpg, snap_cpg.</div>
+ Attributes are target_name, target_mode, user_cpg, snap_cpg.
+ Used with state[s] - present</div>
                                                                             </td>
         </tr>
                             <tr>
@@ -4009,7 +3976,8 @@ Parameters
                                                                                 </ul>
                                                                         </td>
                                                             <td>
-                                                                    <div>Enables (true) or disables (false) deletion of the remote volume on the secondary array from the system. Defaults to false. Do not use with keepSnap.</div>
+                                                                    <div>Enables (true) or disables (false) deletion of the remote volume on the secondary array from the system. Defaults to false. Do not use with keepSnap.
+ Used with state[s] - remove_volume</div>
                                                                             </td>
         </tr>
                             <tr>
@@ -4025,49 +3993,8 @@ Parameters
                                                             <td>
                                                                     <div>If skipInitialSync is set to true, the volume should skip the initial sync. 
  This is for the admission of volumes that have been presynced with the target volume. 
- This cannot be set to true if the snapshot name is specified.</div>
-                                                                            </td>
-        </tr>
-                            <tr>
-                                                            <td colspan="1">
-                <b>skip_promote</b>
-                <br/><div style="font-size: small; color: red">bool</div>                                                        </td>
-                            <td>
-                                                                                                                                                                                                                <ul><b>Choices:</b>
-                                                                                                                                                            <li><div style="color: blue"><b>no</b>&nbsp;&larr;</div></li>
-                                                                                                                                                                                            <li>yes</li>
-                                                                                </ul>
-                                                                        </td>
-                                                            <td>
-                                                                    <div>If true, the snapshots of the groups that are switched from secondary to primary are not promoted to the base volume. Valid for FAILOVER and REVERSE operations only.</div>
-                                                                            </td>
-        </tr>
-                            <tr>
-                                                            <td colspan="1">
-                <b>skip_start</b>
-                <br/><div style="font-size: small; color: red">bool</div>                                                        </td>
-                            <td>
-                                                                                                                                                                                                                <ul><b>Choices:</b>
-                                                                                                                                                            <li><div style="color: blue"><b>no</b>&nbsp;&larr;</div></li>
-                                                                                                                                                                                            <li>yes</li>
-                                                                                </ul>
-                                                                        </td>
-                                                            <td>
-                                                                    <div>If true, groups are not started after role reversal is completed. Valid for only FAILOVER, RECOVER, and RESTORE operations.</div>
-                                                                            </td>
-        </tr>
-                            <tr>
-                                                            <td colspan="1">
-                <b>skip_sync</b>
-                <br/><div style="font-size: small; color: red">bool</div>                                                        </td>
-                            <td>
-                                                                                                                                                                                                                <ul><b>Choices:</b>
-                                                                                                                                                            <li><div style="color: blue"><b>no</b>&nbsp;&larr;</div></li>
-                                                                                                                                                                                            <li>yes</li>
-                                                                                </ul>
-                                                                        </td>
-                                                            <td>
-                                                                    <div>If true, the groups are not synchronized after role reversal is completed. Valid for FAILOVER, RECOVER, and RESTORE operations only.</div>
+ This cannot be set to true if the snapshot name is specified.
+ Used with state[s] - add_volume, start</div>
                                                                             </td>
         </tr>
                             <tr>
@@ -4081,7 +4008,8 @@ Parameters
  the group is started without performing a full resynchronization. 
  Instead, for synchronized groups, the volume synchronizes deltas 
  between this snapshotName and the base volume. For periodic groups, 
- the volume synchronizes deltas between this snapshotName and a snapshot of the base.</div>
+ the volume synchronizes deltas between this snapshotName and a snapshot of the base.
+ Used with state[s] - add_volume</div>
                                                                             </td>
         </tr>
                             <tr>
@@ -4091,7 +4019,8 @@ Parameters
                             <td>
                                                                                                                                                         </td>
                                                             <td>
-                                                                    <div>node:slot:port Specifies the node, slot, and port of the Ethernet port on the local system Ethernet port on the local system.</div>
+                                                                    <div>node:slot:port Specifies the node, slot, and port of the Ethernet port on the local system Ethernet port on the local system.
+ Used with state[s] - admit_link, dismiss_link</div>
                                                                             </td>
         </tr>
                             <tr>
@@ -4101,7 +4030,8 @@ Parameters
                             <td>
                                                                                                                                                         </td>
                                                             <td>
-                                                                    <div>When used, you must specify all the volumes inthe group. While specifying the pair, the starting snapshot is optional. When not used, the system performs a full resynchronization of the volume.</div>
+                                                                    <div>When used, you must specify all the volumes inthe group. While specifying the pair, the starting snapshot is optional. When not used, the system performs a full resynchronization of the volume.
+ Used with state[s] - start</div>
                                                                             </td>
         </tr>
                             <tr>
@@ -4118,7 +4048,6 @@ Parameters
                                                                                                                                                                                             <li>start</li>
                                                                                                                                                                                             <li>stop</li>
                                                                                                                                                                                             <li>synchronize</li>
-                                                                                                                                                                                            <li>recover</li>
                                                                                                                                                                                             <li>admit_link</li>
                                                                                                                                                                                             <li>dismiss_link</li>
                                                                                                                                                                                             <li>admit_target</li>
@@ -4128,21 +4057,7 @@ Parameters
                                                                                 </ul>
                                                                         </td>
                                                             <td>
-                                                                    <div>Whether the specified Remote Copy Group should exist or not. State also provides actions to modify Remote copy Group ,add/remove volumes, start/stop/synchronize/recover remote copy group, Add/remove remote copy link, start remote copy services, admit/dismiss target.</div>
-                                                                            </td>
-        </tr>
-                            <tr>
-                                                            <td colspan="1">
-                <b>stop_groups</b>
-                <br/><div style="font-size: small; color: red">bool</div>                                                        </td>
-                            <td>
-                                                                                                                                                                                                                <ul><b>Choices:</b>
-                                                                                                                                                            <li><div style="color: blue"><b>no</b>&nbsp;&larr;</div></li>
-                                                                                                                                                                                            <li>yes</li>
-                                                                                </ul>
-                                                                        </td>
-                                                            <td>
-                                                                    <div>If true, the groups are stopped before performing the reverse operation. Valid for REVERSE operation only.</div>
+                                                                    <div>Whether the specified Remote Copy Group should exist or not. State also provides actions to modify Remote copy Group ,add/remove volumes, start/stop/synchronize remote copy group, Add/remove remote copy link, start remote copy services, admit/dismiss target.</div>
                                                                             </td>
         </tr>
                             <tr>
@@ -4187,7 +4102,8 @@ Parameters
                                                                                 </ul>
                                                                         </td>
                                                             <td>
-                                                                    <div>Specifies the mode of the target as either synchronous (sync), asynchronous periodic (periodic), or asynchronous streaming (async).</div>
+                                                                    <div>Specifies the mode of the target as either synchronous (sync), asynchronous periodic (periodic), or asynchronous streaming (async).
+ Used with state[s] - admit_target</div>
                                                                             </td>
         </tr>
                             <tr>
@@ -4197,7 +4113,8 @@ Parameters
                             <td>
                                                                                                                                                         </td>
                                                             <td>
-                                                                    <div>Specifies the target name associated with the Remote Copy group to be created.</div>
+                                                                    <div>Specifies the target name associated with the Remote Copy group to be created.
+ Used with state[s] - start, stop, synchronize, admit_link, dismiss_link, admit_target, dismiss_target</div>
                                                                             </td>
         </tr>
                             <tr>
@@ -4207,7 +4124,8 @@ Parameters
                             <td>
                                                                                                                                                         </td>
                                                             <td>
-                                                                    <div>IP/WWN address of the peer port on the target system.</div>
+                                                                    <div>IP/WWN address of the peer port on the target system.
+ Used with state[s] - admit_link, dismiss_link</div>
                                                                             </td>
         </tr>
                             <tr>
@@ -4222,7 +4140,8 @@ Parameters
                                                                         </td>
                                                             <td>
                                                                     <div>Enables (true) or disables (false) setting the 
- localSnapCPG and remoteSnapCPG of the Remote Copy group.</div>
+ localSnapCPG and remoteSnapCPG of the Remote Copy group.
+ Used with state[s] - modify</div>
                                                                             </td>
         </tr>
                             <tr>
@@ -4237,7 +4156,8 @@ Parameters
                                                                         </td>
                                                             <td>
                                                                     <div>Enables (true) or disables (false) setting the localUserCPG and 
- remoteUserCPG of the Remote Copy group.</div>
+ remoteUserCPG of the Remote Copy group.
+ Used with state[s] - modify</div>
                                                                             </td>
         </tr>
                             <tr>
@@ -4253,7 +4173,8 @@ Parameters
                                                             <td>
                                                                     <div>If volumeAutoCreation is set to true, 
  the secondary volumes should be created automatically 
- on the target using the CPG. associated with the Remote Copy group on that target. This cannot be set to true if the snapshot name is specified.</div>
+ on the target using the CPG. associated with the Remote Copy group on that target. This cannot be set to true if the snapshot name is specified.
+ Used with state[s] - add_volume</div>
                                                                             </td>
         </tr>
                             <tr>
@@ -4263,7 +4184,8 @@ Parameters
                             <td>
                                                                                                                                                         </td>
                                                             <td>
-                                                                    <div>Specifies the name of the existing virtual volume to be admitted to an existing Remote Copy group.</div>
+                                                                    <div>Specifies the name of the existing virtual volume to be admitted to an existing Remote Copy group.
+ Used with state[s] - add_volume, remove_volume</div>
                                                                             </td>
         </tr>
                     </table>
@@ -4357,7 +4279,7 @@ Examples
       state: present
       remote_copy_group_name: test_rcg
       remote_copy_targets:
-      - target_name: CSSOS-SSA06
+      - target_name: target_array_name
         target_mode: sync
 
   - name: Add volume to remote copy group
@@ -4369,7 +4291,7 @@ Examples
       remote_copy_group_name: test_rcg
       volume_name: demo_volume_1
       admit_volume_targets:
-      - target_name: CSSOS-SSA06
+      - target_name: target_array_name
         sec_volume_name: demo_volume_1
 
   - name: Add volume to remote copy group
@@ -4381,7 +4303,7 @@ Examples
       remote_copy_group_name: test_rcg
       volume_name: demo_volume_2
       admit_volume_targets:
-      - target_name: CSSOS-SSA06
+      - target_name: target_array_name
         sec_volume_name: demo_volume_2
 
   - name: admit Remote Copy target
@@ -4391,19 +4313,19 @@ Examples
       storage_system_username: username
       state: admit_target
       remote_copy_group_name: test_rcg
-      target_name: CSSOS-SSA04
+      target_name: target_array_name
       local_remote_volume_pair_list:
-      - sourceVolumeName: demo_volume_1
-        targetVolumeName: demo_volume_1
-      - sourceVolumeName: demo_volume_2
-        targetVolumeName: demo_volume_2
+      - sourceVolumeName: source_volume_1
+        targetVolumeName: target_volume_1
+      - sourceVolumeName: source_volume_2
+        targetVolumeName: target_volume_2
       target_mode: periodic
 
   - name: remote copy group status
     hpe3par_remote_copy:
-      storage_system_ip: 192.168.67.5
-      storage_system_password: 3pardata
-      storage_system_username: 3paradm
+      storage_system_ip: 10.10.10.1
+      storage_system_password: password
+      storage_system_username: username
       state: remote_copy_status
       remote_copy_group_name: test_rcg
     register: result
@@ -4419,7 +4341,7 @@ Examples
       storage_system_username: username
       state: dismiss_target
       remote_copy_group_name: test_rcg
-      target_name: CSSOS-SSA04
+      target_name: target_array_name
 
   - name: Modify Remote Copy Group test_rcg
     hpe3par_remote_copy:
@@ -4433,7 +4355,7 @@ Examples
       unset_user_cpg: false
       unset_snap_cpg: false
       modify_targets:
-      - target_name: CSSOS-SSA06
+      - target_name: target_array_name
         remote_user_cpg: "FC_r1"
         remote_snap_cpg: "FC_r6"
 
@@ -4485,9 +4407,9 @@ Examples
       storage_system_password: password
       storage_system_username: username
       state: dismiss_link
-      target_name: CSSOS-SSA06
+      target_name: target_array_name
       source_port: 0:3:1
-      target_port_wwn_or_ip: 192.168.1.2
+      target_port_wwn_or_ip: 10.10.10.10
 
   - name: dismiss remote copy link
     hpe3par_remote_copy:
@@ -4495,9 +4417,9 @@ Examples
       storage_system_password: password
       storage_system_username: username
       state: dismiss_link
-      target_name: CSSOS-SSA06
+      target_name: target_array_name
       source_port: "1:3:1"
-      target_port_wwn_or_ip: 192.168.2.2
+      target_port_wwn_or_ip: 10.10.10.10
 
   - name: Admit remote copy link
     hpe3par_remote_copy:
@@ -4505,9 +4427,9 @@ Examples
       storage_system_password: password
       storage_system_username: username
       state: admit_link
-      target_name: CSSOS-SSA06
+      target_name: target_array_name
       source_port: 0:3:1
-      target_port_wwn_or_ip: 192.168.1.2
+      target_port_wwn_or_ip: 10.10.10.10
 
   - name: Admit remote copy link
     hpe3par_remote_copy:
@@ -4515,9 +4437,9 @@ Examples
       storage_system_password: password
       storage_system_username: username
       state: admit_link
-      target_name: CSSOS-SSA06
+      target_name: target_array_name
       source_port: "1:3:1"
-      target_port_wwn_or_ip: 192.168.2.2
+      target_port_wwn_or_ip: 10.10.10.10
 
   - name: start remote copy service
     hpe3par_remote_copy:
@@ -4525,6 +4447,149 @@ Examples
       storage_system_password: password
       storage_system_username: username
       state: start_rcopy
+
+  - name: Add volume to remote copy group
+    hpe3par_remote_copy:
+      storage_system_ip: 10.10.10.1
+      storage_system_password: password
+      storage_system_username: username
+      remote_copy_group_name: "ansible_CreateRCG-004"
+      state: add_volume
+      volume_name: "Ansible_volume_01"
+      admit_volume_targets:
+      - target_name: "target_array_name"
+        sec_volume_name: "Target_volume"
+      snapshot_name:
+      volume_auto_creation: true
+      skip_initial_sync: true
+      different_secondary_wwn: true
+
+  - name: Add volume to remote copy group
+    hpe3par_remote_copy:
+      storage_system_ip: 10.10.10.1
+      storage_system_password: password
+      storage_system_username: username
+      remote_copy_group_name: "ansible_CreateRCG-002"
+      state: add_volume
+      volume_name: "Ansible_volume_rcg_01"
+      admit_volume_targets:
+      - target_name: "target_array_name"
+        sec_volume_name: "Target_volume"
+      snapshot_name: "Ansible_volume_SS_snap_01"
+      volume_auto_creation: "false"
+      skip_initial_sync: "false"
+      different_secondary_wwn:
+
+  - name: Add volume to remote copy group
+    hpe3par_remote_copy:
+      storage_system_ip: 10.10.10.1
+      storage_system_password: password
+      storage_system_username: username
+      remote_copy_group_name: "ansible_CreateRCG-002"
+      state: add_volume
+      volume_name: "Ansible_volume_rcg_01"
+      admit_volume_targets:
+      - target_name: "target_array_name"
+        sec_volume_name: "Target_volume"
+      snapshot_name:
+      volume_auto_creation: "true"
+      skip_initial_sync: "false"
+      different_secondary_wwn:
+
+  - name: Add volume to remote copy group
+    hpe3par_remote_copy:
+      storage_system_ip: 10.10.10.1
+      storage_system_password: password
+      storage_system_username: username
+      remote_copy_group_name: "ansible_CreateRCG-002"
+      state: add_volume
+      volume_name: "Ansible_volume_rcg_01"
+      admit_volume_targets:
+      - target_name: "target_array_name"
+        sec_volume_name: "Target_volume"
+      snapshot_name: "Ansible_volume_SS_snap_01"
+      volume_auto_creation: "false"
+      skip_initial_sync: "false"
+      different_secondary_wwn:
+
+  - name: Add volume to remote copy group
+    hpe3par_remote_copy:
+      storage_system_ip: 10.10.10.1
+      storage_system_password: password
+      storage_system_username: username
+      remote_copy_group_name: "ansible_CreateRCG-002"
+      state: add_volume
+      volume_name: "Ansible_volume_rcg_01"
+      admit_volume_targets:
+      - target_name: "target_array_name"
+        sec_volume_name: "Target_volume"
+      snapshot_name:
+      volume_auto_creation: "true"
+      skip_initial_sync: true
+      different_secondary_wwn:
+
+  - name: Synchronize remote copy group
+    hpe3par_remote_copy:
+      storage_system_ip: 10.10.10.1
+      storage_system_password: password
+      storage_system_username: username
+      remote_copy_group_name: "ansible_CreateRCG-002"
+      state: synchronize
+      no_resync_snapshot: "false"
+      target_name: "target_array_name"
+      full_sync: "false"
+
+  - name: Synchronize remote copy group
+    hpe3par_remote_copy:
+      storage_system_ip: 10.10.10.1
+      storage_system_password: password
+      storage_system_username: username
+      remote_copy_group_name: "ansible_CreateRCG-003"
+      state: synchronize
+      no_resync_snapshot: "true"
+      target_name: "target_array_name"
+      full_sync: "true"
+
+  - name: Remove remote copy group
+    hpe3par_remote_copy:
+      storage_system_ip: 10.10.10.1
+      storage_system_password: password
+      storage_system_username: username
+      state: absent
+      remote_copy_group_name: "ansible_CreateRCG-004"
+      keepSnap: "false"
+      remove_secondary_volume:
+
+  - name: Remove volume from remote copy group
+    hpe3par_remote_copy:
+      storage_system_ip: 10.10.10.1
+      storage_system_password: password
+      storage_system_username: username
+      state: remove_volume
+      volume_name: "Ansible_volume_rcg_01"
+      keep_snap: "true"
+      remove_secondary_volume: "false"
+
+  - name: Stop remote copy group
+    hpe3par_remote_copy:
+      storage_system_ip: 10.10.10.1
+      storage_system_password: password
+      storage_system_username: username
+      remote_copy_group_name: "ansible_CreateRCG-003"
+      state: stop
+      no_snapshot: "true"
+      target_name: "target_array_name"
+
+  - name: Remove volume from remote copy group
+    hpe3par_remote_copy:
+      storage_system_ip: 10.10.10.1
+      storage_system_password: password
+      storage_system_username: username
+      remote_copy_group_name: "ansible_CreateRCG-002"
+      state: remove_volume
+      volume_name: "Ansible_volume_rcg_01"
+      keep_snap: "false"
+      remove_secondary_volume: "true"
 ```
 
 ### Author
