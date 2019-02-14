@@ -31,10 +31,10 @@ DOCUMENTATION = r'''
 author: "Arshad Ansari(arshad.alam.ansari@hpe.com)"
 description: "On HPE 3PAR - Create Remote Copy Group. - Modify Remote Copy
  Group. - Add Volumes to Remote Copy Group. - Remove Volumes from Remote
- Synchronize Remote Copy Group. - Delete Remote Copy Group.
- - Admit Remote Copy Group. - Dismiss Remote Copy Group.
- - Start Remote Copy Group. - Admit Remote Copy Target. - Dismiss Remote Copy
- Target."
+ Copy Group. -Synchronize Remote Copy Group. - Delete Remote Copy Group.
+ - Admit Remote Copy Link. - Dismiss Remote Copy Link.
+ - Start Remote Copy Group. - Stop Remote Copy Group. - Admit Remote Copy Target.
+ - Dismiss Remote Copy Target. - Start Remote Copy Service. - Remote Copy Status."
 module: hpe3par_remote_copy
 options:
   remote_copy_group_name:
