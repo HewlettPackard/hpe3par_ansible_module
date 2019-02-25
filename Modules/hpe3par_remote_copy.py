@@ -277,7 +277,7 @@ EXAMPLES = r'''
       size: 1024
       size_unit: MiB
       cpg: FC_r1
-      snap_cpg: FC_r1     
+      snap_cpg: FC_r1
 
   - name: Create volume on target
     hpe3par_volume:
@@ -289,7 +289,7 @@ EXAMPLES = r'''
       size: 1024
       size_unit: MiB
       cpg: FC_r1
-      snap_cpg: FC_r1     
+      snap_cpg: FC_r1
 
   - name: Create volume on target
     hpe3par_volume:
@@ -301,7 +301,7 @@ EXAMPLES = r'''
       size: 1024
       size_unit: MiB
       cpg: FC_r1
-      snap_cpg: FC_r1           
+      snap_cpg: FC_r1
 
   - name: Create volume on target2
     hpe3par_volume:
@@ -337,7 +337,7 @@ EXAMPLES = r'''
       remote_copy_targets:
       - target_name: target_array_name
         target_mode: sync
-       
+
   - name: Add volume to remote copy group
     hpe3par_remote_copy:
       storage_system_ip: 10.10.10.1
@@ -349,7 +349,7 @@ EXAMPLES = r'''
       admit_volume_targets:
       - target_name: target_array_name
         sec_volume_name: demo_volume_1
-        
+
   - name: Add volume to remote copy group
     hpe3par_remote_copy:
       storage_system_ip: 10.10.10.1
@@ -414,7 +414,7 @@ EXAMPLES = r'''
       - target_name: target_array_name
         remote_user_cpg: "FC_r1"
         remote_snap_cpg: "FC_r6"
-        
+
   - name: Start remote copy
     hpe3par_remote_copy:
       storage_system_ip: 10.10.10.1
@@ -422,7 +422,7 @@ EXAMPLES = r'''
       storage_system_username: username
       remote_copy_group_name: test_rcg
       state: start
-      
+
   - name: Stop remote copy
     hpe3par_remote_copy:
       storage_system_ip: 10.10.10.1
@@ -430,7 +430,7 @@ EXAMPLES = r'''
       storage_system_username: username
       remote_copy_group_name: test_rcg
       state: stop
-      
+
   - name: Remove volume from remote copy group
     hpe3par_remote_copy:
       storage_system_ip: 10.10.10.1
@@ -439,7 +439,7 @@ EXAMPLES = r'''
       state: remove_volume
       remote_copy_group_name: test_rcg
       volume_name: demo_volume_1
-        
+
   - name: Remove volume from remote copy group
     hpe3par_remote_copy:
       storage_system_ip: 10.10.10.1
@@ -448,13 +448,13 @@ EXAMPLES = r'''
       state: remove_volume
       remote_copy_group_name: test_rcg
       volume_name: demo_volume_2
-        
+
   - name: Remove Remote Copy Group test_rcg
     hpe3par_remote_copy:
       storage_system_ip: 10.10.10.1
       storage_system_password: password
       storage_system_username: username
-      state: absent 
+      state: absent
       remote_copy_group_name: test_rcg
 
   - name: dismiss remote copy link
@@ -657,16 +657,17 @@ try:
 except ImportError:
     client = None
 
+
 def create_remote_copy_group(
-            client_obj,
-            storage_system_username,
-            storage_system_password,
-            remote_copy_group_name,
-            domain,
-            remote_copy_targets,
-            local_user_cpg,
-            local_snap_cpg
-            ):
+    client_obj,
+    storage_system_username,
+    storage_system_password,
+    remote_copy_group_name,
+    domain,
+    remote_copy_targets,
+    local_user_cpg,
+    local_snap_cpg
+):
     if storage_system_username is None or storage_system_password is None:
         return (
             False,
@@ -682,7 +683,7 @@ def create_remote_copy_group(
     targets_transformed = []
     target_names_list = []
     for target_dict in remote_copy_targets:
-        target={}
+        target = {}
         for key in target_dict.keys():
             if key == 'target_name':
                 if target_dict[key] is None:
@@ -698,13 +699,13 @@ def create_remote_copy_group(
                 elif target_dict.get(key) == 'async':
                     target['mode'] = 4
                 else:
-                    return (False, False, "Remote Copy Group create failed. Target mode is invalid", {}) 
+                    return (False, False, "Remote Copy Group create failed. Target mode is invalid", {})
             elif key == 'user_cpg':
                 target['userCPG'] = target_dict.get(key)
             elif key == 'snap_cpg':
                 target['snapCPG'] = target_dict.get(key)
             else:
-                return (False, False, "Remote Copy Group create failed. Wrong parameter name %s is given." % key, {}) 
+                return (False, False, "Remote Copy Group create failed. Wrong parameter name %s is given." % key, {})
         targets_transformed.append(target)
     remote_copy_targets = targets_transformed
     try:
@@ -718,7 +719,8 @@ def create_remote_copy_group(
                 'localUserCPG': local_user_cpg,
                 'localSnapCPG': local_snap_cpg
             }
-            client_obj.createRemoteCopyGroup(remote_copy_group_name, remote_copy_targets, optional)
+            client_obj.createRemoteCopyGroup(
+                remote_copy_group_name, remote_copy_targets, optional)
         else:
             return (True, False, "Remote Copy Group already present", {})
     except Exception as e:
@@ -727,17 +729,18 @@ def create_remote_copy_group(
         client_obj.logout()
     return (True, True, "Created Remote Copy Group %s successfully." % remote_copy_group_name, {})
 
+
 def modify_remote_copy_group(
-            client_obj,
-            storage_system_username,
-            storage_system_password,
-            remote_copy_group_name,
-            local_user_cpg,
-            local_snap_cpg,
-            modify_targets,
-            unset_user_cpg,
-            unset_snap_cpg
-            ):
+    client_obj,
+    storage_system_username,
+    storage_system_password,
+    remote_copy_group_name,
+    local_user_cpg,
+    local_snap_cpg,
+    modify_targets,
+    unset_user_cpg,
+    unset_snap_cpg
+):
     if storage_system_username is None or storage_system_password is None:
         return (
             False,
@@ -803,18 +806,19 @@ def modify_remote_copy_group(
         client_obj.logout()
     return (True, True, "Modify Remote Copy Group %s successfully." % remote_copy_group_name, {})
 
+
 def add_volume_to_remote_copy_group(
-            client_obj,
-            storage_system_username,
-            storage_system_password,
-            remote_copy_group_name,
-            volume_name,
-            admit_volume_targets,
-            snapshot_name,
-            volume_auto_creation,
-            skip_initial_sync,
-            different_secondary_wwn
-            ):
+    client_obj,
+    storage_system_username,
+    storage_system_password,
+    remote_copy_group_name,
+    volume_name,
+    admit_volume_targets,
+    snapshot_name,
+    volume_auto_creation,
+    skip_initial_sync,
+    different_secondary_wwn
+):
     if storage_system_username is None or storage_system_password is None:
         return (
             False,
@@ -853,7 +857,7 @@ def add_volume_to_remote_copy_group(
                     return (False, False, "Add volume to Remote Copy Group failed. Secondary volume name must be atleast 1 character and not more than 31 characters", {})
                 target['secVolumeName'] = target_dict.get(key)
             else:
-                return (False, False, "Remote Copy Group create failed. Wrong parameter name %s is given." % key, {}) 
+                return (False, False, "Remote Copy Group create failed. Wrong parameter name %s is given." % key, {})
         targets_transformed.append(target)
     admit_volume_targets = targets_transformed
     try:
@@ -869,7 +873,8 @@ def add_volume_to_remote_copy_group(
                     'skipInitialSync': skip_initial_sync,
                     'differentSecondaryWWN': different_secondary_wwn
                 }
-                client_obj.addVolumeToRemoteCopyGroup(remote_copy_group_name, volume_name, admit_volume_targets, optional)
+                client_obj.addVolumeToRemoteCopyGroup(
+                    remote_copy_group_name, volume_name, admit_volume_targets, optional)
             else:
                 return (True, False, "Volume %s already present in Remote Copy Group %s" % (volume_name, remote_copy_group_name), {})
         else:
@@ -880,15 +885,16 @@ def add_volume_to_remote_copy_group(
         client_obj.logout()
     return (True, True, "Volume %s added to Remote Copy Group %s successfully." % (volume_name, remote_copy_group_name), {})
 
+
 def remove_volume_from_remote_copy_group(
-            client_obj,
-            storage_system_username,
-            storage_system_password,
-            remote_copy_group_name,
-            volume_name,
-            keep_snap,
-            remove_secondary_volume
-            ):
+    client_obj,
+    storage_system_username,
+    storage_system_password,
+    remote_copy_group_name,
+    volume_name,
+    keep_snap,
+    remove_secondary_volume
+):
     if remote_copy_group_name is None:
         return (False, False, "Remove volume from Remote Copy Group failed. Remote Copy Group name is null", {})
     if len(remote_copy_group_name) < 1 or len(remote_copy_group_name) > 31:
@@ -906,7 +912,8 @@ def remove_volume_from_remote_copy_group(
                 optional = {
                     'keepSnap': keep_snap
                 }
-                client_obj.removeVolumeFromRemoteCopyGroup(remote_copy_group_name, volume_name, optional, remove_secondary_volume)
+                client_obj.removeVolumeFromRemoteCopyGroup(
+                    remote_copy_group_name, volume_name, optional, remove_secondary_volume)
             else:
                 return (True, False, "Volume %s is not present in Remote Copy Group %s" % (volume_name, remote_copy_group_name), {})
         else:
@@ -917,15 +924,16 @@ def remove_volume_from_remote_copy_group(
         client_obj.logout()
     return (True, True, "Volume %s removed from Remote Copy Group %s successfully." % (volume_name, remote_copy_group_name), {})
 
+
 def start_remote_copy_group(
-            client_obj,
-            storage_system_username,
-            storage_system_password,
-            remote_copy_group_name,
-            skip_initial_sync,
-            target_name,
-            starting_snapshots
-            ):
+    client_obj,
+    storage_system_username,
+    storage_system_password,
+    remote_copy_group_name,
+    skip_initial_sync,
+    target_name,
+    starting_snapshots
+):
     if remote_copy_group_name is None:
         return (False, False, "Start Remote Copy Group failed. Remote Copy Group name is null", {})
     if len(remote_copy_group_name) < 1 or len(remote_copy_group_name) > 31:
@@ -950,14 +958,15 @@ def start_remote_copy_group(
         client_obj.logout()
     return (True, True, "Remote copy group %s started successfully." % remote_copy_group_name, {})
 
+
 def stop_remote_copy_group(
-            client_obj,
-            storage_system_username,
-            storage_system_password,
-            remote_copy_group_name,
-            no_snapshot,
-            target_name
-            ):
+    client_obj,
+    storage_system_username,
+    storage_system_password,
+    remote_copy_group_name,
+    no_snapshot,
+    target_name
+):
     if remote_copy_group_name is None:
         return (False, False, "Stop Remote Copy Group failed. Remote Copy Group name is null", {})
     if len(remote_copy_group_name) < 1 or len(remote_copy_group_name) > 31:
@@ -981,15 +990,16 @@ def stop_remote_copy_group(
         client_obj.logout()
     return (True, True, "Remote copy group %s stopped successfully." % remote_copy_group_name, {})
 
+
 def synchronize_remote_copy_group(
-            client_obj,
-            storage_system_username,
-            storage_system_password,
-            remote_copy_group_name,
-            no_resync_snapshot,
-            target_name,
-            full_sync
-            ):
+    client_obj,
+    storage_system_username,
+    storage_system_password,
+    remote_copy_group_name,
+    no_resync_snapshot,
+    target_name,
+    full_sync
+):
     if remote_copy_group_name is None:
         return (False, False, "Synchronize Remote Copy Group failed. Remote Copy Group name is null", {})
     if len(remote_copy_group_name) < 1 or len(remote_copy_group_name) > 31:
@@ -1002,7 +1012,8 @@ def synchronize_remote_copy_group(
                 'targetName': target_name,
                 'fullSync': full_sync
             }
-            task = client_obj.synchronizeRemoteCopyGroup(remote_copy_group_name, optional)
+            task = client_obj.synchronizeRemoteCopyGroup(
+                remote_copy_group_name, optional)
         else:
             return (False, False, "Remote Copy Group not present", {})
     except Exception as e:
@@ -1011,13 +1022,14 @@ def synchronize_remote_copy_group(
         client_obj.logout()
     return (True, True, "Remote copy group %s resynchronize started successfully." % remote_copy_group_name, {})
 
+
 def delete_remote_copy_group(
-            client_obj,
-            storage_system_username,
-            storage_system_password,
-            remote_copy_group_name,
-            keep_snap
-            ):
+    client_obj,
+    storage_system_username,
+    storage_system_password,
+    remote_copy_group_name,
+    keep_snap
+):
     if storage_system_username is None or storage_system_password is None:
         return (
             False,
@@ -1039,22 +1051,23 @@ def delete_remote_copy_group(
     finally:
         client_obj.logout()
     return (True, True, "Deleted Remote Copy Group %s successfully." % remote_copy_group_name, {})
-'''
+
+
 def recover_remote_copy_group(
-            client_obj,
-            storage_system_username,
-            storage_system_password,
-            remote_copy_group_name,
-            recovery_action,
-            target_name,
-            skip_start,
-            skip_sync,
-            discard_new_data,
-            skip_promote,
-            no_snapshot,
-            stop_groups,
-            local_groups_direction
-            ):
+    client_obj,
+    storage_system_username,
+    storage_system_password,
+    remote_copy_group_name,
+    recovery_action,
+    target_name,
+    skip_start,
+    skip_sync,
+    discard_new_data,
+    skip_promote,
+    no_snapshot,
+    stop_groups,
+    local_groups_direction
+):
     if storage_system_username is None or storage_system_password is None:
         return (
             False,
@@ -1067,35 +1080,42 @@ def recover_remote_copy_group(
         return (False, False, "Remote Copy Group Recover failed. Remote Copy Group name must be atleast 1 character and not more than 31 characters", {})
     if recovery_action is None:
         return (False, False, "Remote Copy Recover delete failed. recovery action is null", {})
-    if skip_start and (recovery_action != 'FAILOVER_GROUP' or recovery_action != 'RESTORE_GROUP' or recovery_action != 'RECOVER_GROUP'):
-        return (False, False, "Remote Copy Group Recover failed. skipStart can only be true if recovery action is either 'FAILOVER_GROUP', 'RESTORE_GROUP' or 'RECOVER_GROUP'", {})
-    if skip_sync and (recovery_action != 'FAILOVER_GROUP' or recovery_action != 'RESTORE_GROUP'):
-        return (False, False, "Remote Copy Group Recover failed. skipSync can only be true if recovery action is either 'FAILOVER_GROUP', 'RESTORE_GROUP' or 'RECOVER_GROUP'", {})
-    if discard_new_data and recovery_action != 'FAILOVER_GROUP':
-        return (False, False, "Remote Copy Group Recover failed. discardNewData can only be true if recovery action is 'FAILOVER_GROUP'", {})
-    if skip_promote and (recovery_action != 'FAILOVER_GROUP' or recovery_action != 'REVERSE_GROUP'):
-        return (False, False, "Remote Copy Group Recover failed. skipPromote can only be true if recovery action is either 'FAILOVER_GROUP' or 'REVERSE_GROUP'", {})
-    if no_snapshot and (recovery_action != 'FAILOVER_GROUP' or recovery_action != 'REVERSE_GROUP' or recovery_action != 'RESTORE_GROUP'):
-        return (False, False, "Remote Copy Group Recover failed. noSnapshot can only be true if recovery action is either 'FAILOVER_GROUP', 'RESTORE_GROUP' or 'REVERSE_GROUP'", {})
-    if stop_groups and recovery_action != 'REVERSE_GROUP':
-        return (False, False, "Remote Copy Group Recover failed. stopGroups can only be true if recovery action is 'REVERSE_GROUP'", {})
-    if local_groups_direction and recovery_action != 'REVERSE_GROUP':
-        return (False, False, "Remote Copy Group Recover failed. localGroupDirection can only be true if recovery action is 'REVERSE_GROUP'", {})
     try:
         client_obj.login(storage_system_username, storage_system_password)
         if client_obj.remoteCopyGroupExists(remote_copy_group_name):
-            optional = {
-                'targetName': target_name,
-                'skipStart': skip_start,
-                'skipSync': skip_sync,
-                'discardNewData': discard_new_data,
-                'skipPromote': skip_promote,
-                'noSnapshot':no_snapshot,
-                'stopGroups': stop_groups,
-                'localGroupDirection': local_groups_direction
-            }
-            recovery_action_enum = getattr(client.HPE3ParClient, recovery_action)
-            client_obj.recoverRemoteCopyGroupFromDisaster(remote_copy_group_name, recovery_action_enum, optional)
+            optional = {}
+            if target_name is not None:
+                optional['targetName'] = target_name
+            if skip_start is not None:
+                if recovery_action in ['FAILOVER_GROUP', 'RECOVER_GROUP', 'RESTORE_GROUP']:
+                    optional['skipStart'] = skip_start
+            if skip_sync is not None:
+                if recovery_action in ['FAILOVER_GROUP', 'RECOVER_GROUP', 'RESTORE_GROUP']:
+                    optional['skipSync'] = skip_sync
+            if discard_new_data is not None:
+                if recovery_action == 'FAILOVER_GROUP':
+                    optional['discardNewData'] = discard_new_data
+            if skip_promote is not None:
+                if recovery_action in ['FAILOVER_GROUP', 'REVERSE_GROUP']:
+                    optional['skipPromote'] = skip_promote
+            if no_snapshot is not None:
+                if recovery_action in ['FAILOVER_GROUP', 'REVERSE_GROUP', 'RESTORE_GROUP']:
+                    optional['noSnapshot'] = no_snapshot
+            if stop_groups is not None:
+                if recovery_action == 'REVERSE_GROUP':
+                    optional['stopGroups'] = stop_groups
+            if local_groups_direction is not None:
+                if recovery_action == 'REVERSE_GROUP':
+                    optional['localGroupDirection'] = local_groups_direction
+            recovery_action_enum = getattr(
+                client.HPE3ParClient, recovery_action)
+            # f = open("/tmp/debug.txt", 'w')
+            # f.write(str(optional))
+            # f.write(str(recovery_action_enum))
+            # f.close()
+
+            client_obj.recoverRemoteCopyGroupFromDisaster(
+                remote_copy_group_name, recovery_action_enum, optional)
         else:
             return (True, False, "Remote Copy Group is not present", {})
     except Exception as e:
@@ -1103,16 +1123,17 @@ def recover_remote_copy_group(
     finally:
         client_obj.logout()
     return (True, True, "Recovered Remote Copy Group %s successfully." % remote_copy_group_name, {})
-'''
+
+
 def admit_remote_copy_links(
-            client_obj,
-            storage_system_username,
-            storage_system_password,
-            storage_system_ip,
-            target_name,
-            source_port,
-            target_port_wwn_or_ip
-            ):
+    client_obj,
+    storage_system_username,
+    storage_system_password,
+    storage_system_ip,
+    target_name,
+    source_port,
+    target_port_wwn_or_ip
+):
     if storage_system_username is None or storage_system_password is None:
         return (
             False,
@@ -1131,26 +1152,29 @@ def admit_remote_copy_links(
         client_obj.login(storage_system_username, storage_system_password)
         if target_name == client_obj.getStorageSystemInfo()['name']:
             return (False, False, "Source and target cannot be same. Source and target both are %s" % target_name, {})
-        client_obj.setSSHOptions(storage_system_ip, storage_system_username, storage_system_password)
+        client_obj.setSSHOptions(
+            storage_system_ip, storage_system_username, storage_system_password)
         if client_obj.rcopyLinkExists(target_name, source_port, target_port_wwn_or_ip):
             return (True, False, "Admit remote copy link %s:%s already exists." % (source_port, target_port_wwn_or_ip), {})
         else:
-            response = client_obj.admitRemoteCopyLinks(target_name, source_port, target_port_wwn_or_ip)
+            response = client_obj.admitRemoteCopyLinks(
+                target_name, source_port, target_port_wwn_or_ip)
     except Exception as e:
         return (False, False, "Admit remote copy link failed | %s" % (e), {})
     finally:
         client_obj.logout()
     return (True, True, "Admit remote copy link %s:%s successful." % (source_port, target_port_wwn_or_ip), {})
 
+
 def dismiss_remote_copy_links(
-            client_obj,
-            storage_system_username,
-            storage_system_password,
-            storage_system_ip,
-            target_name,
-            source_port,
-            target_port_wwn_or_ip
-            ):
+    client_obj,
+    storage_system_username,
+    storage_system_password,
+    storage_system_ip,
+    target_name,
+    source_port,
+    target_port_wwn_or_ip
+):
     if storage_system_username is None or storage_system_password is None:
         return (
             False,
@@ -1169,23 +1193,26 @@ def dismiss_remote_copy_links(
         client_obj.login(storage_system_username, storage_system_password)
         if target_name == client_obj.getStorageSystemInfo()['name']:
             return (False, False, "Source and target cannot be same. Source and target both are %s" % target_name, {})
-        client_obj.setSSHOptions(storage_system_ip, storage_system_username, storage_system_password)
+        client_obj.setSSHOptions(
+            storage_system_ip, storage_system_username, storage_system_password)
         if not client_obj.rcopyLinkExists(target_name, source_port, target_port_wwn_or_ip):
             return (True, False, "Remote copy link %s:%s already not present." % (source_port, target_port_wwn_or_ip), {})
         else:
-            response = client_obj.dismissRemoteCopyLinks(target_name, source_port, target_port_wwn_or_ip)
+            response = client_obj.dismissRemoteCopyLinks(
+                target_name, source_port, target_port_wwn_or_ip)
     except Exception as e:
         return (False, False, "Dismiss remote copy link failed| %s" % (e), {})
     finally:
         client_obj.logout()
-    return (True, True, "Dismiss remote copy link %s:%s successful." % (source_port,target_port_wwn_or_ip), {})
+    return (True, True, "Dismiss remote copy link %s:%s successful." % (source_port, target_port_wwn_or_ip), {})
+
 
 def start_remote_copy_service(
-            client_obj,
-            storage_system_username,
-            storage_system_password,
-            storage_system_ip,
-            ):
+    client_obj,
+    storage_system_username,
+    storage_system_password,
+    storage_system_ip,
+):
     if storage_system_username is None or storage_system_password is None:
         return (
             False,
@@ -1196,7 +1223,8 @@ def start_remote_copy_service(
         return (False, False, "Start remote copy service failed. Storage system IP address is null", {})
     try:
         client_obj.login(storage_system_username, storage_system_password)
-        client_obj.setSSHOptions(storage_system_ip, storage_system_username, storage_system_password)
+        client_obj.setSSHOptions(
+            storage_system_ip, storage_system_username, storage_system_password)
         if client_obj.rcopyServiceExists():
             return (True, False, "Remote copy service already started", {})
         else:
@@ -1207,16 +1235,17 @@ def start_remote_copy_service(
         client_obj.logout()
     return (True, True, "Start remote copy service successful.", {})
 
+
 def admit_remote_copy_target(
-            client_obj,
-            storage_system_username,
-            storage_system_password,
-            storage_system_ip,
-            target_name,
-            target_mode,
-            remote_copy_group_name,
-            local_remote_volume_pair_list
-            ):
+    client_obj,
+    storage_system_username,
+    storage_system_password,
+    storage_system_ip,
+    target_name,
+    target_mode,
+    remote_copy_group_name,
+    local_remote_volume_pair_list
+):
     if storage_system_username is None or storage_system_password is None:
         return (
             False,
@@ -1235,31 +1264,34 @@ def admit_remote_copy_target(
         client_obj.login(storage_system_username, storage_system_password)
         if target_name == client_obj.getStorageSystemInfo()['name']:
             return (False, False, "Source and target cannot be same. Source and target both are %s" % target_name, {})
-        client_obj.setSSHOptions(storage_system_ip, storage_system_username, storage_system_password)
-        #checking existance of remote_copy_group_name
+        client_obj.setSSHOptions(
+            storage_system_ip, storage_system_username, storage_system_password)
+        # checking existance of remote_copy_group_name
         if not client_obj.remoteCopyGroupExists(remote_copy_group_name):
             return (False, False, "Remote Copy Group is not present", {})
 
-        #Checking whether target name already present in remote copy
-        #If it is already present then target add to remote copy group fails
+        # Checking whether target name already present in remote copy
+        # If it is already present then target add to remote copy group fails
         if client_obj.targetInRemoteCopyGroupExists(target_name, remote_copy_group_name):
             return (True, False, "Admit remote copy target failed.Target is already present", {})
-        optional = { 'volumePairs': local_remote_volume_pair_list }
-        results=client_obj.admitRemoteCopyTarget(target_name, target_mode, remote_copy_group_name, optional)
+        optional = {'volumePairs': local_remote_volume_pair_list}
+        results = client_obj.admitRemoteCopyTarget(
+            target_name, target_mode, remote_copy_group_name, optional)
     except Exception as e:
         return (False, False, "Admit remote copy target failed| %s" % (e), {})
     finally:
         client_obj.logout()
     return (True, True, "Admit remote copy target %s successful in remote copy group %s." % (target_name, remote_copy_group_name), {})
 
+
 def dismiss_remote_copy_target(
-            client_obj,
-            storage_system_username,
-            storage_system_password,
-            storage_system_ip,
-            target_name,
-            remote_copy_group_name
-            ):
+    client_obj,
+    storage_system_username,
+    storage_system_password,
+    storage_system_ip,
+    target_name,
+    remote_copy_group_name
+):
     if storage_system_username is None or storage_system_password is None:
         return (
             False,
@@ -1277,32 +1309,35 @@ def dismiss_remote_copy_target(
         client_obj.login(storage_system_username, storage_system_password)
         if target_name == client_obj.getStorageSystemInfo()['name']:
             return (False, False, "Source and target cannot be same. Source and target both are %s" % target_name, {})
-        client_obj.setSSHOptions(storage_system_ip, storage_system_username, storage_system_password)
+        client_obj.setSSHOptions(
+            storage_system_ip, storage_system_username, storage_system_password)
 
-        #checking existance of remote_copy_group_name
+        # checking existance of remote_copy_group_name
         if not client_obj.remoteCopyGroupExists(remote_copy_group_name):
             return (False, False, "Remote Copy Group %s is not present" % remote_copy_group_name, {})
 
-        #Checking whether target name already present in remote copy
-        #If it is already present then target add to remote copy group fails
+        # Checking whether target name already present in remote copy
+        # If it is already present then target add to remote copy group fails
         if not client_obj.targetInRemoteCopyGroupExists(target_name, remote_copy_group_name):
-            return (True, False, "Dismiss remote copy target failed. Target %s is already not present in remote copy group %s"\
+            return (True, False, "Dismiss remote copy target failed. Target %s is already not present in remote copy group %s"
                     % (target_name, remote_copy_group_name), {})
 
-        results=client_obj.dismissRemoteCopyTarget(target_name, remote_copy_group_name)
+        results = client_obj.dismissRemoteCopyTarget(
+            target_name, remote_copy_group_name)
     except Exception as e:
         return (False, False, "Dismiss remote copy target failed| %s" % (e), {})
     finally:
         client_obj.logout()
     return (True, True, "Dismiss remote copy target %s successful." % target_name, {})
 
+
 def remote_copy_group_status(
-            client_obj,
-            storage_system_username,
-            storage_system_password,
-            storage_system_ip,
-            remote_copy_group_name
-            ):
+    client_obj,
+    storage_system_username,
+    storage_system_password,
+    storage_system_ip,
+    remote_copy_group_name
+):
     if storage_system_username is None or storage_system_password is None:
         return (
             False,
@@ -1315,28 +1350,30 @@ def remote_copy_group_status(
         return (False, False, "Remote copy group status failed. Remote copy group name is null", {})
     try:
         client_obj.login(storage_system_username, storage_system_password)
-        client_obj.setSSHOptions(storage_system_ip, storage_system_username, storage_system_password)
+        client_obj.setSSHOptions(
+            storage_system_ip, storage_system_username, storage_system_password)
 
-        #checking existance of remote_copy_group_name
+        # checking existance of remote_copy_group_name
         if not client_obj.remoteCopyGroupExists(remote_copy_group_name):
             return (True, False, "Remote Copy Group %s is not present" % remote_copy_group_name, {})
 
-
-        remotecopy_status = client_obj.remoteCopyGroupStatusCheck(remote_copy_group_name)
+        remotecopy_status = client_obj.remoteCopyGroupStatusCheck(
+            remote_copy_group_name)
         if not remotecopy_status:
-            return (True, False, "Remote copy group %s status is not in complete" % (remote_copy_group_name), {"remote_copy_sync_status":remotecopy_status})
+            return (True, False, "Remote copy group %s status is not in complete" % (remote_copy_group_name), {"remote_copy_sync_status": remotecopy_status})
     except Exception as e:
         return (False, False, "Could not get remote copy group status | %s" % (e), {})
     finally:
         client_obj.logout()
-    return (True, False, "Remote copy group %s status is complete" % (remote_copy_group_name), {"remote_copy_sync_status":remotecopy_status})
+    return (True, False, "Remote copy group %s status is complete" % (remote_copy_group_name), {"remote_copy_sync_status": remotecopy_status})
+
 
 def main():
     fields = {
         "state": {
             "required": True,
-            "choices": ['present', 'absent', 'modify', 'add_volume', 'remove_volume', 'start', 'stop', 'synchronize', 'recover', 'admit_link', 
-            'dismiss_link','admit_target','dismiss_target', 'start_rcopy', 'remote_copy_status'],
+            "choices": ['present', 'absent', 'modify', 'add_volume', 'remove_volume', 'start', 'stop', 'synchronize', 'recover', 'admit_link',
+                        'dismiss_link', 'admit_target', 'dismiss_target', 'start_rcopy', 'remote_copy_status', 'recover'],
             "type": 'str'
         },
         "storage_system_ip": {
@@ -1412,8 +1449,7 @@ def main():
             "type": "list"
         },
         "no_snapshot": {
-            "type": "bool",
-            "default": False
+            "type": "bool"
         },
         "no_resync_snapshot": {
             "type": "bool",
@@ -1428,28 +1464,22 @@ def main():
             "type": 'str'
         },
         "skip_start": {
-            "type": "bool",
-            "default": False
+            "type": "bool"
         },
         "skip_sync": {
-            "type": "bool",
-            "default": False
+            "type": "bool"
         },
         "discard_new_data": {
-            "type": "bool",
-            "default": False
+            "type": "bool"
         },
         "skip_promote": {
-            "type": "bool",
-            "default": False
+            "type": "bool"
         },
         "stop_groups": {
-            "type": "bool",
-            "default": False
+            "type": "bool"
         },
         "local_groups_direction": {
-            "type": "bool",
-            "default": False
+            "type": "bool"
         },
         "volume_name": {
             "type": "str"
@@ -1577,7 +1607,7 @@ def main():
             skip_initial_sync,
             target_name,
             starting_snapshots
-		)
+        )
     elif module.params["state"] == "stop":
         return_status, changed, msg, issue_attr_dict = stop_remote_copy_group(
             client_obj,
@@ -1597,22 +1627,22 @@ def main():
             target_name,
             full_sync
         )
-#    elif module.params["state"] == "recover":
-#        return_status, changed, msg, issue_attr_dict = recover_remote_copy_group(
-#            client_obj,
-#            storage_system_username,
-#            storage_system_password,
-#            remote_copy_group_name,
-#            recovery_action,
-#            target_name,
-#            skip_start,
-#            skip_sync,
-#            discard_new_data,
-#            skip_promote,
-#            no_snapshot,
-#            stop_groups,
-#            local_groups_direction
-#        )
+    elif module.params["state"] == "recover":
+        return_status, changed, msg, issue_attr_dict = recover_remote_copy_group(
+            client_obj,
+            storage_system_username,
+            storage_system_password,
+            remote_copy_group_name,
+            recovery_action,
+            target_name,
+            skip_start,
+            skip_sync,
+            discard_new_data,
+            skip_promote,
+            no_snapshot,
+            stop_groups,
+            local_groups_direction
+        )
     elif module.params["state"] == "admit_link":
         return_status, changed, msg, issue_attr_dict = admit_remote_copy_links(
             client_obj,
@@ -1679,3 +1709,4 @@ def main():
 
 if __name__ == '__main__':
     main()
+
