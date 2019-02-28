@@ -1109,10 +1109,6 @@ def recover_remote_copy_group(
                     optional['localGroupDirection'] = local_groups_direction
             recovery_action_enum = getattr(
                 client.HPE3ParClient, recovery_action)
-            # f = open("/tmp/debug.txt", 'w')
-            # f.write(str(optional))
-            # f.write(str(recovery_action_enum))
-            # f.close()
 
             client_obj.recoverRemoteCopyGroupFromDisaster(
                 remote_copy_group_name, recovery_action_enum, optional)
