@@ -173,6 +173,11 @@ EXAMPLES = r'''
 RETURN = r'''
 '''
 
+try:
+    from hpe3parclient.exceptions import HTTPNotFound
+except ImportError:
+    HPE3ParClient = None
+
 from ansible.module_utils.basic import AnsibleModule
 try:
     from hpe3par_sdk import client
@@ -276,7 +281,16 @@ def unexport_volume_from_host(
                     else:
                         return (False, False, "VLUN does not exist", {})
                 else:
-                    return (False, False, "Lun ID is required", {})
+                    vluns = client_obj.getVLUNs()
+
+                    is_vlun_deleted = False
+                    for del_vlun in vluns:
+                        if del_vlun.volume_name == volume_name and del_vlun.hostname == host_name:
+                            is_vlun_deleted = True
+                            client_obj.deleteVLUN(volume_name, del_vlun.lun,
+                                                  host_name, port_pos)
+                    if not is_vlun_deleted:
+                        return (True, False, "VLUN not present in host %s (already deleted)" % host_name, {})
             else:
                 return (False, False, 'Node, Slot and Port or host name need to be specified to unexport a vlun', {})
         else:
@@ -394,7 +408,17 @@ unexport a vlun',
             else:
                 return (False, False, "VLUN does not exist", {})
         else:
-            return (False, False, "Lun ID is required", {})
+            vluns = client_obj.getVLUNs()
+
+            is_vlun_deleted = False
+            for del_vlun in vluns:
+                if del_vlun.volume_name == volume_name and del_vlun.hostname == host_set_name:
+                    is_vlun_deleted = True
+                    client_obj.deleteVLUN(volume_name, del_vlun.lun,
+                                          host_set_name, port_pos)
+            if not is_vlun_deleted:
+                return (True, False, "VLUN not present in hostset %s (already deleted)" % host_set_name, {})
+
     except Exception as e:
         return (False, False, "VLUN deletion failed | %s" % e, {})
     finally:
