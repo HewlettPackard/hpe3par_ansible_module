@@ -901,7 +901,9 @@ def main():
     keep_vv = module.params["keep_vv"]
     type = module.params["type"]
 
-    wsapi_url = 'https://%s:8080/api/v1' % storage_system_ip
+    port_number = client.HPE3ParClient.getPortNumber(
+        storage_system_ip, storage_system_username, storage_system_password)
+    wsapi_url = 'https://%s:%s/api/v1' % (storage_system_ip, port_number)
     client_obj = client.HPE3ParClient(wsapi_url, 'ansible_module_3par')
 
     # States
