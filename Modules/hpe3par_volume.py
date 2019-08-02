@@ -642,6 +642,11 @@ is null",
             {})
     try:
         client_obj.login(storage_system_username, storage_system_password)
+        compression_state = client_obj.getVolume(volume_name).compression_state
+        if compression_state == 2 or compression_state == 3:
+            compression_state = False
+        else:
+            compression_state = True
         provisioning_type = client_obj.getVolume(volume_name).provisioning_type
         if provisioning_type == 1:
             volume_type = 'FPVV'
@@ -654,12 +659,14 @@ is null",
 
         if client_obj.volumeExists(volume_name):
             if (volume_type != get_volume_type(type)[0] or
-                    volume_type == 'UNKNOWN'):
+                    volume_type == 'UNKNOWN' or
+                    compression != compression_state):
                 new_vol_type = get_volume_type(type)[1]
                 usr_cpg = 1
                 optional = {'userCPG': cpg,
                             'conversionOperation': new_vol_type,
-                            'keepVV': keep_vv
+                            'keepVV': keep_vv,
+                            'compression': compression
                             }
 
                 task = client_obj.tuneVolume(volume_name,
