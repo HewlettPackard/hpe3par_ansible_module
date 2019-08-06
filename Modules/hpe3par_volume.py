@@ -643,7 +643,7 @@ is null",
     try:
         client_obj.login(storage_system_username, storage_system_password)
         compression_state = client_obj.getVolume(volume_name).compression_state
-        if compression_state == 2 or compression_state == 3:
+        if compression_state == 2 or compression_state == 3 or compression_state == 4:
             compression_state = False
         else:
             compression_state = True
