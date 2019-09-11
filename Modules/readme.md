@@ -3229,7 +3229,7 @@ Required with action change_snap_cpg</div>
                                                                         </td>
                                                             <td>
                                                                     <div>Specifies the type of the volume.
-Required with action convert_type</div>
+Required with action convert_type. Full provisioning is not supported on Primera array</div>
                                                                             </td>
         </tr>
                             <tr>
