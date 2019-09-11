@@ -23,7 +23,7 @@ library=/home/user/workspace/hpe3par_ansible/Modules
 This is developed as a set of modules and example playbooks to provision the following:
 * [CPG](Modules/readme.md#hpe3par_cpg---manage-hpe-3par-cpg)
 * [Host](Modules/readme.md#hpe3par_host---manage-hpe-3par-host)
-* [Volume](Modules/readme.md#hpe3par_volume---manage-hpe-3par-\/-primera-volume)
+* [Volume](Modules/readme.md#hpe3par_volume---manage-hpe-3par-/-primera-volume)
 * [VLUN](Modules/readme.md#hpe3par_vlun---manage-hpe-3par-vlun)
 * [Host Set](Modules/readme.md#hpe3par_hostset---manage-hpe-3par-host-set)
 * [Volume Set](Modules/readme.md#hpe3par_volumeset---manage-hpe-3par-volume-set)
