@@ -2,13 +2,13 @@ source
 
 :   hpe3par\_cpg.py
 
-hpe3par\_cpg - Manage HPE 3PAR CPG
-==================================
+hpe3par\_cpg - Manage HPE 3PAR and PRIMERA CPG
+==============================================
 
 Synopsis
 --------
 
--   Create and delete CPG on HPE 3PAR.
+-   Create and delete CPG on HPE 3PAR and PRIMERA.
 
 Parameters
 ----------
@@ -391,13 +391,13 @@ source
 :   hpe3par\_flash\_cache.py
 
 
-hpe3par\_flash\_cache - Manage HPE 3PAR Flash Cache
-===================================================
+hpe3par\_flash\_cache - Manage HPE 3PAR and PRIMERA Flash Cache
+===============================================================
 
 Synopsis
 --------
 
--   On HPE 3PAR - Create Flash Cache - Delete Flash Cache.
+-   On HPE 3PAR and PRIMERA - Create Flash Cache - Delete Flash Cache.
 
 Parameters
 ----------
@@ -551,16 +551,16 @@ source
 :   hpe3par\_host.py
 
 
-hpe3par\_host - Manage HPE 3PAR Host
-====================================
+hpe3par\_host - Manage HPE 3PAR and PRIMERA Host
+================================================
 
 Synopsis
 --------
 
--   On HPE 3PAR - Create Host. - Delete Host. - Add Initiator Chap. -
-    Remove Initiator Chap. - Add Target Chap. - Remove Target Chap. -
-    Add FC Path to Host - Remove FC Path from Host - Add ISCSI Path to
-    Host - Remove ISCSI Path from Host
+-   On HPE 3PAR and PRIMERA - Create Host. - Delete Host. - Add
+    Initiator Chap. - Remove Initiator Chap. - Add Target Chap. - Remove
+    Target Chap. - Add FC Path to Host. - Remove FC Path from Host. -
+    Add ISCSI Path to Host. - Remove ISCSI Path from Host
 
 Parameters
 ----------
@@ -902,14 +902,14 @@ source
 :   hpe3par\_hostset.py
 
 
-hpe3par\_hostset - Manage HPE 3PAR Host Set
-===========================================
+hpe3par\_hostset - Manage HPE 3PAR and PRIMERA Host Set
+=======================================================
 
 Synopsis
 --------
 
--   On HPE 3PAR - Create Host Set. - Add Hosts to Host Set. - Remove
-    Hosts from Host Set.
+-   On HPE 3PAR and PRIMERA - Create Host Set. - Add Hosts to Host Set.
+    - Remove Hosts from Host Set.
 
 Parameters
 ----------
@@ -1104,14 +1104,14 @@ source
 :   hpe3par\_offline\_clone.py
   
 
-hpe3par\_offline\_clone - Manage HPE 3PAR Offline Clone
-=======================================================
+hpe3par\_offline\_clone - Manage HPE 3PAR and PRIMERA Offline Clone
+===================================================================
 
 Synopsis
 --------
 
--   On HPE 3PAR - Create Offline Clone. - Delete Clone. - Resync Clone.
-    - Stop Cloning.
+-   On HPE 3PAR and PRIMERA - Create Offline Clone. - Delete Clone. -
+    Resync Clone. - Stop Cloning.
 
 
 Parameters
@@ -1367,13 +1367,14 @@ source
 
 :   hpe3par\_online\_clone.py
 
-hpe3par\_online\_clone - Manage HPE 3PAR Online Clone
-=====================================================
+hpe3par\_online\_clone - Manage HPE 3PAR and PRIMERA Online Clone
+=================================================================
 
 Synopsis
 --------
 
--   On HPE 3PAR - Create Online Clone. - Delete Clone. - Resync Clone.
+-   On HPE 3PAR and PRIMERA - Create Online Clone. - Delete Clone. -
+    Resync Clone.
 
 Parameters
 ----------
@@ -1643,13 +1644,14 @@ source
 :   hpe3par\_qos.py
  
 
-hpe3par\_qos - Manage HPE 3PAR QoS Rules
-========================================
+hpe3par\_qos - Manage HPE 3PAR and PRIMERA QoS Rules
+====================================================
 
 Synopsis
 --------
 
--   On HPE 3PAR - Create QoS Rule. - Delete QoS Rule. - Modify QoS Rule.
+-   On HPE 3PAR and PRIMERA - Create QoS Rule. - Delete QoS Rule. -
+    Modify QoS Rule.
 
 Parameters
 ----------
@@ -2106,13 +2108,15 @@ source
 
 :   hpe3par\_snapshot.py
 
-hpe3par\_snapshot - Manage HPE 3PAR Snapshots
-=============================================
+hpe3par\_snapshot - Manage HPE 3PAR and PRIMERA Snapshots
+=========================================================
 
 Synopsis
 --------
 
--   On HPE 3PAR - Create Snapshot. - Delete Snapshot. - Modify Snapshot. - Create Schedule. - Modify Schedule. - Suspend Schedule. - Resume Schedule. - Delete Schedule.
+-   On HPE 3PAR and PRIMERA - Create Snapshot. - Delete Snapshot. -
+    Modify Snapshot. - Create Schedule. - Modify Schedule. - Suspend
+    Schedule. - Resume Schedule. - Delete Schedule.
 
 Parameters
 ----------
@@ -2609,16 +2613,16 @@ source
 :   hpe3par\_vlun.py
 
 
-hpe3par\_vlun - Manage HPE 3PAR VLUN
-====================================
+hpe3par\_vlun - Manage HPE 3PAR and PRIMERA VLUN
+================================================
 
 Synopsis
 --------
 
--   On HPE 3PAR - Export volume to host. - Export volumeset to host. -
-    Export volume to hostset. - Export volumeset to hostset. - Unexport
-    volume from host. - Unexport volumeset from host. - Unexport volume
-    from hostset. - Unexport volumeset from hostset.
+-   On HPE 3PAR and PRIMERA - Export volume to host. - Export volumeset
+    to host. - Export volume to hostset. - Export volumeset to hostset.
+    - Unexport volume from host. - Unexport volumeset from host. -
+    Unexport volume from hostset. - Unexport volumeset from hostset.
 
 Parameters
 ----------
@@ -2949,15 +2953,15 @@ source
 :   hpe3par\_volume.py
 
 
-hpe3par\_volume - Manage HPE 3PAR/Primera Volume
-================================================
+hpe3par\_volume - Manage HPE 3PAR and PRIMERA Volume
+====================================================
 
 Synopsis
 --------
 
--   On HPE 3PAR - Create Volume. - Delete Volume. - Modify Volume. -
-    Grow Volume - Grow Volume to certain size - Change Snap CPG - Change
-    User CPG - Convert Provisioning TypeError - Set Snap CPG
+-   On HPE 3PAR and PRIMERA - Create Volume. - Delete Volume. - Modify
+    Volume - Grow Volume - Grow Volume to certain size - Change Snap CPG
+    - Change User CPG - Convert Provisioning TypeError - Set Snap CPG
 
 Parameters
 ----------
@@ -3372,14 +3376,14 @@ source
 :   hpe3par\_volumeset.py
  
 
-hpe3par\_volumeset - Manage HPE 3PAR Volume Set
-===============================================
+hpe3par\_volumeset - Manage HPE 3PAR and PRIMERA Volume Set
+===========================================================
 
 Synopsis
 --------
 
--   On HPE 3PAR - Create Volume Set. - Add Volumes to Volume Set. -
-    Remove Volumes from Volume Set.
+-   On HPE 3PAR and PRIMERA - Create Volume Set. - Add Volumes to Volume
+    Set. - Remove Volumes from Volume Set.
 
 Parameters
 ----------
@@ -3573,19 +3577,19 @@ source
 
 :   hpe3par\_remote\_copy.py
 
-hpe3par\_remote\_copy - Manage HPE 3PAR Remote Copy
-===================================================
+hpe3par\_remote\_copy - Manage HPE 3PAR and PRIMERA Remote Copy
+===============================================================
 
 Synopsis
 --------
 
--   On HPE 3PAR - Create Remote Copy Group. - Modify Remote Copy Group.
-    - Add Volumes to Remote Copy Group. - Remove Volumes from Remote
-    Copy Group. -Synchronize Remote Copy Group. - Delete Remote Copy
-    Group. - Admit Remote Copy Link. - Dismiss Remote Copy Link. - Start
-    Remote Copy Group. - Stop Remote Copy Group. - Admit Remote Copy
-    Target. - Dismiss Remote Copy Target. - Start Remote Copy Service. -
-    Remote Copy Status.
+-   On HPE 3PAR and PRIMERA - Create Remote Copy Group. - Modify Remote
+    Copy Group. - Add Volumes to Remote Copy Group. - Remove Volumes
+    from Remote Copy Group. -Synchronize Remote Copy Group. - Delete
+    Remote Copy Group. - Admit Remote Copy Link. - Dismiss Remote Copy
+    Link. - Start Remote Copy Group. - Stop Remote Copy Group. - Admit
+    Remote Copy Target. - Dismiss Remote Copy Target. - Start Remote
+    Copy Service. - Remote Copy Status.
 
 Parameters
 ----------
