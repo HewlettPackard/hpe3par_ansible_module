@@ -30,9 +30,9 @@ ANSIBLE_METADATA = {'metadata_version': '1.1',
 DOCUMENTATION = r'''
 ---
 author: "Hewlett Packard Enterprise (ecostor@groups.ext.hpe.com )"
-description: "On HPE 3PAR - Create Volume. - Delete Volume. - Modify Volume.
- - Grow Volume - Grow Volume to certain size - Change Snap CPG - Change User
- CPG - Convert Provisioning TypeError - Set Snap CPG"
+description: "On HPE 3PAR and PRIMERA - Create Volume. - Delete Volume. - Modify
+ Volume - Grow Volume - Grow Volume to certain size - Change Snap CPG - Change
+ User CPG - Convert Provisioning TypeError - Set Snap CPG"
 module: hpe3par_volume
 options:
   compression:
@@ -155,7 +155,8 @@ options:
       - full
     default: thin
     description:
-      - "Specifies the type of the volume.\nRequired with action convert_type"
+      - "Specifies the type of the volume.\nRequired with action convert_type.
+       Full provisioning is not supported on PRIMERA array"
     required: false
   usr_spc_alloc_limit_pct:
     default: 0
@@ -198,8 +199,8 @@ requirements:
   - "3PAR OS - 3.2.2 MU6, 3.3.1 MU1"
   - "Ansible - 2.4"
   - "hpe3par_sdk 1.0.0"
-  - "WSAPI service should be enabled on the 3PAR storage array."
-short_description: "Manage HPE 3PAR Volume"
+  - "WSAPI service should be enabled on the 3PAR and PRIMERA storage array."
+short_description: "Manage HPE 3PAR and PRIMERA Volume"
 version_added: "2.4"
 '''
 

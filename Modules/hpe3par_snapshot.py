@@ -28,8 +28,9 @@ ANSIBLE_METADATA = {'metadata_version': '1.1',
 DOCUMENTATION = r'''
 ---
 author: "Hewlett Packard Enterprise (ecostor@groups.ext.hpe.com )"
-description: "On HPE 3PAR - Create Snapshot. - Delete Snapshot. - Modify
- Snapshot. -  Create Schedule. - Modify Schedule. - Suspend Schedule. - Resume Schedule. - Delete Schedule."
+description: "On HPE 3PAR and PRIMERA - Create Snapshot. - Delete Snapshot.
+ - Modify Snapshot. -  Create Schedule. - Modify Schedule. - Suspend Schedule.
+ - Resume Schedule. - Delete Schedule."
 module: hpe3par_snapshot
 options:
   allow_remote_copy_parent:
@@ -159,8 +160,8 @@ requirements:
   - "3PAR OS - 3.2.2 MU6, 3.3.1 MU1"
   - "Ansible - 2.4"
   - "hpe3par_sdk 1.0.0"
-  - "WSAPI service should be enabled on the 3PAR storage array."
-short_description: "Manage HPE 3PAR Snapshots"
+  - "WSAPI service should be enabled on the 3PAR and PRIMERA storage array."
+short_description: "Manage HPE 3PAR and PRIMERA Snapshots"
 version_added: "2.4"
 '''
 

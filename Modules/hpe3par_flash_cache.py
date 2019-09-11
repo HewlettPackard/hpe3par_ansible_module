@@ -30,7 +30,7 @@ ANSIBLE_METADATA = {'metadata_version': '1.1',
 DOCUMENTATION = r'''
 ---
 author: "Hewlett Packard Enterprise (ecostor@groups.ext.hpe.com)"
-description: "On HPE 3PAR - Create Flash Cache
+description: "On HPE 3PAR and PRIMERA - Create Flash Cache
  - Delete Flash Cache."
 module: hpe3par_flash_cache
 options:
@@ -67,8 +67,8 @@ requirements:
   - "3PAR OS - 3.2.2 MU6, 3.3.1 MU1"
   - "Ansible - 2.4"
   - "hpe3par_sdk 1.0.0"
-  - "WSAPI service should be enabled on the 3PAR storage array."
-short_description: "Manage HPE 3PAR Flash Cache"
+  - "WSAPI service should be enabled on the 3PAR and PRIMERA storage array."
+short_description: "Manage HPE 3PAR and PRIMERA Flash Cache"
 version_added: "2.4"
 '''
 
