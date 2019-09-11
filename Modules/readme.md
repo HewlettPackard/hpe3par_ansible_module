@@ -2949,7 +2949,7 @@ source
 :   hpe3par\_volume.py
 
 
-hpe3par\_volume - Manage HPE 3PAR\_primera Volume
+hpe3par\_volume - Manage HPE 3PAR \/ primera Volume
 ================================================
 
 Synopsis
