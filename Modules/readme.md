@@ -2949,15 +2949,15 @@ source
 :   hpe3par\_volume.py
 
 
-hpe3par\_volume - Manage HPE 3PAR '/' primera Volume
-================================================
+hpe3par\_volume - Manage HPE 3PAR and PRIMERA Volume
+====================================================
 
 Synopsis
 --------
 
--   On HPE 3PAR - Create Volume. - Delete Volume. - Modify Volume. -
-    Grow Volume - Grow Volume to certain size - Change Snap CPG - Change
-    User CPG - Convert Provisioning TypeError - Set Snap CPG
+-   On HPE 3PAR and PRIMERA - Create Volume. - Delete Volume. - Modify
+    Volume - Grow Volume - Grow Volume to certain size - Change Snap CPG
+    - Change User CPG - Convert Provisioning TypeError - Set Snap CPG
 
 Parameters
 ----------
