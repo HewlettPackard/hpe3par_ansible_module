@@ -2960,8 +2960,9 @@ Synopsis
 --------
 
 -   On HPE 3PAR and PRIMERA - Create Volume. - Delete Volume. - Modify
-    Volume - Grow Volume - Grow Volume to certain size - Change Snap CPG
-    - Change User CPG - Convert Provisioning TypeError - Set Snap CPG
+    Volume. - Grow Volume. - Grow Volume to certain size. - Change Snap
+    CPG - Change User CPG - Convert Provisioning TypeError - Set Snap
+    CPG
 
 Parameters
 ----------
