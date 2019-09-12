@@ -30,8 +30,8 @@ ANSIBLE_METADATA = {'metadata_version': '1.1',
 DOCUMENTATION = r'''
 ---
 author: "Hewlett Packard Enterprise (ecostor@groups.ext.hpe.com )"
-description: "On HPE 3PAR and PRIMERA - Create Host Set. - Add Hosts to Host Set.
- - Remove Hosts from Host Set."
+description: "On HPE 3PAR and PRIMERA - Create Host Set - Add Hosts to
+ Host Set - Remove Hosts from Host Set"
 module: hpe3par_hostset
 options:
   domain:

@@ -30,8 +30,8 @@ ANSIBLE_METADATA = {'metadata_version': '1.1',
 DOCUMENTATION = r'''
 ---
 author: "Hewlett Packard Enterprise (ecostor@groups.ext.hpe.com )"
-description: "On HPE 3PAR and PRIMERA - Create QoS Rule. - Delete QoS Rule.
- - Modify QoS Rule."
+description: "On HPE 3PAR and PRIMERA - Create QoS Rule - Delete QoS Rule
+ - Modify QoS Rule"
 module: hpe3par_qos
 options:
   bwmax_limit_kb:

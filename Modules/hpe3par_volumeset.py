@@ -30,8 +30,8 @@ ANSIBLE_METADATA = {'metadata_version': '1.1',
 DOCUMENTATION = r'''
 ---
 author: "Hewlett Packard Enterprise (ecostor@groups.ext.hpe.com )"
-description: "On HPE 3PAR and PRIMERA - Create Volume Set. - Add Volumes to Volume
- Set. - Remove Volumes from Volume Set."
+description: "On HPE 3PAR and PRIMERA - Create Volume Set - Add Volumes to Volume
+ Set - Remove Volumes from Volume Set"
 module: hpe3par_volumeset
 options:
   domain:

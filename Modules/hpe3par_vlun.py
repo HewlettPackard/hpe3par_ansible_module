@@ -30,10 +30,10 @@ ANSIBLE_METADATA = {'metadata_version': '1.1',
 DOCUMENTATION = r'''
 ---
 author: "Hewlett Packard Enterprise (ecostor@groups.ext.hpe.com )"
-description: "On HPE 3PAR and PRIMERA - Export volume to host. - Export volumeset
- to host. - Export volume to hostset. - Export volumeset to hostset. - Unexport
- volume from host. - Unexport volumeset from host. - Unexport volume from
- hostset. - Unexport volumeset from hostset."
+description: "On HPE 3PAR and PRIMERA - Export volume to host - Export
+ volumeset to host - Export volume to hostset - Export volumeset
+ to hostset - Unexport volume from host - Unexport volumeset from host -
+ Unexport volume from hostset - Unexport volumeset from hostset"
 module: hpe3par_vlun
 options:
   autolun:

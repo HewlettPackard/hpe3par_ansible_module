@@ -30,8 +30,8 @@ ANSIBLE_METADATA = {'metadata_version': '1.1',
 DOCUMENTATION = r'''
 ---
 author: "Hewlett Packard Enterprise (ecostor@groups.ext.hpe.com )"
-description: "On HPE 3PAR and PRIMERA - Create Online Clone. - Delete Clone.
- - Resync Clone."
+description: "On HPE 3PAR and PRIMERA - Create Online Clone - Delete Clone
+ - Resync Clone"
 module: hpe3par_online_clone
 options:
   base_volume_name:

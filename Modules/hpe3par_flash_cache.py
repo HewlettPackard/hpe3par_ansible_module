@@ -31,7 +31,7 @@ DOCUMENTATION = r'''
 ---
 author: "Hewlett Packard Enterprise (ecostor@groups.ext.hpe.com)"
 description: "On HPE 3PAR and PRIMERA - Create Flash Cache
- - Delete Flash Cache."
+ - Delete Flash Cache"
 module: hpe3par_flash_cache
 options:
   size_in_gib:

@@ -28,9 +28,9 @@ ANSIBLE_METADATA = {'metadata_version': '1.1',
 DOCUMENTATION = r'''
 ---
 author: "Hewlett Packard Enterprise (ecostor@groups.ext.hpe.com )"
-description: "On HPE 3PAR and PRIMERA - Create Snapshot. - Delete Snapshot.
- - Modify Snapshot. -  Create Schedule. - Modify Schedule. - Suspend Schedule.
- - Resume Schedule. - Delete Schedule."
+description: "On HPE 3PAR and PRIMERA - Create Snapshot - Delete Snapshot
+ - Modify Snapshot -  Create Schedule - Modify Schedule - Suspend Schedule
+ - Resume Schedule - Delete Schedule"
 module: hpe3par_snapshot
 options:
   allow_remote_copy_parent:

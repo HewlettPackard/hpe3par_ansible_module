@@ -30,7 +30,7 @@ ANSIBLE_METADATA = {'metadata_version': '1.1',
 DOCUMENTATION = r'''
 ---
 author: "Hewlett Packard Enterprise (ecostor@groups.ext.hpe.com )"
-description: "On HPE 3PAR and PRIMERA - Create Volume. - Delete Volume. - Modify
+description: "On HPE 3PAR and PRIMERA - Create Volume - Delete Volume - Modify
  Volume - Grow Volume - Grow Volume to certain size - Change Snap CPG - Change
  User CPG - Convert Provisioning TypeError - Set Snap CPG"
 module: hpe3par_volume
