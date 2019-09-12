@@ -2,13 +2,13 @@ source
 
 :   hpe3par\_cpg.py
 
-hpe3par\_cpg - Manage HPE 3PAR CPG
-==================================
+hpe3par\_cpg - Manage HPE 3PAR and PRIMERA CPG
+==============================================
 
 Synopsis
 --------
 
--   Create and delete CPG on HPE 3PAR.
+-   Create and delete CPG on HPE 3PAR and PRIMERA.
 
 Parameters
 ----------
@@ -391,13 +391,13 @@ source
 :   hpe3par\_flash\_cache.py
 
 
-hpe3par\_flash\_cache - Manage HPE 3PAR Flash Cache
-===================================================
+hpe3par\_flash\_cache - Manage HPE 3PAR and PRIMERA Flash Cache
+===============================================================
 
 Synopsis
 --------
 
--   On HPE 3PAR - Create Flash Cache - Delete Flash Cache.
+-   On HPE 3PAR and PRIMERA - Create Flash Cache - Delete Flash Cache
 
 Parameters
 ----------
@@ -551,16 +551,16 @@ source
 :   hpe3par\_host.py
 
 
-hpe3par\_host - Manage HPE 3PAR Host
-====================================
+hpe3par\_host - Manage HPE 3PAR and PRIMERA Host
+================================================
 
 Synopsis
 --------
 
--   On HPE 3PAR - Create Host. - Delete Host. - Add Initiator Chap. -
-    Remove Initiator Chap. - Add Target Chap. - Remove Target Chap. -
-    Add FC Path to Host - Remove FC Path from Host - Add ISCSI Path to
-    Host - Remove ISCSI Path from Host
+-   On HPE 3PAR and PRIMERA - Create Host - Delete Host - Add Initiator
+    Chap - Remove Initiator Chap - Add Target Chap - Remove Target
+    Chap - Add FC Path to Host - Remove FC Path from Host - Add ISCSI
+    Path to Host - Remove ISCSI Path from Host
 
 Parameters
 ----------
@@ -902,14 +902,14 @@ source
 :   hpe3par\_hostset.py
 
 
-hpe3par\_hostset - Manage HPE 3PAR Host Set
-===========================================
+hpe3par\_hostset - Manage HPE 3PAR and PRIMERA Host Set
+=======================================================
 
 Synopsis
 --------
 
--   On HPE 3PAR - Create Host Set. - Add Hosts to Host Set. - Remove
-    Hosts from Host Set.
+-   On HPE 3PAR and PRIMERA - Create Host Set - Add Hosts to Host Set -
+    Remove Hosts from Host Set
 
 Parameters
 ----------
@@ -1104,15 +1104,14 @@ source
 :   hpe3par\_offline\_clone.py
   
 
-hpe3par\_offline\_clone - Manage HPE 3PAR Offline Clone
-=======================================================
+hpe3par\_offline\_clone - Manage HPE 3PAR and PRIMERA Offline Clone
+===================================================================
 
 Synopsis
 --------
 
--   On HPE 3PAR - Create Offline Clone. - Delete Clone. - Resync Clone.
-    - Stop Cloning.
-
+-   On HPE 3PAR and PRIMERA - Create Offline Clone - Delete Clone -
+    Resync Clone - Stop Cloning
 
 Parameters
 ----------
@@ -1367,13 +1366,14 @@ source
 
 :   hpe3par\_online\_clone.py
 
-hpe3par\_online\_clone - Manage HPE 3PAR Online Clone
-=====================================================
+hpe3par\_online\_clone - Manage HPE 3PAR and PRIMERA Online Clone
+=================================================================
 
 Synopsis
 --------
 
--   On HPE 3PAR - Create Online Clone. - Delete Clone. - Resync Clone.
+-   On HPE 3PAR and PRIMERA - Create Online Clone - Delete Clone -
+    Resync Clone
 
 Parameters
 ----------
@@ -1643,13 +1643,14 @@ source
 :   hpe3par\_qos.py
  
 
-hpe3par\_qos - Manage HPE 3PAR QoS Rules
-========================================
+hpe3par\_qos - Manage HPE 3PAR and PRIMERA QoS Rules
+====================================================
 
 Synopsis
 --------
 
--   On HPE 3PAR - Create QoS Rule. - Delete QoS Rule. - Modify QoS Rule.
+-   On HPE 3PAR and PRIMERA - Create QoS Rule - Delete QoS Rule - Modify
+    QoS Rule
 
 Parameters
 ----------
@@ -2106,13 +2107,15 @@ source
 
 :   hpe3par\_snapshot.py
 
-hpe3par\_snapshot - Manage HPE 3PAR Snapshots
-=============================================
+hpe3par\_snapshot - Manage HPE 3PAR and PRIMERA Snapshots
+=========================================================
 
 Synopsis
 --------
 
--   On HPE 3PAR - Create Snapshot. - Delete Snapshot. - Modify Snapshot. - Create Schedule. - Modify Schedule. - Suspend Schedule. - Resume Schedule. - Delete Schedule.
+-   On HPE 3PAR and PRIMERA - Create Snapshot - Delete Snapshot - Modify
+    Snapshot - Create Schedule - Modify Schedule - Suspend Schedule -
+    Resume Schedule - Delete Schedule
 
 Parameters
 ----------
@@ -2609,16 +2612,16 @@ source
 :   hpe3par\_vlun.py
 
 
-hpe3par\_vlun - Manage HPE 3PAR VLUN
-====================================
+hpe3par\_vlun - Manage HPE 3PAR and PRIMERA VLUN
+================================================
 
 Synopsis
 --------
 
--   On HPE 3PAR - Export volume to host. - Export volumeset to host. -
-    Export volume to hostset. - Export volumeset to hostset. - Unexport
-    volume from host. - Unexport volumeset from host. - Unexport volume
-    from hostset. - Unexport volumeset from hostset.
+-   On HPE 3PAR and PRIMERA - Export volume to host - Export volumeset
+    to host - Export volume to hostset - Export volumeset to hostset -
+    Unexport volume from host - Unexport volumeset from host - Unexport
+    volume from hostset - Unexport volumeset from hostset
 
 Parameters
 ----------
@@ -2949,534 +2952,335 @@ source
 :   hpe3par\_volume.py
 
 
-hpe3par\_volume - Manage HPE 3PAR Volume
-========================================
+hpe3par\_volume - Manage HPE 3PAR and PRIMERA Volume
+====================================================
 
 Synopsis
 --------
 
--   On HPE 3PAR - Create Volume. - Delete Volume. - Modify Volume. -
-    Grow Volume - Grow Volume to certain size - Change Snap CPG - Change
-    User CPG - Convert Provisioning TypeError - Set Snap CPG
+-   On HPE 3PAR and PRIMERA - Create Volume - Delete Volume - Modify
+    Volume - Grow Volume - Grow Volume to certain size - Change Snap
+    CPG - Change User CPG - Convert Provisioning TypeError - Set Snap
+    CPG
 
 Parameters
 ----------
 
 <table  border=0 cellpadding=0 class="documentation-table">
-            <tr>
-        <th class="head"><div class="cell-border">Parameter</div></th>
-        <th class="head"><div class="cell-border">Choices/<font color="blue">Defaults</font></div></th>
-                    <th class="head" width="100%"><div class="cell-border">Comments</div></th>
+    <tr>
+        <th colspan="1">Parameter</th>
+        <th>Choices/<font color="blue">Defaults</font></th>
+                    <th width="100%">Comments</th>
     </tr>
-                <tr class="return-value-column">
+                <tr>
+                                                            <td colspan="1">
+                <b>compression</b>
+                <br/><div style="font-size: small; color: red">bool</div>                                                        </td>
                             <td>
-                <div class="outer-elbow-container">
-                                            <div class="elbow-key">
-                        <b>compression</b>
-                                                                            </div>
-                </div>
-            </td>
-                            <td>
-                <div class="cell-border">
-                                                                                                                                                                                                                                                                                                                    <ul><b>Choices:</b>
-                                                                                                                                                                                <li><div style="color: blue"><b>no</b>&nbsp;&larr;</div></li>
-                                                                                                                                                                                                                    <li>yes</li>
-                                                                                            </ul>
-                                                                                        </div>
-            </td>
+                                                                                                                                                                                                                <ul><b>Choices:</b>
+                                                                                                                                                            <li><div style="color: blue"><b>no</b>&nbsp;&larr;</div></li>
+                                                                                                                                                                                            <li>yes</li>
+                                                                                </ul>
+                                                                        </td>
                                                             <td>
-                <div class="cell-border">
-                                                                                <div>Specifes whether the compression is on or off.</div>
-                                                                                            </div>
-            </td>
+                                                                    <div>Specifes whether the compression is on or off.</div>
+                                                                            </td>
         </tr>
-                            <tr class="return-value-column">
+                            <tr>
+                                                            <td colspan="1">
+                <b>cpg</b>
+                                                                        </td>
                             <td>
-                <div class="outer-elbow-container">
-                                            <div class="elbow-key">
-                        <b>cpg</b>
-                                                                            </div>
-                </div>
-            </td>
-                            <td>
-                <div class="cell-border">
-                                                                                                                                                                                        </div>
-            </td>
+                                                                                                                                                        </td>
                                                             <td>
-                <div class="cell-border">
-                                                                                <div>Specifies the name of the CPG from which the volume user space will be allocated.
+                                                                    <div>Specifies the name of the CPG from which the volume user space will be allocated.
 Required with action present, change_user_cpg</div>
-                                                                                            </div>
-            </td>
+                                                                            </td>
         </tr>
-                            <tr class="return-value-column">
+                            <tr>
+                                                            <td colspan="1">
+                <b>expiration_hours</b>
+                                                                        </td>
                             <td>
-                <div class="outer-elbow-container">
-                                            <div class="elbow-key">
-                        <b>expiration_hours</b>
-                                                                            </div>
-                </div>
-            </td>
-                            <td>
-                <div class="cell-border">
-                                                                                                                                                                                                                                                                                                                <b>Default:</b><br/><div style="color: blue">no</div>
-                                        </div>
-            </td>
+                                                                                                                                                                <b>Default:</b><br/><div style="color: blue">0</div>
+                                </td>
                                                             <td>
-                <div class="cell-border">
-                                                                                <div>Remaining time, in hours, before the volume expires.</div>
-                                                                                            </div>
-            </td>
+                                                                    <div>Remaining time, in hours, before the volume expires.</div>
+                                                                            </td>
         </tr>
-                            <tr class="return-value-column">
+                            <tr>
+                                                            <td colspan="1">
+                <b>keep_vv</b>
+                                                                        </td>
                             <td>
-                <div class="outer-elbow-container">
-                                            <div class="elbow-key">
-                        <b>keep_vv</b>
-                                                                            </div>
-                </div>
-            </td>
-                            <td>
-                <div class="cell-border">
-                                                                                                                                                                                        </div>
-            </td>
+                                                                                                                                                        </td>
                                                             <td>
-                <div class="cell-border">
-                                                                                <div>Name of the new volume where the original logical disks are saved.</div>
-                                                                                            </div>
-            </td>
+                                                                    <div>Name of the new volume where the original logical disks are saved.</div>
+                                                                            </td>
         </tr>
-                            <tr class="return-value-column">
+                            <tr>
+                                                            <td colspan="1">
+                <b>new_name</b>
+                                                                        </td>
                             <td>
-                <div class="outer-elbow-container">
-                                            <div class="elbow-key">
-                        <b>new_name</b>
-                                                                            </div>
-                </div>
-            </td>
-                            <td>
-                <div class="cell-border">
-                                                                                                                                                                                        </div>
-            </td>
+                                                                                                                                                        </td>
                                                             <td>
-                <div class="cell-border">
-                                                                                <div>Specifies the new name for the volume.</div>
-                                                                                            </div>
-            </td>
+                                                                    <div>Specifies the new name for the volume.</div>
+                                                                            </td>
         </tr>
-                            <tr class="return-value-column">
+                            <tr>
+                                                            <td colspan="1">
+                <b>retention_hours</b>
+                                                                        </td>
                             <td>
-                <div class="outer-elbow-container">
-                                            <div class="elbow-key">
-                        <b>retention_hours</b>
-                                                                            </div>
-                </div>
-            </td>
-                            <td>
-                <div class="cell-border">
-                                                                                                                                                                                                                                                                                                                <b>Default:</b><br/><div style="color: blue">no</div>
-                                        </div>
-            </td>
+                                                                                                                                                                <b>Default:</b><br/><div style="color: blue">0</div>
+                                </td>
                                                             <td>
-                <div class="cell-border">
-                                                                                <div>Sets the number of hours to retain the volume.</div>
-                                                                                            </div>
-            </td>
+                                                                    <div>Sets the number of hours to retain the volume.</div>
+                                                                            </td>
         </tr>
-                            <tr class="return-value-column">
+                            <tr>
+                                                            <td colspan="1">
+                <b>rm_exp_time</b>
+                <br/><div style="font-size: small; color: red">bool</div>                                                        </td>
                             <td>
-                <div class="outer-elbow-container">
-                                            <div class="elbow-key">
-                        <b>rm_exp_time</b>
-                                                                            </div>
-                </div>
-            </td>
-                            <td>
-                <div class="cell-border">
-                                                                                                                                                                                                                                                                                                                    <ul><b>Choices:</b>
-                                                                                                                                                                                <li><div style="color: blue"><b>no</b>&nbsp;&larr;</div></li>
-                                                                                                                                                                                                                    <li>yes</li>
-                                                                                            </ul>
-                                                                                        </div>
-            </td>
+                                                                                                                                                                                                                <ul><b>Choices:</b>
+                                                                                                                                                            <li><div style="color: blue"><b>no</b>&nbsp;&larr;</div></li>
+                                                                                                                                                                                            <li>yes</li>
+                                                                                </ul>
+                                                                        </td>
                                                             <td>
-                <div class="cell-border">
-                                                                                <div>Enables false or disables true resetting the expiration time. If false, and expiration time value is a positive. number, then set.</div>
-                                                                                            </div>
-            </td>
+                                                                    <div>Enables false or disables true resetting the expiration time. If false, and expiration time value is a positive. number, then set.</div>
+                                                                            </td>
         </tr>
-                            <tr class="return-value-column">
+                            <tr>
+                                                            <td colspan="1">
+                <b>rm_ss_spc_alloc_limit</b>
+                <br/><div style="font-size: small; color: red">bool</div>                                                        </td>
                             <td>
-                <div class="outer-elbow-container">
-                                            <div class="elbow-key">
-                        <b>rm_ss_spc_alloc_limit</b>
-                                                                            </div>
-                </div>
-            </td>
-                            <td>
-                <div class="cell-border">
-                                                                                                                                                                                                                                                                                                                    <ul><b>Choices:</b>
-                                                                                                                                                                                <li><div style="color: blue"><b>no</b>&nbsp;&larr;</div></li>
-                                                                                                                                                                                                                    <li>yes</li>
-                                                                                            </ul>
-                                                                                        </div>
-            </td>
+                                                                                                                                                                                                                <ul><b>Choices:</b>
+                                                                                                                                                            <li><div style="color: blue"><b>no</b>&nbsp;&larr;</div></li>
+                                                                                                                                                                                            <li>yes</li>
+                                                                                </ul>
+                                                                        </td>
                                                             <td>
-                <div class="cell-border">
-                                                                                <div>Enables false or disables true removing the snapshot space allocation limit. If false, and limit value is 0, setting  ignored.If false, and limit value is a positive number, then set.</div>
-                                                                                            </div>
-            </td>
+                                                                    <div>Enables false or disables true removing the snapshot space allocation limit. If false, and limit value is 0, setting  ignored.If false, and limit value is a positive number, then set.</div>
+                                                                            </td>
         </tr>
-                            <tr class="return-value-column">
+                            <tr>
+                                                            <td colspan="1">
+                <b>rm_ss_spc_alloc_warning</b>
+                <br/><div style="font-size: small; color: red">bool</div>                                                        </td>
                             <td>
-                <div class="outer-elbow-container">
-                                            <div class="elbow-key">
-                        <b>rm_ss_spc_alloc_warning</b>
-                                                                            </div>
-                </div>
-            </td>
-                            <td>
-                <div class="cell-border">
-                                                                                                                                                                                                                                                                                                                    <ul><b>Choices:</b>
-                                                                                                                                                                                <li><div style="color: blue"><b>no</b>&nbsp;&larr;</div></li>
-                                                                                                                                                                                                                    <li>yes</li>
-                                                                                            </ul>
-                                                                                        </div>
-            </td>
+                                                                                                                                                                                                                <ul><b>Choices:</b>
+                                                                                                                                                            <li><div style="color: blue"><b>no</b>&nbsp;&larr;</div></li>
+                                                                                                                                                                                            <li>yes</li>
+                                                                                </ul>
+                                                                        </td>
                                                             <td>
-                <div class="cell-border">
-                                                                                <div>Enables false or disables true removing the snapshot space allocation warning. If false, and warning value is a positive number, then set.</div>
-                                                                                            </div>
-            </td>
+                                                                    <div>Enables false or disables true removing the snapshot space allocation warning. If false, and warning value is a positive number, then set.</div>
+                                                                            </td>
         </tr>
-                            <tr class="return-value-column">
+                            <tr>
+                                                            <td colspan="1">
+                <b>rm_usr_spc_alloc_limit</b>
+                <br/><div style="font-size: small; color: red">bool</div>                                                        </td>
                             <td>
-                <div class="outer-elbow-container">
-                                            <div class="elbow-key">
-                        <b>rm_usr_spc_alloc_limit</b>
-                                                                            </div>
-                </div>
-            </td>
-                            <td>
-                <div class="cell-border">
-                                                                                                                                                                                                                                                                                                                    <ul><b>Choices:</b>
-                                                                                                                                                                                <li><div style="color: blue"><b>no</b>&nbsp;&larr;</div></li>
-                                                                                                                                                                                                                    <li>yes</li>
-                                                                                            </ul>
-                                                                                        </div>
-            </td>
+                                                                                                                                                                                                                <ul><b>Choices:</b>
+                                                                                                                                                            <li><div style="color: blue"><b>no</b>&nbsp;&larr;</div></li>
+                                                                                                                                                                                            <li>yes</li>
+                                                                                </ul>
+                                                                        </td>
                                                             <td>
-                <div class="cell-border">
-                                                                                <div>Enables false or disables true the allocation limit. If false, and limit value is a positive number, then set.</div>
-                                                                                            </div>
-            </td>
+                                                                    <div>Enables false or disables true the allocation limit. If false, and limit value is a positive number, then set.</div>
+                                                                            </td>
         </tr>
-                            <tr class="return-value-column">
+                            <tr>
+                                                            <td colspan="1">
+                <b>rm_usr_spc_alloc_warning</b>
+                <br/><div style="font-size: small; color: red">bool</div>                                                        </td>
                             <td>
-                <div class="outer-elbow-container">
-                                            <div class="elbow-key">
-                        <b>rm_usr_spc_alloc_warning</b>
-                                                                            </div>
-                </div>
-            </td>
-                            <td>
-                <div class="cell-border">
-                                                                                                                                                                                                                                                                                                                    <ul><b>Choices:</b>
-                                                                                                                                                                                <li><div style="color: blue"><b>no</b>&nbsp;&larr;</div></li>
-                                                                                                                                                                                                                    <li>yes</li>
-                                                                                            </ul>
-                                                                                        </div>
-            </td>
+                                                                                                                                                                                                                <ul><b>Choices:</b>
+                                                                                                                                                            <li><div style="color: blue"><b>no</b>&nbsp;&larr;</div></li>
+                                                                                                                                                                                            <li>yes</li>
+                                                                                </ul>
+                                                                        </td>
                                                             <td>
-                <div class="cell-border">
-                                                                                <div>Enables false or disables true removing the user space allocation warning. If false, and warning value is a positive number, then set.</div>
-                                                                                            </div>
-            </td>
+                                                                    <div>Enables false or disables true removing the user space allocation warning. If false, and warning value is a positive number, then set.</div>
+                                                                            </td>
         </tr>
-                            <tr class="return-value-column">
+                            <tr>
+                                                            <td colspan="1">
+                <b>size</b>
+                                                                        </td>
                             <td>
-                <div class="outer-elbow-container">
-                                            <div class="elbow-key">
-                        <b>size</b>
-                                                                            </div>
-                </div>
-            </td>
-                            <td>
-                <div class="cell-border">
-                                                                                                                                                                                        </div>
-            </td>
+                                                                                                                                                        </td>
                                                             <td>
-                <div class="cell-border">
-                                                                                <div>Specifies the size of the volume.
+                                                                    <div>Specifies the size of the volume.
 Required with action present, grow, grow_to_size</div>
-                                                                                            </div>
-            </td>
+                                                                            </td>
         </tr>
-                            <tr class="return-value-column">
+                            <tr>
+                                                            <td colspan="1">
+                <b>size_unit</b>
+                                                                        </td>
                             <td>
-                <div class="outer-elbow-container">
-                                            <div class="elbow-key">
-                        <b>size_unit</b>
-                                                                            </div>
-                </div>
-            </td>
-                            <td>
-                <div class="cell-border">
-                                                                                                                                                                                                    <ul><b>Choices:</b>
-                                                                                                                                                                                <li><div style="color: blue"><b>MiB</b>&nbsp;&larr;</div></li>
-                                                                                                                                                                                                                    <li>GiB</li>
-                                                                                                                                                                                                                    <li>TiB</li>
-                                                                                            </ul>
-                                                                                        </div>
-            </td>
+                                                                                                                        <ul><b>Choices:</b>
+                                                                                                                                                            <li><div style="color: blue"><b>MiB</b>&nbsp;&larr;</div></li>
+                                                                                                                                                                                            <li>GiB</li>
+                                                                                                                                                                                            <li>TiB</li>
+                                                                                </ul>
+                                                                        </td>
                                                             <td>
-                <div class="cell-border">
-                                                                                <div>Specifies the unit of the volume size.
+                                                                    <div>Specifies the unit of the volume size.
 Required with action present, grow, grow_to_size</div>
-                                                                                            </div>
-            </td>
+                                                                            </td>
         </tr>
-                            <tr class="return-value-column">
+                            <tr>
+                                                            <td colspan="1">
+                <b>snap_cpg</b>
+                                                                        </td>
                             <td>
-                <div class="outer-elbow-container">
-                                            <div class="elbow-key">
-                        <b>snap_cpg</b>
-                                                                            </div>
-                </div>
-            </td>
-                            <td>
-                <div class="cell-border">
-                                                                                                                                                                                        </div>
-            </td>
+                                                                                                                                                        </td>
                                                             <td>
-                <div class="cell-border">
-                                                                                <div>Specifies the name of the CPG from which the snapshot space will be allocated.
+                                                                    <div>Specifies the name of the CPG from which the snapshot space will be allocated.
 Required with action change_snap_cpg</div>
-                                                                                            </div>
-            </td>
+                                                                            </td>
         </tr>
-                            <tr class="return-value-column">
+                            <tr>
+                                                            <td colspan="1">
+                <b>ss_spc_alloc_limit_pct</b>
+                                                                        </td>
                             <td>
-                <div class="outer-elbow-container">
-                                            <div class="elbow-key">
-                        <b>ss_spc_alloc_limit_pct</b>
-                                                                            </div>
-                </div>
-            </td>
-                            <td>
-                <div class="cell-border">
-                                                                                                                                                                                                                                                                                                                <b>Default:</b><br/><div style="color: blue">no</div>
-                                        </div>
-            </td>
+                                                                                                                                                                <b>Default:</b><br/><div style="color: blue">0</div>
+                                </td>
                                                             <td>
-                <div class="cell-border">
-                                                                                <div>Prevents the snapshot space of  the virtual volume from growing beyond the indicated percentage of the virtual volume size.</div>
-                                                                                            </div>
-            </td>
+                                                                    <div>Prevents the snapshot space of  the virtual volume from growing beyond the indicated percentage of the virtual volume size.</div>
+                                                                            </td>
         </tr>
-                            <tr class="return-value-column">
+                            <tr>
+                                                            <td colspan="1">
+                <b>ss_spc_alloc_warning_pct</b>
+                                                                        </td>
                             <td>
-                <div class="outer-elbow-container">
-                                            <div class="elbow-key">
-                        <b>ss_spc_alloc_warning_pct</b>
-                                                                            </div>
-                </div>
-            </td>
-                            <td>
-                <div class="cell-border">
-                                                                                                                                                                                                                                                                                                                <b>Default:</b><br/><div style="color: blue">no</div>
-                                        </div>
-            </td>
+                                                                                                                                                                <b>Default:</b><br/><div style="color: blue">0</div>
+                                </td>
                                                             <td>
-                <div class="cell-border">
-                                                                                <div>Generates a warning alert when the reserved snapshot space of the virtual volume exceeds the indicated percentage of the virtual volume size.</div>
-                                                                                            </div>
-            </td>
+                                                                    <div>Generates a warning alert when the reserved snapshot space of the virtual volume exceeds the indicated percentage of the virtual volume size.</div>
+                                                                            </td>
         </tr>
-                            <tr class="return-value-column">
+                            <tr>
+                                                            <td colspan="1">
+                <b>state</b>
+                                    <br/><div style="font-size: small; color: red">required</div>                                    </td>
                             <td>
-                <div class="outer-elbow-container">
-                                            <div class="elbow-key">
-                        <b>state</b>
-                        <br/><div style="font-size: small; color: red">required</div>                                                    </div>
-                </div>
-            </td>
-                            <td>
-                <div class="cell-border">
-                                                                                                                                                <ul><b>Choices:</b>
-                                                                                                                                                                                <li>present</li>
-                                                                                                                                                                                                                    <li>absent</li>
-                                                                                                                                                                                                                    <li>modify</li>
-                                                                                                                                                                                                                    <li>grow</li>
-                                                                                                                                                                                                                    <li>grow_to_size</li>
-                                                                                                                                                                                                                    <li>change_snap_cpg</li>
-                                                                                                                                                                                                                    <li>change_user_cpg</li>
-                                                                                                                                                                                                                    <li>convert_type</li>
-                                                                                                                                                                                                                    <li>set_snap_cpg</li>
-                                                                                            </ul>
-                                                                                        </div>
-            </td>
+                                                                                                                        <ul><b>Choices:</b>
+                                                                                                                                                            <li>present</li>
+                                                                                                                                                                                            <li>absent</li>
+                                                                                                                                                                                            <li>modify</li>
+                                                                                                                                                                                            <li>grow</li>
+                                                                                                                                                                                            <li>grow_to_size</li>
+                                                                                                                                                                                            <li>change_snap_cpg</li>
+                                                                                                                                                                                            <li>change_user_cpg</li>
+                                                                                                                                                                                            <li>convert_type</li>
+                                                                                                                                                                                            <li>set_snap_cpg</li>
+                                                                                </ul>
+                                                                        </td>
                                                             <td>
-                <div class="cell-border">
-                                                                                <div>Whether the specified Volume should exist or not. State also provides actions to modify volume properties.</div>
-                                                                                            </div>
-            </td>
+                                                                    <div>Whether the specified Volume should exist or not. State also provides actions to modify volume properties.</div>
+                                                                            </td>
         </tr>
-                            <tr class="return-value-column">
+                            <tr>
+                                                            <td colspan="1">
+                <b>storage_system_ip</b>
+                                    <br/><div style="font-size: small; color: red">required</div>                                    </td>
                             <td>
-                <div class="outer-elbow-container">
-                                            <div class="elbow-key">
-                        <b>storage_system_ip</b>
-                        <br/><div style="font-size: small; color: red">required</div>                                                    </div>
-                </div>
-            </td>
-                            <td>
-                <div class="cell-border">
-                                                                                                                                                                                        </div>
-            </td>
+                                                                                                                                                        </td>
                                                             <td>
-                <div class="cell-border">
-                                                                                <div>The storage system IP address.</div>
-                                                                                            </div>
-            </td>
+                                                                    <div>The storage system IP address.</div>
+                                                                            </td>
         </tr>
-                            <tr class="return-value-column">
+                            <tr>
+                                                            <td colspan="1">
+                <b>storage_system_password</b>
+                                    <br/><div style="font-size: small; color: red">required</div>                                    </td>
                             <td>
-                <div class="outer-elbow-container">
-                                            <div class="elbow-key">
-                        <b>storage_system_password</b>
-                        <br/><div style="font-size: small; color: red">required</div>                                                    </div>
-                </div>
-            </td>
-                            <td>
-                <div class="cell-border">
-                                                                                                                                                                                        </div>
-            </td>
+                                                                                                                                                        </td>
                                                             <td>
-                <div class="cell-border">
-                                                                                <div>The storage system password.</div>
-                                                                                            </div>
-            </td>
+                                                                    <div>The storage system password.</div>
+                                                                            </td>
         </tr>
-                            <tr class="return-value-column">
+                            <tr>
+                                                            <td colspan="1">
+                <b>storage_system_username</b>
+                                    <br/><div style="font-size: small; color: red">required</div>                                    </td>
                             <td>
-                <div class="outer-elbow-container">
-                                            <div class="elbow-key">
-                        <b>storage_system_username</b>
-                        <br/><div style="font-size: small; color: red">required</div>                                                    </div>
-                </div>
-            </td>
-                            <td>
-                <div class="cell-border">
-                                                                                                                                                                                        </div>
-            </td>
+                                                                                                                                                        </td>
                                                             <td>
-                <div class="cell-border">
-                                                                                <div>The storage system user name.</div>
-                                                                                            </div>
-            </td>
+                                                                    <div>The storage system user name.</div>
+                                                                            </td>
         </tr>
-                            <tr class="return-value-column">
+                            <tr>
+                                                            <td colspan="1">
+                <b>type</b>
+                                                                        </td>
                             <td>
-                <div class="outer-elbow-container">
-                                            <div class="elbow-key">
-                        <b>type</b>
-                                                                            </div>
-                </div>
-            </td>
-                            <td>
-                <div class="cell-border">
-                                                                                                                                                                                                    <ul><b>Choices:</b>
-                                                                                                                                                                                <li><div style="color: blue"><b>thin</b>&nbsp;&larr;</div></li>
-                                                                                                                                                                                                                    <li>thin_dedupe</li>
-                                                                                                                                                                                                                    <li>full</li>
-                                                                                            </ul>
-                                                                                        </div>
-            </td>
+                                                                                                                        <ul><b>Choices:</b>
+                                                                                                                                                            <li><div style="color: blue"><b>thin</b>&nbsp;&larr;</div></li>
+                                                                                                                                                                                            <li>thin_dedupe</li>
+                                                                                                                                                                                            <li>full</li>
+                                                                                </ul>
+                                                                        </td>
                                                             <td>
-                <div class="cell-border">
-                                                                                <div>Specifies the type of the volume.
-Required with action convert_type</div>
-                                                                                            </div>
-            </td>
+                                                                    <div>Specifies the type of the volume.
+Required with action convert_type. Full provisioning is not supported on Primera array</div>
+                                                                            </td>
         </tr>
-                            <tr class="return-value-column">
+                            <tr>
+                                                            <td colspan="1">
+                <b>usr_spc_alloc_limit_pct</b>
+                                                                        </td>
                             <td>
-                <div class="outer-elbow-container">
-                                            <div class="elbow-key">
-                        <b>usr_spc_alloc_limit_pct</b>
-                                                                            </div>
-                </div>
-            </td>
-                            <td>
-                <div class="cell-border">
-                                                                                                                                                                                                                                                                                                                <b>Default:</b><br/><div style="color: blue">no</div>
-                                        </div>
-            </td>
+                                                                                                                                                                <b>Default:</b><br/><div style="color: blue">0</div>
+                                </td>
                                                             <td>
-                <div class="cell-border">
-                                                                                <div>Prevents the user space of the TPVV from growing beyond the indicated percentage of the virtual volume size. After reaching this limit, any new writes to the virtual volume will fail.</div>
-                                                                                            </div>
-            </td>
+                                                                    <div>Prevents the user space of the TPVV from growing beyond the indicated percentage of the virtual volume size. After reaching this limit, any new writes to the virtual volume will fail.</div>
+                                                                            </td>
         </tr>
-                            <tr class="return-value-column">
+                            <tr>
+                                                            <td colspan="1">
+                <b>usr_spc_alloc_warning_pct</b>
+                                                                        </td>
                             <td>
-                <div class="outer-elbow-container">
-                                            <div class="elbow-key">
-                        <b>usr_spc_alloc_warning_pct</b>
-                                                                            </div>
-                </div>
-            </td>
-                            <td>
-                <div class="cell-border">
-                                                                                                                                                                                                                                                                                                                <b>Default:</b><br/><div style="color: blue">no</div>
-                                        </div>
-            </td>
+                                                                                                                                                                <b>Default:</b><br/><div style="color: blue">0</div>
+                                </td>
                                                             <td>
-                <div class="cell-border">
-                                                                                <div>Generates a warning alert when the user data space of the TPVV exceeds the specified percentage of the virtual volume size.</div>
-                                                                                            </div>
-            </td>
+                                                                    <div>Generates a warning alert when the user data space of the TPVV exceeds the specified percentage of the virtual volume size.</div>
+                                                                            </td>
         </tr>
-                            <tr class="return-value-column">
+                            <tr>
+                                                            <td colspan="1">
+                <b>volume_name</b>
+                                    <br/><div style="font-size: small; color: red">required</div>                                    </td>
                             <td>
-                <div class="outer-elbow-container">
-                                            <div class="elbow-key">
-                        <b>volume_name</b>
-                        <br/><div style="font-size: small; color: red">required</div>                                                    </div>
-                </div>
-            </td>
-                            <td>
-                <div class="cell-border">
-                                                                                                                                                                                        </div>
-            </td>
+                                                                                                                                                        </td>
                                                             <td>
-                <div class="cell-border">
-                                                                                <div>Name of the Virtual Volume.</div>
-                                                                                            </div>
-            </td>
+                                                                    <div>Name of the Virtual Volume.</div>
+                                                                            </td>
         </tr>
-                            <tr class="return-value-column">
+                            <tr>
+                                                            <td colspan="1">
+                <b>wait_for_task_to_end</b>
+                <br/><div style="font-size: small; color: red">bool</div>                                                        </td>
                             <td>
-                <div class="outer-elbow-container">
-                                            <div class="elbow-key">
-                        <b>wait_for_task_to_end</b>
-                                                                            </div>
-                </div>
-            </td>
-                            <td>
-                <div class="cell-border">
-                                                                                                                                                                                                                                                                                                                    <ul><b>Choices:</b>
-                                                                                                                                                                                <li><div style="color: blue"><b>no</b>&nbsp;&larr;</div></li>
-                                                                                                                                                                                                                    <li>yes</li>
-                                                                                            </ul>
-                                                                                        </div>
-            </td>
+                                                                                                                                                                                                                <ul><b>Choices:</b>
+                                                                                                                                                            <li><div style="color: blue"><b>no</b>&nbsp;&larr;</div></li>
+                                                                                                                                                                                            <li>yes</li>
+                                                                                </ul>
+                                                                        </td>
                                                             <td>
-                <div class="cell-border">
-                                                                                <div>Setting to true makes the resource to wait until a task asynchronous operation, for ex convert type ends.</div>
-                                                                                            </div>
-            </td>
+                                                                    <div>Setting to true makes the resource to wait until a task asynchronous operation, for ex convert type ends.</div>
+                                                                            </td>
         </tr>
                     </table>
 <br/>
@@ -3572,14 +3376,14 @@ source
 :   hpe3par\_volumeset.py
  
 
-hpe3par\_volumeset - Manage HPE 3PAR Volume Set
-===============================================
+hpe3par\_volumeset - Manage HPE 3PAR and PRIMERA Volume Set
+===========================================================
 
 Synopsis
 --------
 
--   On HPE 3PAR - Create Volume Set. - Add Volumes to Volume Set. -
-    Remove Volumes from Volume Set.
+-   On HPE 3PAR and PRIMERA - Create Volume Set - Add Volumes to Volume
+    Set - Remove Volumes from Volume Set
 
 Parameters
 ----------
@@ -3773,19 +3577,19 @@ source
 
 :   hpe3par\_remote\_copy.py
 
-hpe3par\_remote\_copy - Manage HPE 3PAR Remote Copy
-===================================================
+hpe3par\_remote\_copy - Manage HPE 3PAR and PRIMERA Remote Copy
+===============================================================
 
 Synopsis
 --------
 
--   On HPE 3PAR - Create Remote Copy Group. - Modify Remote Copy Group.
-    - Add Volumes to Remote Copy Group. - Remove Volumes from Remote
-    Copy Group. -Synchronize Remote Copy Group. - Delete Remote Copy
-    Group. - Admit Remote Copy Link. - Dismiss Remote Copy Link. - Start
-    Remote Copy Group. - Stop Remote Copy Group. - Admit Remote Copy
-    Target. - Dismiss Remote Copy Target. - Start Remote Copy Service. -
-    Remote Copy Status.
+-   On HPE 3PAR and PRIMERA - Create Remote Copy Group - Modify Remote
+    Copy Group - Add Volumes to Remote Copy Group - Remove Volumes from
+    Remote Copy Group -Synchronize Remote Copy Group - Delete Remote
+    Copy Group - Admit Remote Copy Link - Dismiss Remote Copy Link -
+    Start Remote Copy Group - Stop Remote Copy Group - Admit Remote Copy
+    Target - Dismiss Remote Copy Target - Start Remote Copy Service -
+    Remote Copy Status
 
 Parameters
 ----------

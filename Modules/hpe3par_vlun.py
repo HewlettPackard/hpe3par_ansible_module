@@ -30,10 +30,10 @@ ANSIBLE_METADATA = {'metadata_version': '1.1',
 DOCUMENTATION = r'''
 ---
 author: "Hewlett Packard Enterprise (ecostor@groups.ext.hpe.com )"
-description: "On HPE 3PAR - Export volume to host. - Export volumeset to host.
- - Export volume to hostset. - Export volumeset to hostset. - Unexport volume
- from host. - Unexport volumeset from host. - Unexport volume from hostset. -
- Unexport volumeset from hostset."
+description: "On HPE 3PAR and PRIMERA - Export volume to host - Export
+ volumeset to host - Export volume to hostset - Export volumeset
+ to hostset - Unexport volume from host - Unexport volumeset from host -
+ Unexport volume from hostset - Unexport volumeset from hostset"
 module: hpe3par_vlun
 options:
   autolun:
@@ -109,8 +109,8 @@ requirements:
   - "3PAR OS - 3.2.2 MU6, 3.3.1 MU1"
   - "Ansible - 2.4"
   - "hpe3par_sdk 1.0.0"
-  - "WSAPI service should be enabled on the 3PAR storage array."
-short_description: "Manage HPE 3PAR VLUN"
+  - "WSAPI service should be enabled on the 3PAR and PRIMERA storage array."
+short_description: "Manage HPE 3PAR and PRIMERA VLUN"
 version_added: "2.4"
 '''
 
@@ -726,7 +726,9 @@ def main():
     card_port = module.params["card_port"]
     autolun = module.params["autolun"]
 
-    wsapi_url = 'https://%s:8080/api/v1' % storage_system_ip
+    port_number = client.HPE3ParClient.getPortNumber(
+        storage_system_ip, storage_system_username, storage_system_password)
+    wsapi_url = 'https://%s:%s/api/v1' % (storage_system_ip, port_number)
     client_obj = client.HPE3ParClient(wsapi_url)
 
     # States

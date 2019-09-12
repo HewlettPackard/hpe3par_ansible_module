@@ -30,8 +30,8 @@ ANSIBLE_METADATA = {'metadata_version': '1.1',
 DOCUMENTATION = r'''
 ---
 author: "Hewlett Packard Enterprise (ecostor@groups.ext.hpe.com )"
-description: "On HPE 3PAR - Create Online Clone. - Delete Clone. - Resync
- Clone."
+description: "On HPE 3PAR and PRIMERA - Create Online Clone - Delete Clone
+ - Resync Clone"
 module: hpe3par_online_clone
 options:
   base_volume_name:
@@ -93,8 +93,8 @@ requirements:
   - "3PAR OS - 3.2.2 MU6, 3.3.1 MU1"
   - "Ansible - 2.4"
   - "hpe3par_sdk 1.0.0"
-  - "WSAPI service should be enabled on the 3PAR storage array."
-short_description: "Manage HPE 3PAR Online Clone"
+  - "WSAPI service should be enabled on the 3PAR and PRIMERA storage array."
+short_description: "Manage HPE 3PAR and PRIMERA Online Clone"
 version_added: "2.4"
 '''
 
@@ -367,7 +367,9 @@ def main():
     snap_cpg = module.params["snap_cpg"]
     compression = module.params["compression"]
 
-    wsapi_url = 'https://%s:8080/api/v1' % storage_system_ip
+    port_number = client.HPE3ParClient.getPortNumber(
+        storage_system_ip, storage_system_username, storage_system_password)
+    wsapi_url = 'https://%s:%s/api/v1' % (storage_system_ip, port_number)
     client_obj = client.HPE3ParClient(wsapi_url)
 
     # States

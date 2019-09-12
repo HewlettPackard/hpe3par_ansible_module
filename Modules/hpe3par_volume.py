@@ -30,9 +30,9 @@ ANSIBLE_METADATA = {'metadata_version': '1.1',
 DOCUMENTATION = r'''
 ---
 author: "Hewlett Packard Enterprise (ecostor@groups.ext.hpe.com )"
-description: "On HPE 3PAR - Create Volume. - Delete Volume. - Modify Volume.
- - Grow Volume - Grow Volume to certain size - Change Snap CPG - Change User
- CPG - Convert Provisioning TypeError - Set Snap CPG"
+description: "On HPE 3PAR and PRIMERA - Create Volume - Delete Volume - Modify
+ Volume - Grow Volume - Grow Volume to certain size - Change Snap CPG - Change
+ User CPG - Convert Provisioning TypeError - Set Snap CPG"
 module: hpe3par_volume
 options:
   compression:
@@ -155,7 +155,8 @@ options:
       - full
     default: thin
     description:
-      - "Specifies the type of the volume.\nRequired with action convert_type"
+      - "Specifies the type of the volume.\nRequired with action convert_type.
+       Full provisioning is not supported on PRIMERA array"
     required: false
   usr_spc_alloc_limit_pct:
     default: 0
@@ -198,8 +199,8 @@ requirements:
   - "3PAR OS - 3.2.2 MU6, 3.3.1 MU1"
   - "Ansible - 2.4"
   - "hpe3par_sdk 1.0.0"
-  - "WSAPI service should be enabled on the 3PAR storage array."
-short_description: "Manage HPE 3PAR Volume"
+  - "WSAPI service should be enabled on the 3PAR and PRIMERA storage array."
+short_description: "Manage HPE 3PAR and PRIMERA Volume"
 version_added: "2.4"
 '''
 
@@ -642,6 +643,11 @@ is null",
             {})
     try:
         client_obj.login(storage_system_username, storage_system_password)
+        compression_state = client_obj.getVolume(volume_name).compression_state
+        if compression_state == 2 or compression_state == 3 or compression_state == 4 or compression_state is None:
+            compression_state = False
+        else:
+            compression_state = True
         provisioning_type = client_obj.getVolume(volume_name).provisioning_type
         if provisioning_type == 1:
             volume_type = 'FPVV'
@@ -654,12 +660,14 @@ is null",
 
         if client_obj.volumeExists(volume_name):
             if (volume_type != get_volume_type(type)[0] or
-                    volume_type == 'UNKNOWN'):
+                    volume_type == 'UNKNOWN' or
+                    compression != compression_state):
                 new_vol_type = get_volume_type(type)[1]
                 usr_cpg = 1
                 optional = {'userCPG': cpg,
                             'conversionOperation': new_vol_type,
-                            'keepVV': keep_vv
+                            'keepVV': keep_vv,
+                            'compression': compression
                             }
 
                 task = client_obj.tuneVolume(volume_name,
@@ -901,7 +909,9 @@ def main():
     keep_vv = module.params["keep_vv"]
     type = module.params["type"]
 
-    wsapi_url = 'https://%s:8080/api/v1' % storage_system_ip
+    port_number = client.HPE3ParClient.getPortNumber(
+        storage_system_ip, storage_system_username, storage_system_password)
+    wsapi_url = 'https://%s:%s/api/v1' % (storage_system_ip, port_number)
     client_obj = client.HPE3ParClient(wsapi_url, 'ansible_module_3par')
 
     # States

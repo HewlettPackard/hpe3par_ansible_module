@@ -29,12 +29,12 @@ ANSIBLE_METADATA = {'metadata_version': '1.1',
 DOCUMENTATION = r'''
 ---
 author: "Arshad Ansari(arshad.alam.ansari@hpe.com)"
-description: "On HPE 3PAR - Create Remote Copy Group. - Modify Remote Copy
- Group. - Add Volumes to Remote Copy Group. - Remove Volumes from Remote
- Copy Group. -Synchronize Remote Copy Group. - Delete Remote Copy Group.
- - Admit Remote Copy Link. - Dismiss Remote Copy Link.
- - Start Remote Copy Group. - Stop Remote Copy Group. - Admit Remote Copy Target.
- - Dismiss Remote Copy Target. - Start Remote Copy Service. - Remote Copy Status."
+description: "On HPE 3PAR and PRIMERA - Create Remote Copy Group - Modify Remote
+ Copy Group - Add Volumes to Remote Copy Group - Remove Volumes from Remote
+ Copy Group -Synchronize Remote Copy Group - Delete Remote Copy Group
+ - Admit Remote Copy Link - Dismiss Remote Copy Link - Start Remote Copy Group
+ - Stop Remote Copy Group - Admit Remote Copy Target - Dismiss Remote Copy Target
+ - Start Remote Copy Service - Remote Copy Status"
 module: hpe3par_remote_copy
 options:
   remote_copy_group_name:
@@ -244,8 +244,8 @@ requirements:
   - "3PAR OS - 3.2.2 MU6, 3.3.1 MU1"
   - "Ansible - 2.4"
   - "hpe3par_sdk 1.0.0"
-  - "WSAPI service should be enabled on the 3PAR storage array."
-short_description: "Manage HPE 3PAR Remote Copy"
+  - "WSAPI service should be enabled on the 3PAR and PRIMERA storage array."
+short_description: "Manage HPE 3PAR and PRIMERA Remote Copy"
 version_added: "2.4"
 '''
 
@@ -1510,7 +1510,9 @@ def main():
     local_remote_volume_pair_list = module.params["local_remote_volume_pair_list"]
     target_mode = module.params["target_mode"]
 
-    wsapi_url = 'https://%s:8080/api/v1' % storage_system_ip
+    port_number = client.HPE3ParClient.getPortNumber(
+        storage_system_ip, storage_system_username, storage_system_password)
+    wsapi_url = 'https://%s:%s/api/v1' % (storage_system_ip, port_number)
     client_obj = client.HPE3ParClient(wsapi_url)
 
     # States
