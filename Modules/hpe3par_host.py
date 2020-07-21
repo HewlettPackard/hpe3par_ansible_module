@@ -637,7 +637,7 @@ null",
     try:
         client_obj.login(storage_system_username, storage_system_password)
 
-        # check if wwn is already assigned
+        # check if iscsi name is already assigned
         client_obj.setSSHOptions(storage_system_ip, storage_system_username, storage_system_password)
 
         for iscsi_name in host_iscsi_names:
