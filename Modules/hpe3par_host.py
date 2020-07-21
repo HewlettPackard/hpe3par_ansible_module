@@ -511,6 +511,7 @@ null",
 
 def add_fc_path_to_host(
         client_obj,
+        storage_system_ip,
         storage_system_username,
         storage_system_password,
         host_name,
@@ -538,6 +539,20 @@ null",
             {})
     try:
         client_obj.login(storage_system_username, storage_system_password)
+
+        # check if wwn is already assigned
+        client_obj.setSSHOptions(storage_system_ip, storage_system_username, storage_system_password)
+
+        for fc_wwn in host_fc_wwns:
+            host_name_3par = client_obj.findHost(wwn=fc_wwn)
+
+            if host_name_3par:
+                if host_name == host_name_3par:
+                    return (True, False, "WWN %s is already assigned to host" % fc_wwn, {})
+                else:
+                    err_msg = 'WWN is already used by another host'
+                    return (False, False, "Add FC path to host failed | %s" % err_msg, {})
+
         mod_request = {
             'pathOperation': HPE3ParClient.HOST_EDIT_ADD,
             'FCWWNs': host_fc_wwns}
@@ -593,6 +608,7 @@ null",
 
 def add_iscsi_path_to_host(
         client_obj,
+        storage_system_ip,
         storage_system_username,
         storage_system_password,
         host_name,
@@ -620,6 +636,20 @@ null",
             {})
     try:
         client_obj.login(storage_system_username, storage_system_password)
+
+        # check if wwn is already assigned
+        client_obj.setSSHOptions(storage_system_ip, storage_system_username, storage_system_password)
+
+        for iscsi_name in host_iscsi_names:
+            host_name_3par = client_obj.findHost(iqn=iscsi_name)
+
+            if host_name_3par:
+                if host_name == host_name_3par:
+                    return (True, False, "iSCSI name %s is already assigned to host" % iscsi_name, {})
+                else:
+                    err_msg = 'iSCSI name is already used by another host'
+                    return (False, False, "Add ISCSI path to host failed | %s" % err_msg, {})
+
         mod_request = {
             'pathOperation': HPE3ParClient.HOST_EDIT_ADD,
             'iSCSINames': host_iscsi_names}
@@ -801,7 +831,7 @@ def main():
             host_name)
     elif module.params["state"] == "add_fc_path_to_host":
         return_status, changed, msg, issue_attr_dict = add_fc_path_to_host(
-            client_obj, storage_system_username, storage_system_password,
+            client_obj, storage_system_ip, storage_system_username, storage_system_password,
             host_name, host_fc_wwns)
     elif module.params["state"] == "remove_fc_path_from_host":
         return_status, changed, msg, issue_attr_dict = (
@@ -810,7 +840,7 @@ def main():
                                      host_fc_wwns, force_path_removal))
     elif module.params["state"] == "add_iscsi_path_to_host":
         return_status, changed, msg, issue_attr_dict = add_iscsi_path_to_host(
-            client_obj, storage_system_username, storage_system_password,
+            client_obj, storage_system_ip, storage_system_username, storage_system_password,
             host_name, host_iscsi_names)
     elif module.params["state"] == "remove_iscsi_path_from_host":
         return_status, changed, msg, issue_attr_dict = (
