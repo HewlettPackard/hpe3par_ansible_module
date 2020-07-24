@@ -541,17 +541,11 @@ null",
         client_obj.login(storage_system_username, storage_system_password)
 
         # check if wwn is already assigned
-        client_obj.setSSHOptions(storage_system_ip, storage_system_username, storage_system_password)
-
-        for fc_wwn in host_fc_wwns:
-            host_name_3par = client_obj.findHost(wwn=fc_wwn)
-
-            if host_name_3par:
-                if host_name == host_name_3par:
-                    return (True, False, "WWN %s is already assigned to host" % fc_wwn, {})
-                else:
-                    err_msg = 'WWN is already used by another host'
-                    return (False, False, "Add FC path to host failed | %s" % err_msg, {})
+        host_list = client_obj.queryHost(wwns=host_fc_wwns)
+        for host_obj in host_list:
+            host_name_3par = host_obj.name
+            if host_name == host_name_3par:
+                return (True, False, "WWN is already assigned to this host", {})
 
         mod_request = {
             'pathOperation': HPE3ParClient.HOST_EDIT_ADD,
@@ -638,17 +632,11 @@ null",
         client_obj.login(storage_system_username, storage_system_password)
 
         # check if iscsi name is already assigned
-        client_obj.setSSHOptions(storage_system_ip, storage_system_username, storage_system_password)
-
-        for iscsi_name in host_iscsi_names:
-            host_name_3par = client_obj.findHost(iqn=iscsi_name)
-
-            if host_name_3par:
-                if host_name == host_name_3par:
-                    return (True, False, "iSCSI name %s is already assigned to host" % iscsi_name, {})
-                else:
-                    err_msg = 'iSCSI name is already used by another host'
-                    return (False, False, "Add ISCSI path to host failed | %s" % err_msg, {})
+        host_list = client_obj.queryHost(iqns=host_iscsi_names)
+        for host_obj in host_list:
+            host_name_3par = host_obj.name
+            if host_name == host_name_3par:
+                return (True, False, "iSCSI name is already assigned to this host", {})
 
         mod_request = {
             'pathOperation': HPE3ParClient.HOST_EDIT_ADD,
