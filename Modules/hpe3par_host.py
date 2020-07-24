@@ -511,7 +511,6 @@ null",
 
 def add_fc_path_to_host(
         client_obj,
-        storage_system_ip,
         storage_system_username,
         storage_system_password,
         host_name,
@@ -602,7 +601,6 @@ null",
 
 def add_iscsi_path_to_host(
         client_obj,
-        storage_system_ip,
         storage_system_username,
         storage_system_password,
         host_name,
@@ -819,7 +817,7 @@ def main():
             host_name)
     elif module.params["state"] == "add_fc_path_to_host":
         return_status, changed, msg, issue_attr_dict = add_fc_path_to_host(
-            client_obj, storage_system_ip, storage_system_username, storage_system_password,
+            client_obj, storage_system_username, storage_system_password,
             host_name, host_fc_wwns)
     elif module.params["state"] == "remove_fc_path_from_host":
         return_status, changed, msg, issue_attr_dict = (
@@ -828,7 +826,7 @@ def main():
                                      host_fc_wwns, force_path_removal))
     elif module.params["state"] == "add_iscsi_path_to_host":
         return_status, changed, msg, issue_attr_dict = add_iscsi_path_to_host(
-            client_obj, storage_system_ip, storage_system_username, storage_system_password,
+            client_obj, storage_system_username, storage_system_password,
             host_name, host_iscsi_names)
     elif module.params["state"] == "remove_iscsi_path_from_host":
         return_status, changed, msg, issue_attr_dict = (
