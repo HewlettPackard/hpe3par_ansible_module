@@ -630,21 +630,46 @@ null",
         client_obj.login(storage_system_username, storage_system_password)
 
         # check if iscsi name is already assigned
-        host_list = client_obj.queryHost(iqns=host_iscsi_names)
-        for host_obj in host_list:
-            host_name_3par = host_obj.name
-            if host_name == host_name_3par:
-                return (True, False, "iSCSI name is already assigned to this host", {})
+        #host_iscsi_names = ['iqn.1993-08.org.debian:01:90729193d333','iqn.1993-08.org.debian:01:90729193d222','iqn.1993-08.org.debian:01:90729193d111','iqn.1993-08.org.debian:01:90729193d000']
+        #host_iscsi_names = ['iqn.1993-08.org.debian:01:90729193d333','iqn.1993-08.org.debian:01:90729193d222']
+        #host_iscsi_names = ['iqn.1993-08.org.debian:01:90729193d222']
+        iqn_new = []
+        iqn_same_host = []
+        iqn_other_host = []
 
-        mod_request = {
-            'pathOperation': HPE3ParClient.HOST_EDIT_ADD,
-            'iSCSINames': host_iscsi_names}
-        client_obj.modifyHost(host_name, mod_request)
+        for iqn in host_iscsi_names:
+            iscsi_name = [iqn]
+            host_list = client_obj.queryHost(iqns=iscsi_name)
+            for host_obj in host_list:
+                host_name_3par = host_obj.name
+                if host_name == host_name_3par:
+                    iqn_same_host.append(iqn)
+                else:
+                    iqn_other_host.append(iqn)
+
+            if host_list == []:
+                iqn_new.append(iqn)
+
+        if iqn_other_host:
+            str_iqn = ", ".join(iqn_other_host)
+            client_obj.logout()
+            return(False, False, "iSCSI name(s) %s already assigned to other host" % str_iqn, {})
+        elif iqn_new:
+            mod_request = {
+                'pathOperation': HPE3ParClient.HOST_EDIT_ADD,
+                'iSCSINames': iqn_new}
+            client_obj.modifyHost(host_name, mod_request)
+            client_obj.logout()
+            return (True, True, "Added ISCSI path to host successfully.", {})
+        elif iqn_same_host:
+            str_iqn = ", ".join(iqn_same_host)
+            client_obj.logout()
+            return(True, False, "iSCSI name(s) %s already assigned to this host" % str_iqn, {})
+
     except Exception as e:
         return (False, False, "Add ISCSI path to host failed | %s" % e, {})
     finally:
         client_obj.logout()
-    return (True, True, "Added ISCSI path to host successfully.", {})
 
 
 def remove_iscsi_path_from_host(
