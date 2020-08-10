@@ -540,21 +540,44 @@ null",
         client_obj.login(storage_system_username, storage_system_password)
 
         # check if wwn is already assigned
-        host_list = client_obj.queryHost(wwns=host_fc_wwns)
-        for host_obj in host_list:
-            host_name_3par = host_obj.name
-            if host_name == host_name_3par:
-                return (True, False, "WWN is already assigned to this host", {})
+        wwn_new = []
+        wwn_same_host = []
+        wwn_other_host = []
 
-        mod_request = {
-            'pathOperation': HPE3ParClient.HOST_EDIT_ADD,
-            'FCWWNs': host_fc_wwns}
-        client_obj.modifyHost(host_name, mod_request)
+        for wwn in host_fc_wwns:
+            wwn_list = [wwn]
+            host_list = client_obj.queryHost(wwns=wwn_list)
+            for host_obj in host_list:
+                host_name_3par = host_obj.name
+                if host_name == host_name_3par:
+                    wwn_same_host.append(wwn)
+                else:
+                    wwn_other_host.append(wwn)
+
+            if host_list == []:
+                wwn_new.append(wwn)
+
+        if wwn_other_host:
+            str_wwn = ", ".join(wwn_other_host)
+            client_obj.logout()
+            return(False, False, "FC path(s) %s already assigned to other host" % str_wwn, {})
+        elif wwn_new:
+            mod_request = {
+                'pathOperation': HPE3ParClient.HOST_EDIT_ADD,
+                'FCWWNs': wwn_new}
+            client_obj.modifyHost(host_name, mod_request)
+            client_obj.logout()
+            str_wwn = ", ".join(wwn_new)
+            return (True, True, "Added FC path(s) %s to host successfully." % str_wwn, {})
+        elif wwn_same_host:
+            str_wwn = ", ".join(wwn_same_host)
+            client_obj.logout()
+            return(True, False, "FC path(s) %s already assigned to this host" % str_wwn, {})
+
     except Exception as e:
         return (False, False, "Add FC path to host failed | %s" % e, {})
     finally:
         client_obj.logout()
-    return (True, True, "Added FC path to host successfully.", {})
 
 
 def remove_fc_path_from_host(
@@ -630,9 +653,6 @@ null",
         client_obj.login(storage_system_username, storage_system_password)
 
         # check if iscsi name is already assigned
-        #host_iscsi_names = ['iqn.1993-08.org.debian:01:90729193d333','iqn.1993-08.org.debian:01:90729193d222','iqn.1993-08.org.debian:01:90729193d111','iqn.1993-08.org.debian:01:90729193d000']
-        #host_iscsi_names = ['iqn.1993-08.org.debian:01:90729193d333','iqn.1993-08.org.debian:01:90729193d222']
-        #host_iscsi_names = ['iqn.1993-08.org.debian:01:90729193d222']
         iqn_new = []
         iqn_same_host = []
         iqn_other_host = []
@@ -660,7 +680,8 @@ null",
                 'iSCSINames': iqn_new}
             client_obj.modifyHost(host_name, mod_request)
             client_obj.logout()
-            return (True, True, "Added ISCSI path to host successfully.", {})
+            str_iqn = ", ".join(iqn_new)
+            return (True, True, "Added iSCSI path(s) %s to host successfully." % str_iqn, {})
         elif iqn_same_host:
             str_iqn = ", ".join(iqn_same_host)
             client_obj.logout()
