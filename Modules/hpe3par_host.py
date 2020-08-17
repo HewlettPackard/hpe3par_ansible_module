@@ -649,6 +649,7 @@ null",
             False,
             "Host modification failed. host_iscsi_names is null",
             {})
+    debug_list = []
     try:
         client_obj.login(storage_system_username, storage_system_password)
 
@@ -660,6 +661,9 @@ null",
         for iqn in host_iscsi_names:
             iscsi_name = [iqn]
             host_list = client_obj.queryHost(iqns=iscsi_name)
+            debug_list.append('type_host_list')
+            str_2 = str(type(host_list))
+            debug_list.append(str_2)
             for host_obj in host_list:
                 host_name_3par = host_obj.name
                 if host_name == host_name_3par:
@@ -681,7 +685,8 @@ null",
             client_obj.modifyHost(host_name, mod_request)
             client_obj.logout()
             str_iqn = ", ".join(iqn_new)
-            return (True, True, "Added iSCSI path(s) %s to host successfully." % str_iqn, {})
+            str_debug = ", ".join(debug_list)
+            return (True, True, "Added iSCSI path(s) %s to host successfully. debug_list: %s" % (str_iqn, str_debug), {})
         elif iqn_same_host:
             str_iqn = ", ".join(iqn_same_host)
             client_obj.logout()
@@ -721,13 +726,75 @@ null",
             False,
             "Host modification failed. host_iscsi_names is null",
             {})
+    iqn_new = []
+    iqn_same_host = []
+    iqn_other_host = []
+    all_host_list = []
+    debug_list = []
     try:
         client_obj.login(storage_system_username, storage_system_password)
-        mod_request = {
-            'pathOperation': HPE3ParClient.HOST_EDIT_REMOVE,
-            'iSCSINames': host_iscsi_names,
-            'forcePathRemoval': force_path_removal}
-        client_obj.modifyHost(host_name, mod_request)
+        debug_list.append('login_done')
+
+        # check various possibilities
+        #host_iscsi_names = ['iqn.1993-08.org.debian:01:90729193d333','iqn.1993-08.org.debian:01:90729193d222','iqn.1993-08.org.debian:01:90729193d111','iqn.1993-08.org.debian:01:90729193d000']
+        #host_iscsi_names = ['iqn.1993-08.org.debian:01:90729193d333','iqn.1993-08.org.debian:01:90729193d222']
+        #host_iscsi_names = ['iqn.1993-08.org.debian:01:90729193d333']
+        #iqn_new = []
+        #iqn_same_host = []
+        #iqn_other_host = []
+
+        #debug_list.append('before_entering_for')
+        for iqn in host_iscsi_names:
+            str_line = "inside_for_iqn " + iqn
+            debug_list.append(str_line)
+            iscsi_name = [iqn]
+            debug_list.append('calling_queryHost')
+            host_list = client_obj.queryHost(iqns=iscsi_name)
+            debug_list.append('type_host_list')
+            str_2 = str(type(host_list))
+            debug_list.append(str_2)
+            host_name_2 = host_list.name
+            #str_tmp = 'host_name ' + host_name_2
+            #debug_list.append(str_tmp)
+
+            if host_list == None:
+                debug_list.append('host_list_is_None')
+
+            #debug_list.append('before_entering_for')
+            for host_obj in host_list:
+                host_name_3par = host_obj.name
+                str_line = "inside_for_host_name_3par " + host_name_3par
+                debug_list.append(str_line)
+                all_host_list.append(host_name_3par)
+                if host_name == host_name_3par:
+                    iqn_same_host.append(iqn)
+                else:
+                    iqn_other_host.append(iqn)
+
+            if host_list == []:
+                debug_list.append('host_list_is_empty')
+                iqn_new.append(iqn)
+
+        debug_list.append('for_loop_completed')
+
+        if iqn_other_host:
+            str_iqn = ", ".join(iqn_other_host)
+            client_obj.logout()
+            return(False, False, "iSCSI name(s) %s assigned to other host" % str_iqn, {})
+        elif iqn_same_host:
+            mod_request = {
+                'pathOperation': HPE3ParClient.HOST_EDIT_REMOVE,
+                'iSCSINames': iqn_same_host,
+                'forcePathRemoval': force_path_removal}
+            client_obj.modifyHost(host_name, mod_request)
+            client_obj.logout()
+            str_iqn = ", ".join(iqn_same_host)
+            return (True, True, "Removed iSCSI path(s) %s from host successfully." % str_iqn, {})
+        elif iqn_new:
+            str_iqn = ", ".join(iqn_new)
+            client_obj.logout()
+            return(True, False, "iSCSI name(s) %s seem to be already removed" % str_iqn, {})
+
     except Exception as e:
         return (
             False,
@@ -737,7 +804,14 @@ null",
             {})
     finally:
         client_obj.logout()
-    return (True, True, "Removed ISCSI path from host successfully.", {})
+        str_orig = ", ".join(host_iscsi_names)
+        str_other = ", ".join(iqn_other_host)
+        str_same = ", ".join(iqn_same_host)
+        str_new = ", ".join(iqn_new)
+        str_all_host = ", ".join(all_host_list)
+        str_debug = ", ".join(debug_list)
+        return(False, False, "code should not reach here; orig: %s, other: %s, same: %s, new: %s, all_host_list: %s, debug: %s" %
+            (str_orig, str_other, str_same, str_new, str_all_host, str_debug), {})
 
 
 def main():
