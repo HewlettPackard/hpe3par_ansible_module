@@ -1057,6 +1057,36 @@ class TestHpe3parHost(unittest.TestCase):
         self.assertEqual(result, (
             False, False, "Remove ISCSI path from host failed | Failed to login!", {}))
 
+    @mock.patch('Modules.hpe3par_host.client')
+    @mock.patch('Modules.hpe3par_host.HPE3ParClient')
+    def test_remove_iscsi_already_removed(self, mock_HPE3ParClient, mock_client):
+        """
+        hpe3par host - remove_iscsi_path_from_host
+        """
+        mock_client.HPE3ParClient.queryHost.return_value = []
+        iqn_list = ['iqn.333', 'iqn.222']
+        result = host.remove_iscsi_path_from_host(
+            mock_client.HPE3ParClient, "user", "pass", "hostname", iqn_list, None)
+
+        self.assertEqual(result, (
+            True, False, "iSCSI name(s) iqn.333, iqn.222 seem to be already removed", {}))
+
+    @mock.patch('Modules.hpe3par_host.client')
+    @mock.patch('Modules.hpe3par_host.HPE3ParClient')
+    def test_remove_iscsi_assigned_other_host(self, mock_HPE3ParClient, mock_client):
+        """
+        hpe3par host - remove_iscsi_path_from_host
+        """
+        object_hash = {'name': 'other_hostname'}
+        host_obj = Host(object_hash)
+        mock_client.HPE3ParClient.queryHost.return_value = [host_obj]
+        iqn_list = ['iqn.111', 'iqn.000']
+        result = host.remove_iscsi_path_from_host(
+            mock_client.HPE3ParClient, "user", "pass", "hostname", iqn_list, None)
+
+        self.assertEqual(result, (
+            False, False, "iSCSI name(s) iqn.111, iqn.000 assigned to other host", {}))
+
 # main tests
 
     @mock.patch('Modules.hpe3par_host.client')
