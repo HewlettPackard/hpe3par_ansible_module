@@ -20,9 +20,11 @@ import mock
 from Modules import hpe3par_host as host
 from ansible.module_utils.basic import AnsibleModule as ansible
 import unittest
-
+from hpe3par_sdk.models import Host
 
 class TestHpe3parHost(unittest.TestCase):
+
+    maxDiff = None
 
     PARAMS_FOR_PRESENT = {'state': 'present', 'storage_system_ip': '192.168.0.1', 'storage_system_username': 'USER',
                           'storage_system_password': 'PASS', 'host_name': 'host', 'host_domain': 'domain', 'host_new_name': 'new',
@@ -726,12 +728,13 @@ class TestHpe3parHost(unittest.TestCase):
         """
         hpe3par host - add_fc_path_to_host
         """
+        mock_client.HPE3ParClient.queryHost.return_value = []
         mock_HPE3ParClient.HOST_EDIT_ADD = 1
         result = host.add_fc_path_to_host(
-            mock_client.HPE3ParClient, "user", "pass", "host", "iscsi")
+            mock_client.HPE3ParClient, "user", "pass", "hostname", ['fc_wwn'])
 
         self.assertEqual(result, (
-            True, True, "Added FC path to host successfully.", {}))
+            True, True, "Added FC path(s) fc_wwn to host successfully.", {}))
 
     @mock.patch('Modules.hpe3par_host.client')
     def test_add_FC_exception(self, mock_client):
@@ -741,10 +744,42 @@ class TestHpe3parHost(unittest.TestCase):
         mock_client.login.side_effect = Exception("Failed to login!")
         mock_client.return_value = mock_client
         result = host.add_fc_path_to_host(
-            mock_client, "user", "pass", "host", "iscsi")
+            mock_client, "user", "pass", "hostname", "fc_wwn")
 
         self.assertEqual(result, (
             False, False, "Add FC path to host failed | Failed to login!", {}))
+
+    @mock.patch('Modules.hpe3par_host.client')
+    @mock.patch('Modules.hpe3par_host.HPE3ParClient')
+    def test_add_FC_same_host(self, mock_HPE3ParClient, mock_client):
+        """
+        hpe3par host - add_fc_path_to_host
+        """
+        object_hash = {'name': 'hostname'}
+        host_obj = Host(object_hash)
+        mock_client.HPE3ParClient.queryHost.return_value = [host_obj]
+        wwn_list = ['wwn.333', 'wwn.222']
+        result = host.add_fc_path_to_host(
+            mock_client.HPE3ParClient, "user", "pass", "hostname", wwn_list)
+
+        self.assertEqual(result, (
+            True, False, "FC path(s) wwn.333, wwn.222 already assigned to this host", {}))
+
+    @mock.patch('Modules.hpe3par_host.client')
+    @mock.patch('Modules.hpe3par_host.HPE3ParClient')
+    def test_add_FC_assigned_other_host(self, mock_HPE3ParClient, mock_client):
+        """
+        hpe3par host - add_fc_path_to_host
+        """
+        object_hash = {'name': 'other_hostname'}
+        host_obj = Host(object_hash)
+        mock_client.HPE3ParClient.queryHost.return_value = [host_obj]
+        wwn_list = ['wwn.111', 'wwn.000']
+        result = host.add_fc_path_to_host(
+            mock_client.HPE3ParClient, "user", "pass", "hostname", wwn_list)
+
+        self.assertEqual(result, (
+            False, False, "FC path(s) wwn.111, wwn.000 already assigned to other host", {}))
 
     # Remove FC
     @mock.patch('Modules.hpe3par_host.client')
@@ -795,12 +830,15 @@ class TestHpe3parHost(unittest.TestCase):
         """
         hpe3par host - remove_fc_path_from_host
         """
+        object_hash = {'name': 'hostname'}
+        host_obj = Host(object_hash)
+        mock_client.HPE3ParClient.queryHost.return_value = [host_obj]
         mock_HPE3ParClient.HOST_EDIT_REMOVE = 1
         result = host.remove_fc_path_from_host(
-            mock_client, "user", "pass", "host", "fcwwns", None)
+            mock_client.HPE3ParClient, "user", "pass", "hostname", ['fc_wwn'], None)
 
         self.assertEqual(result, (
-            True, True, "Removed FC path from host successfully.", {}))
+            True, True, "Removed FC path(s) fc_wwn from host successfully.", {}))
 
     @mock.patch('Modules.hpe3par_host.client')
     def test_remove_fc_exception(self, mock_client):
@@ -814,6 +852,36 @@ class TestHpe3parHost(unittest.TestCase):
 
         self.assertEqual(result, (
             False, False, "Remove FC path from host failed | Failed to login!", {}))
+
+    @mock.patch('Modules.hpe3par_host.client')
+    @mock.patch('Modules.hpe3par_host.HPE3ParClient')
+    def test_remove_fc_already_removed(self, mock_HPE3ParClient, mock_client):
+        """
+        hpe3par host - remove_fc_path_from_host
+        """
+        mock_client.HPE3ParClient.queryHost.return_value = []
+        wwn_list = ['wwn.333', 'wwn.222']
+        result = host.remove_fc_path_from_host(
+            mock_client.HPE3ParClient, "user", "pass", "hostname", wwn_list, None)
+
+        self.assertEqual(result, (
+            True, False, "FC path(s) wwn.333, wwn.222 seem to be already removed", {}))
+
+    @mock.patch('Modules.hpe3par_host.client')
+    @mock.patch('Modules.hpe3par_host.HPE3ParClient')
+    def test_remove_fc_assigned_other_host(self, mock_HPE3ParClient, mock_client):
+        """
+        hpe3par host - remove_fc_path_from_host
+        """
+        object_hash = {'name': 'other_hostname'}
+        host_obj = Host(object_hash)
+        mock_client.HPE3ParClient.queryHost.return_value = [host_obj]
+        wwn_list = ['wwn.111', 'wwn.000']
+        result = host.remove_fc_path_from_host(
+            mock_client.HPE3ParClient, "user", "pass", "hostname", wwn_list, None)
+
+        self.assertEqual(result, (
+            False, False, "FC path(s) wwn.111, wwn.000 assigned to other host", {}))
 
     # Add ISCSI
     @mock.patch('Modules.hpe3par_host.client')
@@ -864,12 +932,13 @@ class TestHpe3parHost(unittest.TestCase):
         """
         hpe3par host - add_iscsi_path_to_host
         """
+        mock_client.HPE3ParClient.queryHost.return_value = []
         mock_HPE3ParClient.HOST_EDIT_ADD = 1
         result = host.add_iscsi_path_to_host(
-            mock_client.HPE3ParClient, "user", "pass", "host", "iscsi")
+            mock_client.HPE3ParClient, "user", "pass", "hostname", ['iscsi_iqn'])
 
         self.assertEqual(result, (
-            True, True, "Added ISCSI path to host successfully.", {}))
+            True, True, "Added iSCSI path(s) iscsi_iqn to host successfully.", {}))
 
     @mock.patch('Modules.hpe3par_host.client')
     def test_add_iscsi_exception(self, mock_client):
@@ -879,10 +948,42 @@ class TestHpe3parHost(unittest.TestCase):
         mock_client.login.side_effect = Exception("Failed to login!")
         mock_client.return_value = mock_client
         result = host.add_iscsi_path_to_host(
-            mock_client, "user", "pass", "host", "iscsi")
+            mock_client, "user", "pass", "hostname", "iscsi_iqn")
 
         self.assertEqual(result, (
             False, False, "Add ISCSI path to host failed | Failed to login!", {}))
+
+    @mock.patch('Modules.hpe3par_host.client')
+    @mock.patch('Modules.hpe3par_host.HPE3ParClient')
+    def test_add_iscsi_assigned_same_host(self, mock_HPE3ParClient, mock_client):
+        """
+        hpe3par host - add_iscsi_path_to_host
+        """
+        object_hash = {'name': 'hostname'}
+        host_obj = Host(object_hash)
+        mock_client.HPE3ParClient.queryHost.return_value = [host_obj]
+        iqn_list = ['iqn.333', 'iqn.222']
+        result = host.add_iscsi_path_to_host(
+            mock_client.HPE3ParClient, "user", "pass", "hostname", iqn_list)
+
+        self.assertEqual(result, (
+            True, False, "iSCSI name(s) iqn.333, iqn.222 already assigned to this host", {}))
+
+    @mock.patch('Modules.hpe3par_host.client')
+    @mock.patch('Modules.hpe3par_host.HPE3ParClient')
+    def test_add_iscsi_assigned_other_host(self, mock_HPE3ParClient, mock_client):
+        """
+        hpe3par host - add_iscsi_path_to_host
+        """
+        object_hash = {'name': 'other_hostname'}
+        host_obj = Host(object_hash)
+        mock_client.HPE3ParClient.queryHost.return_value = [host_obj]
+        iqn_list = ['iqn.111', 'iqn.000']
+        result = host.add_iscsi_path_to_host(
+            mock_client.HPE3ParClient, "user", "pass", "hostname", iqn_list)
+
+        self.assertEqual(result, (
+            False, False, "iSCSI name(s) iqn.111, iqn.000 already assigned to other host", {}))
 
     # Remove ISCSI
     @mock.patch('Modules.hpe3par_host.client')
@@ -933,12 +1034,15 @@ class TestHpe3parHost(unittest.TestCase):
         """
         hpe3par host - remove_iscsi_path_from_host
         """
+        object_hash = {'name': 'hostname'}
+        host_obj = Host(object_hash)
+        mock_client.HPE3ParClient.queryHost.return_value = [host_obj]
         mock_HPE3ParClient.HOST_EDIT_REMOVE = 1
         result = host.remove_iscsi_path_from_host(
-            mock_client, "user", "pass", "host", "iscsi", None)
+            mock_client.HPE3ParClient, "user", "pass", "hostname", ['iscsi_iqn'], None)
 
         self.assertEqual(result, (
-            True, True, "Removed ISCSI path from host successfully.", {}))
+            True, True, "Removed iSCSI path(s) iscsi_iqn from host successfully.", {}))
 
     @mock.patch('Modules.hpe3par_host.client')
     def test_remove_iscsi_exception(self, mock_client):
@@ -952,6 +1056,36 @@ class TestHpe3parHost(unittest.TestCase):
 
         self.assertEqual(result, (
             False, False, "Remove ISCSI path from host failed | Failed to login!", {}))
+
+    @mock.patch('Modules.hpe3par_host.client')
+    @mock.patch('Modules.hpe3par_host.HPE3ParClient')
+    def test_remove_iscsi_already_removed(self, mock_HPE3ParClient, mock_client):
+        """
+        hpe3par host - remove_iscsi_path_from_host
+        """
+        mock_client.HPE3ParClient.queryHost.return_value = []
+        iqn_list = ['iqn.333', 'iqn.222']
+        result = host.remove_iscsi_path_from_host(
+            mock_client.HPE3ParClient, "user", "pass", "hostname", iqn_list, None)
+
+        self.assertEqual(result, (
+            True, False, "iSCSI name(s) iqn.333, iqn.222 seem to be already removed", {}))
+
+    @mock.patch('Modules.hpe3par_host.client')
+    @mock.patch('Modules.hpe3par_host.HPE3ParClient')
+    def test_remove_iscsi_assigned_other_host(self, mock_HPE3ParClient, mock_client):
+        """
+        hpe3par host - remove_iscsi_path_from_host
+        """
+        object_hash = {'name': 'other_hostname'}
+        host_obj = Host(object_hash)
+        mock_client.HPE3ParClient.queryHost.return_value = [host_obj]
+        iqn_list = ['iqn.111', 'iqn.000']
+        result = host.remove_iscsi_path_from_host(
+            mock_client.HPE3ParClient, "user", "pass", "hostname", iqn_list, None)
+
+        self.assertEqual(result, (
+            False, False, "iSCSI name(s) iqn.111, iqn.000 assigned to other host", {}))
 
 # main tests
 
