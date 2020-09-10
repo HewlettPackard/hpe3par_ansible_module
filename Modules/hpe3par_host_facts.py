@@ -30,10 +30,7 @@ ANSIBLE_METADATA = {'metadata_version': '1.1',
 DOCUMENTATION = r'''
 ---
 author: "Hewlett Packard Enterprise (ecostor@groups.ext.hpe.com)"
-description: "On HPE 3PAR and PRIMERA - Get Host Facts
- - Add Initiator Chap - Remove Initiator Chap - Add Target Chap
- - Remove Target Chap - Add FC Path to Host - Remove FC Path from Host
- - Add ISCSI Path to Host - Remove ISCSI Path from Host"
+description: "On HPE 3PAR and PRIMERA - Get Host Facts"
 module: hpe3par_host_facts
 options:
   host_name:

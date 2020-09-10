@@ -30,8 +30,7 @@ ANSIBLE_METADATA = {'metadata_version': '1.1',
 DOCUMENTATION = r'''
 ---
 author: "Hewlett Packard Enterprise (ecostor@groups.ext.hpe.com)"
-description:
-  - "On HPE 3PAR and PRIMERA - Get CPG Facts"
+description: "On HPE 3PAR and PRIMERA - Get CPG Facts"
 module: hpe3par_cpg_facts
 options:
   cpg_name:
