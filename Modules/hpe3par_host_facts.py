@@ -75,7 +75,6 @@ EXAMPLES = r'''
         storage_system_password="{{ storage_system_password }}"
         state=modify
         host_name="{{ host_name }}"
-        host_new_name="{{ host_new_name }}"
 '''
 
 RETURN = r'''
