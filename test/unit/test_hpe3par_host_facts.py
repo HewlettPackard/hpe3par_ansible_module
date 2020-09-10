@@ -122,7 +122,7 @@ class TestHpe3parhostfacts(unittest.TestCase):
                 "domain": "domain",
                 "comment": "comment",
                 "setmembers": "setmembers"
-                }
+            }
         ]
 
         # This creates a instance of the AnsibleModule mock.
