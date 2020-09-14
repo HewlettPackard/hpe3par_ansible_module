@@ -94,6 +94,7 @@ try:
 except ImportError:
     client = None
 
+
 def getCapacityJson(capacity):
     if not capacity:
         return None
@@ -106,6 +107,7 @@ def getCapacityJson(capacity):
     capacityInfo['over_provisioning'] = capacity.over_provisioning
     return capacityInfo
 
+
 def getSpaceJson(space):
     if not space:
         return None
@@ -116,6 +118,7 @@ def getSpaceJson(space):
     spaceInfo['reserved_MiB']  = space.reserved_MiB
     spaceInfo['used_MiB'] = space.used_MiB
     return spaceInfo
+
 
 def getPolicyJson(policy):
     if not policy:
@@ -130,6 +133,7 @@ def getPolicyJson(policy):
     policyInfo['system'] = policy.system
     policyInfo['zero_detect'] = policy.zero_detect
     return policyInfo
+
 
 def get_volumes(client_obj, storage_system_username, storage_system_password, volume_name):
     if storage_system_username is None or storage_system_password is None:

@@ -92,6 +92,7 @@ try:
 except ImportError:
     client = None
 
+
 def get_hostsets (client_obj, storage_system_username, storage_system_password, hostset_name):
     if storage_system_username is None or storage_system_password is None:
         return (

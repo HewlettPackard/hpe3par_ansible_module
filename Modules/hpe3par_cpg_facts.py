@@ -89,6 +89,7 @@ try:
 except ImportError:
     client = None
 
+
 def convert_to_binary_multiple(size, size_unit):
     size_mib = 0
     if size_unit == 'GiB':
@@ -98,6 +99,7 @@ def convert_to_binary_multiple(size, size_unit):
     elif size_unit == 'MiB':
         size_mib = size
     return int(size_mib)
+
 
 def getUsageJson(usage):
     if not usage:
@@ -109,6 +111,7 @@ def getUsageJson(usage):
     usageInfo['rawUsedMiB']  = usage.raw_used_MiB
     usageInfo['rawTotalMiB'] = usage.raw_total_MiB
     return usageInfo
+
 
 def get_cpgs(client_obj, storage_system_username, storage_system_password, cpg_name):
     if storage_system_username is None or storage_system_password is None:
