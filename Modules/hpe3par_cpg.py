@@ -232,7 +232,10 @@ def create_cpg(
         raid_type,
         set_size,
         high_availability,
-        disk_type):
+        disk_type,
+        mag_list,
+        node_list,
+        cage_list):
     if storage_system_username is None or storage_system_password is None:
         return (
             False,
@@ -254,6 +257,13 @@ def create_cpg(
             if disk_type is not None and disk_type:
                 disk_type = getattr(client.HPE3ParClient, disk_type)
                 disk_patterns = [{'diskType': disk_type}]
+            if mag_list is not None and mag_list:
+                disk_patterns.append({'magList': mag_list})
+            if node_list is not None and node_list:
+                disk_patterns.append({'nodeList': node_list})
+            if cage_list is not None and cage_list:
+                disk_patterns.append({'cageList': cage_list})
+
             ld_layout = {
                 'RAIDType': raid_type,
                 'setSize': set_size,
@@ -386,6 +396,15 @@ def main():
         "disk_type": {
             "type": "str",
             "choices": ['FC', 'NL', 'SSD'],
+        },
+        "mag_list": {
+            "type": "str"
+        },
+        "node_list": {
+            "type": "str"
+        },
+        "cage_list": {
+            "type": "str"
         }
     }
 
@@ -409,6 +428,9 @@ def main():
     set_size = module.params["set_size"]
     high_availability = module.params["high_availability"]
     disk_type = module.params["disk_type"]
+    mag_list = module.params["mag_list"]
+    node_list = module.params["node_list"]
+    cage_list = module.params["cage_list"]
 
     port_number = client.HPE3ParClient.getPortNumber(
         storage_system_ip, storage_system_username, storage_system_password)
@@ -432,7 +454,10 @@ def main():
             raid_type,
             set_size,
             high_availability,
-            disk_type
+            disk_type,
+            mag_list,
+            node_list,
+            cage_list
         )
     elif module.params["state"] == "absent":
         return_status, changed, msg, issue_attr_dict = delete_cpg(
