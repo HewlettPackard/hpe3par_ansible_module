@@ -2,13 +2,13 @@ source
 
 :   hpe3par\_cpg.py
 
-hpe3par\_cpg - Manage HPE 3PAR and PRIMERA CPG
-==============================================
+hpe3par\_cpg - Manage HPE Alletra 9000 and Primera and 3PAR CPG
+================================================================
 
 Synopsis
 --------
 
--   Create and delete CPG on HPE 3PAR and PRIMERA.
+-   Create and delete CPG on HPE Alletra 900 and Primera and 3PAR.
 
 Parameters
 ----------
@@ -391,13 +391,13 @@ source
 :   hpe3par\_flash\_cache.py
 
 
-hpe3par\_flash\_cache - Manage HPE 3PAR and PRIMERA Flash Cache
-===============================================================
+hpe3par\_flash\_cache - Manage HPE Alletra 9000 and Primera and 3PAR Flash Cache
+===============================================================================
 
 Synopsis
 --------
 
--   On HPE 3PAR and PRIMERA - Create Flash Cache - Delete Flash Cache
+-   On HPE Alletra 9000 and Primera and 3PAR - Create Flash Cache - Delete Flash Cache
 
 Parameters
 ----------
@@ -551,7 +551,7 @@ source
 :   hpe3par\_host.py
 
 
-hpe3par\_host - Manage HPE 3PAR and PRIMERA Host
+hpe3par\_host - Manage HPE Alletra 9000 and Primera and 3PAR Host
 ================================================
 
 Synopsis

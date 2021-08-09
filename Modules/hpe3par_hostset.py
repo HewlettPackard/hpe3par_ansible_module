@@ -30,7 +30,7 @@ ANSIBLE_METADATA = {'metadata_version': '1.1',
 DOCUMENTATION = r'''
 ---
 author: "Hewlett Packard Enterprise (ecostor@groups.ext.hpe.com )"
-description: "On HPE 3PAR and PRIMERA - Create Host Set - Add Hosts to
+description: "On HPE Alletra 9000 and Primera and 3PAR - Create Host Set - Add Hosts to
  Host Set - Remove Hosts from Host Set"
 module: hpe3par_hostset
 options:
@@ -71,8 +71,8 @@ requirements:
   - "3PAR OS - 3.2.2 MU6, 3.3.1 MU1"
   - "Ansible - 2.4"
   - "hpe3par_sdk 1.0.0"
-  - "WSAPI service should be enabled on the 3PAR and PRIMERA storage array."
-short_description: "Manage HPE 3PAR and PRIMERA Host Set"
+  - "WSAPI service should be enabled on the HPE Alletra 9000 and Primera and 3PAR storage array."
+short_description: "Manage HPE Alletra 9000 and Primera and 3PAR Host Set"
 version_added: "2.4"
 '''
 

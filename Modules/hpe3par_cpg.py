@@ -31,7 +31,7 @@ DOCUMENTATION = r'''
 ---
 author: "Hewlett Packard Enterprise (ecostor@groups.ext.hpe.com)"
 description:
-  - "Create and delete CPG on HPE 3PAR and PRIMERA."
+  - "Create and delete CPG on HPE Alletra 9000 and Primera and 3PAR."
 module: hpe3par_cpg
 options:
   cpg_name:
@@ -142,9 +142,9 @@ requirements:
   - "3PAR OS - 3.2.2 MU6, 3.3.1 MU1"
   - "Ansible - 2.4"
   - "hpe3par_sdk 1.0.0"
-  - "WSAPI service should be enabled on the 3PAR and PRIMERA storage array."
+  - "WSAPI service should be enabled on the HPE Alletra 9000 and Primera and 3PAR storage array."
 
-short_description: "Manage HPE 3PAR and PRIMERA CPG"
+short_description: "Manage HPE Alletra 9000 and Primera and 3PAR CPG"
 version_added: "2.6"
 '''
 

@@ -1,19 +1,22 @@
-# HPE 3PAR and HPE Primera modules for Ansible
+# HPE Alletra 9000 and Primera and 3PAR Modules for Ansible
 
-The HPE 3PAR and HPE Primera modules for Ansible enable automation of storage provisioning for the HPE 3PAR and HPE Primera array. The modules use the HPE 3PAR and HPE Primera SDK for Python to communicate with the storage array over the WSAPI REST interface.
+The HPE Alletra 9000 and Primera and 3PAR modules for Ansible enable automation of storage provisioning for the HPE Alletra 9000 and Primera and 3PAR array. The modules use the HPE Alletra 9000 and Primera and 3PAR SDK for Python to communicate with the storage array over the WSAPI REST interface.
 
 ## Requirements
-* Ansible ver. 2.5, 2.6, 2.7, 2.8
+* Ansible ver. 2.5, 2.6, 2.7, 2.8, 2.9
+* [python_3parclient] (https://pypi.org/project/python-3parclient/)
 * [hpe3par_sdk](https://pypi.org/project/hpe3par_sdk/)
 * 3PAR OS
   * 3.3.1 MU1, MU2, MU3, T05
   * 3.2.2 MU4, MU6 
 * Primera OS
   * 4.0.0
-* WSAPI service should be enabled on the HPE 3PAR and HPE Primera storage array.
+* Alletra OS
+  * 9.4.0
+* WSAPI service should be enabled on the HPE Alletra 9000 and Primera and 3PAR storage array.
 
 ## Configuration
-* Install Ansible and [hpe3par_sdk](https://pypi.org/project/hpe3par_sdk/)
+* Install Ansible, [python_3parclient] (https://pypi.python.org/pypi/hp3parclient) and [hpe3par_sdk](https://pypi.org/project/hpe3par_sdk/)
 * Modify ansible.cfg file to point the library to the Modules folder
 ```
 library=/home/user/workspace/hpe3par_ansible/Modules
