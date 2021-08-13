@@ -15,7 +15,7 @@ The HPE Alletra 9000 and Primera and 3PAR modules for Ansible enable automation 
 * WSAPI service should be enabled on the HPE Alletra 9000 and Primera and 3PAR storage array.
 
 ## Configuration
-* Install Ansible, [python_3parclient] (https://pypi.python.org/pypi/hp3parclient) and [hpe3par_sdk](https://pypi.org/project/hpe3par_sdk/)
+* Install Ansible and [hpe3par_sdk](https://pypi.org/project/hpe3par_sdk/)
 * Modify ansible.cfg file to point the library to the Modules folder
 ```
 library=/home/user/workspace/hpe3par_ansible/Modules
