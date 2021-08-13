@@ -29,7 +29,7 @@ ANSIBLE_METADATA = {'metadata_version': '1.1',
 DOCUMENTATION = r'''
 ---
 author: "Arshad Ansari(arshad.alam.ansari@hpe.com)"
-description: "On HPE 3PAR and PRIMERA - Create Remote Copy Group - Modify Remote
+description: "On HPE Alletra 9000 and Primera and 3PAR - Create Remote Copy Group - Modify Remote
  Copy Group - Add Volumes to Remote Copy Group - Remove Volumes from Remote
  Copy Group -Synchronize Remote Copy Group - Delete Remote Copy Group
  - Admit Remote Copy Link - Dismiss Remote Copy Link - Start Remote Copy Group
@@ -244,8 +244,8 @@ requirements:
   - "3PAR OS - 3.2.2 MU6, 3.3.1 MU1"
   - "Ansible - 2.4"
   - "hpe3par_sdk 1.0.0"
-  - "WSAPI service should be enabled on the 3PAR and PRIMERA storage array."
-short_description: "Manage HPE 3PAR and PRIMERA Remote Copy"
+  - "WSAPI service should be enabled on the HPE Alletra 9000 and Primera and 3PAR storage array."
+short_description: "Manage HPE Alletra 9000 and Primera and 3PAR Remote Copy"
 version_added: "2.4"
 '''
 
