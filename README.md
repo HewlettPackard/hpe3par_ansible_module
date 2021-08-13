@@ -4,7 +4,6 @@ The HPE Alletra 9000 and Primera and 3PAR modules for Ansible enable automation 
 
 ## Requirements
 * Ansible ver. 2.5, 2.6, 2.7, 2.8, 2.9
-* [python_3parclient] (https://pypi.org/project/python-3parclient/)
 * [hpe3par_sdk](https://pypi.org/project/hpe3par_sdk/)
 * 3PAR OS
   * 3.3.1 MU1, MU2, MU3, T05
