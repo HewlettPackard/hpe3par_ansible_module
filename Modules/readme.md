@@ -8,7 +8,7 @@ hpe3par\_cpg - Manage HPE Alletra 9000 and Primera and 3PAR CPG
 Synopsis
 --------
 
--   Create and delete CPG on HPE Alletra 900 and Primera and 3PAR.
+-   Create and delete CPG on HPE Alletra 9000 and Primera and 3PAR.
 
 Parameters
 ----------
@@ -557,7 +557,7 @@ hpe3par\_host - Manage HPE Alletra 9000 and Primera and 3PAR Host
 Synopsis
 --------
 
--   On HPE 3PAR and PRIMERA - Create Host - Delete Host - Add Initiator
+-   On HPE Alletra 9000 and PRIMERA and 3PAR - Create Host - Delete Host - Add Initiator
     Chap - Remove Initiator Chap - Add Target Chap - Remove Target
     Chap - Add FC Path to Host - Remove FC Path from Host - Add ISCSI
     Path to Host - Remove ISCSI Path from Host
@@ -902,13 +902,13 @@ source
 :   hpe3par\_hostset.py
 
 
-hpe3par\_hostset - Manage HPE 3PAR and PRIMERA Host Set
-=======================================================
+hpe3par\_hostset - Manage HPE Alletra 9000 and Primera and 3PAR Host Set
+=============================================================================
 
 Synopsis
 --------
 
--   On HPE 3PAR and PRIMERA - Create Host Set - Add Hosts to Host Set -
+-   On HPE Alletra and PRIMERA and 3PAR  - Create Host Set - Add Hosts to Host Set -
     Remove Hosts from Host Set
 
 Parameters
@@ -1104,13 +1104,13 @@ source
 :   hpe3par\_offline\_clone.py
   
 
-hpe3par\_offline\_clone - Manage HPE 3PAR and PRIMERA Offline Clone
-===================================================================
+hpe3par\_offline\_clone - Manage Alletra 9000 and Primera and 3PAR Offline Clone
+===============================================================================
 
 Synopsis
 --------
 
--   On HPE 3PAR and PRIMERA - Create Offline Clone - Delete Clone -
+-   On HPE Alletra 9000 and PRIMERA and 3PAR - Create Offline Clone - Delete Clone -
     Resync Clone - Stop Cloning
 
 Parameters
@@ -1366,13 +1366,13 @@ source
 
 :   hpe3par\_online\_clone.py
 
-hpe3par\_online\_clone - Manage HPE 3PAR and PRIMERA Online Clone
-=================================================================
+hpe3par\_online\_clone - Manage HPE Alletra 9000 and Primera and 3PAR Online Clone
+=================================================================================
 
 Synopsis
 --------
 
--   On HPE 3PAR and PRIMERA - Create Online Clone - Delete Clone -
+-   On HPE Alletra 9000 and Primera and 3PAR - Create Online Clone - Delete Clone -
     Resync Clone
 
 Parameters
@@ -1643,13 +1643,13 @@ source
 :   hpe3par\_qos.py
  
 
-hpe3par\_qos - Manage HPE 3PAR and PRIMERA QoS Rules
-====================================================
+hpe3par\_qos - Manage HPE Alletra 9000 and Primera and 3PAR QoS Rules
+====================================================================
 
 Synopsis
 --------
 
--   On HPE 3PAR and PRIMERA - Create QoS Rule - Delete QoS Rule - Modify
+-   On HPE Alletra 9000 and Primera and 3PAR - Create QoS Rule - Delete QoS Rule - Modify
     QoS Rule
 
 Parameters
@@ -2107,13 +2107,13 @@ source
 
 :   hpe3par\_snapshot.py
 
-hpe3par\_snapshot - Manage HPE 3PAR and PRIMERA Snapshots
-=========================================================
+hpe3par\_snapshot - Manage HPE Alletra 9000 and Primera and 3PAR Snapshots
+=============================================================================
 
 Synopsis
 --------
 
--   On HPE 3PAR and PRIMERA - Create Snapshot - Delete Snapshot - Modify
+-   On HPE Alletra 9000 and Primera and 3PAR - Create Snapshot - Delete Snapshot - Modify
     Snapshot - Create Schedule - Modify Schedule - Suspend Schedule -
     Resume Schedule - Delete Schedule
 
@@ -2612,13 +2612,13 @@ source
 :   hpe3par\_vlun.py
 
 
-hpe3par\_vlun - Manage HPE 3PAR and PRIMERA VLUN
-================================================
+hpe3par\_vlun - Manage HPE Alletra 9000 and Primera and 3PAR VLUN
+================================================================
 
 Synopsis
 --------
 
--   On HPE 3PAR and PRIMERA - Export volume to host - Export volumeset
+-   On HPE Alletra 9000 and Primera and 3PAR - Export volume to host - Export volumeset
     to host - Export volume to hostset - Export volumeset to hostset -
     Unexport volume from host - Unexport volumeset from host - Unexport
     volume from hostset - Unexport volumeset from hostset
@@ -2952,13 +2952,13 @@ source
 :   hpe3par\_volume.py
 
 
-hpe3par\_volume - Manage HPE 3PAR and PRIMERA Volume
-====================================================
+hpe3par\_volume - Manage HPE Alletra 9000 and Primera and 3PAR Volume
+======================================================================
 
 Synopsis
 --------
 
--   On HPE 3PAR and PRIMERA - Create Volume - Delete Volume - Modify
+-   On HPE Alletra 9000 and Primera and 3PAR - Create Volume - Delete Volume - Modify
     Volume - Grow Volume - Grow Volume to certain size - Change Snap
     CPG - Change User CPG - Convert Provisioning TypeError - Set Snap
     CPG
@@ -3376,13 +3376,13 @@ source
 :   hpe3par\_volumeset.py
  
 
-hpe3par\_volumeset - Manage HPE 3PAR and PRIMERA Volume Set
-===========================================================
+hpe3par\_volumeset - Manage HPE Alletra 9000 and Primera and 3PAR Volume Set
+===============================================================================
 
 Synopsis
 --------
 
--   On HPE 3PAR and PRIMERA - Create Volume Set - Add Volumes to Volume
+-   On HPE Alletra 9000 and Primera and 3PAR Create Volume Set - Add Volumes to Volume
     Set - Remove Volumes from Volume Set
 
 Parameters
@@ -3577,13 +3577,13 @@ source
 
 :   hpe3par\_remote\_copy.py
 
-hpe3par\_remote\_copy - Manage HPE 3PAR and PRIMERA Remote Copy
-===============================================================
+hpe3par\_remote\_copy - Manage HPE Alletra 9000 and Primera and 3PAR Remote Copy
+==================================================================================
 
 Synopsis
 --------
 
--   On HPE 3PAR and PRIMERA - Create Remote Copy Group - Modify Remote
+-   On HPE Alletra 9000 and Primera and 3PAR - Create Remote Copy Group - Modify Remote
     Copy Group - Add Volumes to Remote Copy Group - Remove Volumes from
     Remote Copy Group -Synchronize Remote Copy Group - Delete Remote
     Copy Group - Admit Remote Copy Link - Dismiss Remote Copy Link -
