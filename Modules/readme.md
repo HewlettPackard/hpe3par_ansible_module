@@ -908,7 +908,7 @@ hpe3par\_hostset - Manage HPE Alletra 9000 and Primera and 3PAR Host Set
 Synopsis
 --------
 
--   On HPE Alletra and PRIMERA and 3PAR  - Create Host Set - Add Hosts to Host Set -
+-   On HPE Alletra 9000 and PRIMERA and 3PAR  - Create Host Set - Add Hosts to Host Set -
     Remove Hosts from Host Set
 
 Parameters
