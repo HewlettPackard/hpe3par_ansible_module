@@ -1,0 +1,20 @@
+- hosts: localhost
+  tasks:
+    - name: Load Storage System Vars
+      include_vars: 'properties/storage_system_properties.yml'
+
+    - name: Load Host Vars
+      include_vars: 'properties/host_properties.yml'
+
+    - name: Get All Hosts
+      hpe3par_host_facts: 
+        storage_system_ip: "{{ storage_system_ip }}"
+        storage_system_username: "{{ storage_system_username }}"
+        storage_system_password: "{{ storage_system_password }}"
+
+    - name: Get Host By Name
+      hpe3par_host_facts:
+        storage_system_ip: "{{ storage_system_ip }}"
+        storage_system_username: "{{ storage_system_username }}"
+        storage_system_password: "{{ storage_system_password }}"
+        host_name: "{{ host_name }}"
