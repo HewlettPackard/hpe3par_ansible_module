@@ -225,7 +225,7 @@ specified to create a vlun',
                 None,
                 autolun)
         else:
-            if lunid:
+            if lunid is not None:
                 if not client_obj.vlunExists(
                         volume_name, lunid, host_name, port_pos):
                     client_obj.createVLUN(
