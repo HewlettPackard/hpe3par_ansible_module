@@ -114,7 +114,6 @@ options:
       - "Specifies the RAID type for the logical disk."
     required: false
   set_size:
-    default: -1
     description:
       - "Specifies the set size in the number of chunklets."
     required: false
@@ -200,11 +199,11 @@ def convert_to_binary_multiple(size, size_unit):
 
 
 def validate_set_size(raid_type, set_size):
-    if raid_type is not None or set_size is not None:
-        set_size_array = client.HPE3ParClient.RAID_MAP[raid_type]['set_sizes']
-        if set_size in set_size_array:
-            return True
-    return False
+    # In Primera and Arcus, set_size option is not allowed.
+    if set_size is None:
+        return True
+    else:
+        return False
 
 
 def cpg_ldlayout_map(ldlayout_dict):
@@ -244,9 +243,9 @@ def create_cpg(
     if len(cpg_name) < 1 or len(cpg_name) > 31:
         return (False, False, "CPG create failed. CPG name must be atleast 1 character and not more than 31 characters", {})
     if not validate_set_size(raid_type, set_size):
-        return (False, False, "Set size not part of RAID set", {})
+        # In Primera and Arcus, the set size option is not allowed
+        set_size = None
     try:
-        validate_set_size(raid_type, set_size)
         client_obj.login(storage_system_username, storage_system_password)
         if not client_obj.cpgExists(cpg_name):
             ld_layout = dict()
@@ -256,7 +255,6 @@ def create_cpg(
                 disk_patterns = [{'diskType': disk_type}]
             ld_layout = {
                 'RAIDType': raid_type,
-                'setSize': set_size,
                 'HA': high_availability,
                 'diskPatterns': disk_patterns}
             ld_layout = cpg_ldlayout_map(ld_layout)
@@ -377,7 +375,6 @@ def main():
         "set_size": {
             "required": False,
             "type": "int",
-            "default": -1
         },
         "high_availability": {
             "type": "str",
