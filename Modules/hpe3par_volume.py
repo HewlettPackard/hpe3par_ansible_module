@@ -360,14 +360,14 @@ null",
         client_obj.login(storage_system_username, storage_system_password)
         if not client_obj.volumeExists(volume_name):
             tpvv = False
-            tdvv = False
+            #tdvv = False
             if type == 'thin':
                 tpvv = True
-            elif type == 'thin_dedupe':
-                tdvv = True
+            #elif type == 'thin_dedupe':
+                #tdvv = True
             size_in_mib = convert_to_binary_multiple(
                 size, size_unit)
-            optional = {'tpvv': tpvv, 'tdvv': tdvv, 'snapCPG': snap_cpg,
+            optional = {'tpvv': tpvv, 'snapCPG': snap_cpg,
                         'compression': compression,
                         'objectKeyValues': [
                             {'key': 'type', 'value': 'ansible-3par-client'}]}
