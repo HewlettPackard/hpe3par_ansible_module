@@ -27,7 +27,7 @@
         storage_system_username="{{ storage_system_username }}"
         storage_system_password="{{ storage_system_password }}"
         state=present 
-        volumeset_name="abcdefghikjlmnopqrstuvwxyzghcjkdhckhdkjchkjdhckjd"
+        volumeset_name="{{ volumeset_name }}"
         setmembers="{{ add_vol_setmembers }}"
         
     - name: Add volumes to Volumeset "{{ volumeset_name }}"
