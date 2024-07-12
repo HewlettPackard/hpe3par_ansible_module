@@ -33,7 +33,7 @@
         hostset_name="{{ hostset_name }}"
         setmembers="{{ add_host_setmembers }}"
         
-    - name: Add hosts to Hostset "{{ hostsetset_name }}"
+    - name: Add hosts to Hostset "{{ hostset_name }}"
       hpe3par_hostset:
         storage_system_ip="{{ storage_system_ip }}"
         storage_system_username="{{ storage_system_username }}"
