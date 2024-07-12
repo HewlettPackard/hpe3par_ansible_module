@@ -1,3 +1,10 @@
+- hosts: localhost
+  tasks:
+
+   #- name: Load Demo Vars
+   #  include_vars: 'properties/demo_properties.yml'
+    #uncomment above 2 lines to run this playbook individually and update the demo vars appropriately
+
     - name: Remove volumes from Volumeset "{{ volumeset_name }}"
       hpe3par_volumeset: 
         storage_system_ip="{{ storage_system_ip }}"
@@ -24,7 +31,7 @@
         volume_name="{{ item }}"
       with_items: "{{ ['volume_ansible_1', 'volume_ansible_2', 'volume_ansible_3'] }}"       
         
-    - name: Remove hosts from Hostset "{{ hostsetset_name }}"
+    - name: Remove hosts from Hostset "{{ hostset_name }}"
       hpe3par_hostset: 
         storage_system_ip="{{ storage_system_ip }}"
         storage_system_username="{{ storage_system_username }}"
