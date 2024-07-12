@@ -1,27 +1,29 @@
 - hosts: localhost
   tasks:
-  
+ 
     - name: Load Storage System Vars
       include_vars: 'properties/storage_system_properties.yml'
-      
+
     - name: Load QoS Vars
       include_vars: 'properties/qos_properties.yml'
-      
+
+    - name: Load VolumeSet Vars
+      include_vars: 'properties/volumeset_properties.yml'
+
     - name: Create VVSET
-      hpe3par_volumeset: 
+      hpe3par_volumeset:
         storage_system_ip="{{ storage_system_ip }}"
         storage_system_username="{{ storage_system_username }}"
         storage_system_password="{{ storage_system_password }}"
-        state=present 
-        volumeset_name="Chef_TK_Volume_Set"
-        domain="Chef_Test"
-        
+        state=present
+        volumeset_name="{{ volumeset_name }}"
+
     - name: Create QoS
-      hpe3par_qos: 
+      hpe3par_qos:
         storage_system_ip="{{ storage_system_ip }}"
         storage_system_username="{{ storage_system_username }}"
-        storage_system_password="{{ storage_system_password }}" 
-        state=present 
+        storage_system_password="{{ storage_system_password }}"
+        state=present
         qos_target_name='all_others'
         priority='NORMAL'
         bwmin_goal_kb=200
@@ -34,13 +36,13 @@
         latency_goal_usecs=20
         type='sys'
         iomax_limit_op='NOLIMIT'
-        
+
     - name: Modify QoS
-      hpe3par_qos: 
+      hpe3par_qos:
         storage_system_ip="{{ storage_system_ip }}"
         storage_system_username="{{ storage_system_username }}"
         storage_system_password="{{ storage_system_password }}"
-        state=modify 
+        state=modify
         qos_target_name='all_others'
         priority='HIGH'
         bwmin_goal_kb=200
@@ -59,17 +61,14 @@
         storage_system_ip="{{ storage_system_ip }}"
         storage_system_username="{{ storage_system_username }}"
         storage_system_password="{{ storage_system_password }}"
-        state=absent 
+        state=absent
         qos_target_name='all_others'
         type='sys'
-        
+
     - name: Delete VVSET
-      hpe3par_volumeset: 
+      hpe3par_volumeset:
         storage_system_ip="{{ storage_system_ip }}"
         storage_system_username="{{ storage_system_username }}"
         storage_system_password="{{ storage_system_password }}"
-        state=absent 
-        volumeset_name="Chef_TK_Volume_Set"
-        
-        
-        
+        state=absent
+        volumeset_name="{{ volumeset_name }}"        
