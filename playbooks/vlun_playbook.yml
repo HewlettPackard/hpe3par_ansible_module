@@ -1,37 +1,39 @@
 - hosts: localhost
   tasks:
-    - name: Load Demo Vars
-      include_vars: 'properties/demo_properties.yml'
-      
+    - name: Load Storage System Vars
+      include_vars: 'properties/storage_system_properties.yml'
+
+    - name: Load Host Vars
+      include_vars: 'properties/host_properties.yml'
+
+    - name: Load Volume Vars
+      include_vars: 'properties/volume_properties.yml'
+ 
     - name: Create Host "{{ host_name }}"
-      hpe3par_host: 
+      hpe3par_host:
         storage_system_ip="{{ storage_system_ip }}"
         storage_system_username="{{ storage_system_username }}"
         storage_system_password="{{ storage_system_password }}"
-        state=present 
+        state=present
         host_name="{{ host_name }}"
-        host_persona="{{ host_persona }}"
-        host_domain="{{ host_domain }}"
-        host_iscsi_names="{{ host_iscsi_names }}"
-        
+
     - name: Create Volume "{{ volume_name }}"
-      hpe3par_volume: 
+      hpe3par_volume:
         storage_system_ip="{{ storage_system_ip }}"
         storage_system_username="{{ storage_system_username }}"
         storage_system_password="{{ storage_system_password }}"
-        state=present 
+        state=present
         volume_name="{{ volume_name }}"
         cpg="{{ cpg }}"
         size="{{ size }}"
-        
-    - name: Create VLUN 
-      hpe3par_vlun: 
+
+    - name: Create VLUN
+      hpe3par_vlun:
         storage_system_ip="{{ storage_system_ip }}"
         storage_system_username="{{ storage_system_username }}"
         storage_system_password="{{ storage_system_password }}"
-        state=export_volume_to_host 
+        state=export_volume_to_host
         volume_name="{{ volume_name }}"
-        host_name="{{ host_name }}" 
-        lunid="{{ lunid }}" 
+        host_name="{{ host_name }}"
+        lunid="{{ lunid }}"
         autolun="{{ autolun }}" 
-        
