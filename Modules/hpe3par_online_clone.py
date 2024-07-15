@@ -145,7 +145,6 @@ def create_online_clone(
         clone_name,
         dest_cpg,
         tpvv,
-        tdvv,
         snap_cpg,
         compression):
     if storage_system_username is None or storage_system_password is None:
@@ -176,7 +175,6 @@ is null",
         if not client_obj.volumeExists(clone_name):
             optional = {'online': True,
                         'tpvv': tpvv,
-                        'tdvv': tdvv,
                         'snapCPG': snap_cpg
                         }
             if compression:
@@ -337,10 +335,10 @@ def main():
             "required": False,
             "type": "bool",
         },
-        "tdvv": {
-            "required": False,
-            "type": "bool",
-        },
+#        "tdvv": {
+#            "required": False,
+#            "type": "bool",
+#        },
         "snap_cpg": {
             "required": False,
             "type": "str",
@@ -363,7 +361,6 @@ def main():
     base_volume_name = module.params["base_volume_name"]
     dest_cpg = module.params["dest_cpg"]
     tpvv = module.params["tpvv"]
-    tdvv = module.params["tdvv"]
     snap_cpg = module.params["snap_cpg"]
     compression = module.params["compression"]
 
@@ -376,7 +373,7 @@ def main():
     if module.params["state"] == "present":
         return_status, changed, msg, issue_attr_dict = create_online_clone(
             client_obj, storage_system_username, storage_system_password,
-            base_volume_name, clone_name, dest_cpg, tpvv, tdvv, snap_cpg,
+            base_volume_name, clone_name, dest_cpg, tpvv, snap_cpg,
             compression)
     elif module.params["state"] == "absent":
         return_status, changed, msg, issue_attr_dict = delete_clone(
