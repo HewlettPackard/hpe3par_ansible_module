@@ -5,26 +5,27 @@
 
     - name: Create CPG ansible_auto_CreateCPG-001
       hpe3par_cpg: 
-        storage_system_ip: 10.10.10.1
-        storage_system_password: username
-        storage_system_username: password
-        state: present 
-        cpg_name: ansible_auto_CreateCPG-001
-        growth_increment: 32.5
-        growth_increment_unit: GiB
-        growth_limit: 65536
-        growth_limit_unit: MiB
-        growth_warning: 51200
-        growth_warning_unit: MiB
-        raid_type: R6
-        set_size: 8
-        high_availability: MAG
-        disk_type: FC
+        storage_system_ip="{{ storage_system_ip }}"
+        storage_system_username="{{ storage_system_username }}"
+        storage_system_password="{{ storage_system_password }}"
+        state=present 
+        cpg_name=ansible_auto_CreateCPG-001
+        growth_increment=8
+        growth_increment_unit=GiB
+        growth_limit=64
+        growth_limit_unit=GiB
+        growth_warning=52
+        growth_warning_unit=GiB
+        raid_type=R6
+        disk_type=SSD
+
+# above two parameters (raid_type, disk_type) apply to Primera only.
+# they do not apply for Arcus.
 
     - name: Delete CPG ansible_auto_CreateCPG-001
       hpe3par_cpg:
-        storage_system_ip: 10.10.10.1
-        storage_system_username: username
-        storage_system_password: password
-        state: absent 
-        cpg_name: ansible_auto_CreateCPG-001
+        storage_system_ip="{{ storage_system_ip }}"
+        storage_system_username="{{ storage_system_username }}"
+        storage_system_password="{{ storage_system_password }}"
+        state=absent 
+        cpg_name=ansible_auto_CreateCPG-001
