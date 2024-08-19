@@ -200,12 +200,11 @@ def convert_to_binary_multiple(size, size_unit):
 
 
 def validate_set_size(raid_type, set_size):
-    if raid_type is not None or set_size is not None:
-        set_size_array = client.HPE3ParClient.RAID_MAP[raid_type]['set_sizes']
-        if set_size in set_size_array:
-            return True
-    return False
-
+    # In Primera and Arcus, set_size option is not allowed.
+    if set_size is None:
+        return True
+    else:
+        return False
 
 def cpg_ldlayout_map(ldlayout_dict):
     if ldlayout_dict['RAIDType'] is not None and ldlayout_dict['RAIDType']:
@@ -232,7 +231,11 @@ def create_cpg(
         raid_type,
         set_size,
         high_availability,
-        disk_type):
+        disk_type,
+        sdgs,
+        sdgs_unit,
+        sdgw,
+        sdgw_unit):
     if storage_system_username is None or storage_system_password is None:
         return (
             False,
@@ -244,7 +247,8 @@ def create_cpg(
     if len(cpg_name) < 1 or len(cpg_name) > 31:
         return (False, False, "CPG create failed. CPG name must be atleast 1 character and not more than 31 characters", {})
     if not validate_set_size(raid_type, set_size):
-        return (False, False, "Set size not part of RAID set", {})
+        # In Primera and Arcus, the set size option is not allowed
+        set_size = None
     try:
         validate_set_size(raid_type, set_size)
         client_obj.login(storage_system_username, storage_system_password)
@@ -256,7 +260,6 @@ def create_cpg(
                 disk_patterns = [{'diskType': disk_type}]
             ld_layout = {
                 'RAIDType': raid_type,
-                'setSize': set_size,
                 'HA': high_availability,
                 'diskPatterns': disk_patterns}
             ld_layout = cpg_ldlayout_map(ld_layout)
@@ -269,11 +272,17 @@ def create_cpg(
             if growth_warning is not None:
                 growth_warning = convert_to_binary_multiple(
                     growth_warning, growth_warning_unit)
+            if sdgs is not None:
+                sdgs = convert_to_binary_multiple(
+                        sdgs, sdgs_unit)
+            if sdgw is not None:
+                sdgw = convert_to_binary_multiple(
+                        sdgw, sdgw_unit)
             optional = {
                 'domain': domain,
-                'growthIncrementMiB': growth_increment,
+                'growthIncrementMiB': growth_increment if growth_increment != -1.0 else sdgs,
                 'growthLimitMiB': growth_limit,
-                'usedLDWarningAlertMiB': growth_warning,
+                'usedLDWarningAlertMiB': growth_warning if growth_warning != -1.0 else sdgw,
                 'LDLayout': ld_layout}
             client_obj.createCPG(cpg_name, optional)
         else:
@@ -318,7 +327,7 @@ def main():
     fields = {
         "state": {
             "required": True,
-            "choices": ['present', 'absent'],
+            "choices": ['present', 'absent', 'present_arcus'],
             "type": 'str'
         },
         "storage_system_ip": {
@@ -377,7 +386,6 @@ def main():
         "set_size": {
             "required": False,
             "type": "int",
-            "default": -1
         },
         "high_availability": {
             "type": "str",
@@ -386,6 +394,24 @@ def main():
         "disk_type": {
             "type": "str",
             "choices": ['FC', 'NL', 'SSD'],
+        },
+        "sdgs": {
+            "type": "float",
+            "default": -1.0
+        },
+        "sdgs_unit": {
+            "type": "str",
+            "choices": ['TiB', 'GiB', 'MiB'],
+            #"default": 'MiB'
+        },
+        "sdgw": {
+            "type": "float",
+            "default": -1.0
+        },
+        "sdgw_unit": {
+            "type": "str",
+            "choices": ['TiB', 'GiB', 'MiB'],
+            #"default": 'TiB'
         }
     }
 
@@ -409,6 +435,10 @@ def main():
     set_size = module.params["set_size"]
     high_availability = module.params["high_availability"]
     disk_type = module.params["disk_type"]
+    sdgs = module.params["sdgs"]
+    sdgw = module.params["sdgw"]
+    sdgs_unit = module.params["sdgs_unit"]
+    sdgw_unit = module.params["sdgw_unit"]
 
     port_number = client.HPE3ParClient.getPortNumber(
         storage_system_ip, storage_system_username, storage_system_password)
@@ -440,6 +470,28 @@ def main():
             storage_system_username,
             storage_system_password,
             cpg_name
+        )
+    elif module.params["state"] == "present_arcus":
+        return_status, changed, msg, issue_attr_dict = create_cpg(
+            client_obj,
+            storage_system_username,
+            storage_system_password,
+            cpg_name,
+            domain,
+            growth_increment,
+            growth_increment_unit,
+            growth_limit,
+            growth_limit_unit,
+            growth_warning,
+            growth_warning_unit,
+            raid_type,
+            set_size,
+            high_availability,
+            disk_type,
+            sdgs,
+            sdgw,
+            sdgs_unit,
+            sdgw_unit
         )
 
     if return_status:
