@@ -1,0 +1,34 @@
+- import_playbook: setup_vlun.yml
+
+- hosts: localhost
+  tasks:
+ 
+    - name: Load VLUN Vars
+      include_vars: 'properties/vlun_properties.yml'
+
+    - name: Create VLUN
+      hpe3par_vlun:
+        storage_system_ip="{{ storage_system_ip }}"
+        storage_system_username="{{ storage_system_username }}"
+        storage_system_password="{{ storage_system_password }}"
+        state=export_volumeset_to_host
+        volume_set_name="{{ volumeset_name }}"
+        host_name="{{ vlun_host_name }}"
+        lunid=10
+        autolun=false
+
+    - name: Delete VLUN
+      hpe3par_vlun:
+        storage_system_ip="{{ storage_system_ip }}"
+        storage_system_username="{{ storage_system_username }}"
+        storage_system_password="{{ storage_system_password }}"
+        state=unexport_volume_from_host
+        volume_name="{{ item.volname }}"
+        host_name="{{ vlun_host_name }}"
+        lunid="{{ item.lunval }}"
+      with_items:
+        - { volname: 'volume_ansible_1', lunval: 10 }
+        - { volname: 'volume_ansible_2', lunval: 11 }
+        - { volname: 'volume_ansible_3', lunval: 12 }
+
+- import_playbook: cleanup_vlun.yml
