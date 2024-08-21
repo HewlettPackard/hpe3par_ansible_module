@@ -18,6 +18,7 @@
         state=present 
         volume_name="{{ volume_name }}"
         cpg="{{ cpg }}"
+        type="{{ type }}"
         size="{{ size }}"
         snap_cpg="{{ snap_cpg }}"
         
