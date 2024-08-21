@@ -360,15 +360,13 @@ null",
         client_obj.login(storage_system_username, storage_system_password)
         if not client_obj.volumeExists(volume_name):
             tpvv = False
-            #tdvv = False
             if type == 'thin':
                 tpvv = True
-            #elif type == 'thin_dedupe':
-                #tdvv = True
+            elif type == 'thin_dedupe':
+                tdvv = True
             size_in_mib = convert_to_binary_multiple(
                 size, size_unit)
-            optional = {'tpvv': tpvv, 'snapCPG': snap_cpg,
-                        'compression': compression,
+            optional = {'tpvv': tpvv, 'reduce': tdvv, 'snapCPG': snap_cpg,
                         'objectKeyValues': [
                             {'key': 'type', 'value': 'ansible-3par-client'}]}
             client_obj.createVolume(volume_name, cpg, size_in_mib, optional)
@@ -667,7 +665,6 @@ is null",
                 optional = {'userCPG': cpg,
                             'conversionOperation': new_vol_type,
                             'keepVV': keep_vv,
-                            'compression': compression
                             }
 
                 task = client_obj.tuneVolume(volume_name,
