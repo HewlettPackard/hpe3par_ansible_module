@@ -10,8 +10,12 @@ The HPE Alletra 9000 and HPE Primera and HPE 3PAR modules for Ansible enable aut
   * 3.2.2 MU4, MU6 
 * Primera OS
   * 4.3.1
+  * 4.6.0
 * Alletra 9000 OS
   * 9.3.0
+  * 9.6.0
+* Alletra MP/Arcus
+  * 10.4.0
 * WSAPI service should be enabled on the HPE Alletra 9000 and Primera and 3PAR storage array.
 
 ## Configuration
