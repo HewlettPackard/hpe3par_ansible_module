@@ -360,6 +360,7 @@ null",
         client_obj.login(storage_system_username, storage_system_password)
         if not client_obj.volumeExists(volume_name):
             tpvv = False
+            tdvv = False
             if type == 'thin':
                 tpvv = True
             elif type == 'thin_dedupe':

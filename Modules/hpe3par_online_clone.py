@@ -66,7 +66,7 @@ options:
       - "Whether the specified Clone should exist or not. State also provides
        actions to resync clone\n"
     required: true
-  tdvv:
+  reduce:
     description:
       - "Enables (true) or disables (false) whether the online copy is a TDVV."
     required: false
@@ -109,7 +109,7 @@ EXAMPLES = r'''
         base_volume_name="{{ volume_name }}"
         dest_cpg="{{ cpg }}"
         tpvv=False
-        tdvv=False
+        reduce=False
         compression=False
         snap_cpg="{{ cpg }}"
 
@@ -335,10 +335,10 @@ def main():
             "required": False,
             "type": "bool",
         },
-#        "tdvv": {
-#            "required": False,
-#            "type": "bool",
-#        },
+        "reduce": {
+            "required": False,
+            "type": "bool",
+        },
         "snap_cpg": {
             "required": False,
             "type": "str",
@@ -361,6 +361,7 @@ def main():
     base_volume_name = module.params["base_volume_name"]
     dest_cpg = module.params["dest_cpg"]
     tpvv = module.params["tpvv"]
+    reduce = module.params["reduce"]
     snap_cpg = module.params["snap_cpg"]
     compression = module.params["compression"]
 
