@@ -114,7 +114,6 @@ options:
       - "Specifies the RAID type for the logical disk."
     required: false
   set_size:
-    default: -1
     description:
       - "Specifies the set size in the number of chunklets."
     required: false
@@ -250,7 +249,6 @@ def create_cpg(
         # In Primera and Arcus, the set size option is not allowed
         set_size = None
     try:
-        validate_set_size(raid_type, set_size)
         client_obj.login(storage_system_username, storage_system_password)
         if not client_obj.cpgExists(cpg_name):
             ld_layout = dict()
