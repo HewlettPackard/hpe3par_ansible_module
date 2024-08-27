@@ -1,3 +1,6 @@
 storage_system_ip: "x.x.x.x"
 storage_system_username: "username"
 storage_system_password: "password"
+# ip2 and target_name are for remote_copy functionality.
+storage_system_ip2: "x.x.x.x"
+target_name: "s042N-FC"

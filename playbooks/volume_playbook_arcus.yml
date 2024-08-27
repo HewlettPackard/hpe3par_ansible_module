@@ -1,36 +1,15 @@
 - hosts: localhost
   tasks:
+  
     - name: Load Storage System Vars
       include_vars: 'properties/storage_system_properties.yml'
-
+      
     - name: Load Volume Vars
       include_vars: 'properties/volume_properties.yml'
-
+      
     - name: Load Host Vars
       include_vars: 'properties/host_properties.yml'
 
-    - name: Create Volume my_ansible_base_volume
-      hpe3par_volume: 
-        storage_system_ip="{{ storage_system_ip }}"
-        storage_system_username="{{ storage_system_username }}"
-        storage_system_password="{{ storage_system_password }}"
-        state=present
-        volume_name="my_ansible_base_volume"
-        cpg="{{ cpg }}"
-        snap_cpg="{{ cpg }}"
-        size=1024
-        size_unit="MiB" 
-
-    - name: Create Volume snasphot my_ansible_snapshot
-      hpe3par_snapshot: 
-        storage_system_ip="{{ storage_system_ip }}"
-        storage_system_username="{{ storage_system_username }}"
-        storage_system_password="{{ storage_system_password }}"
-        state=present
-        snapshot_name="my_ansible_snapshot"
-        base_volume_name="my_ansible_base_volume"
-        read_only=False
-        
     - name: Create Volume "{{ volume_name }}"
       hpe3par_volume: 
         storage_system_ip="{{ storage_system_ip }}"
@@ -39,27 +18,54 @@
         state=present 
         volume_name="{{ volume_name }}"
         cpg="{{ cpg }}"
+        type="{{ type }}"
         size="{{ size }}"
-        snap_cpg="{{ cpg }}"
+        snap_cpg="{{ snap_cpg }}"
         
-    - name: Create Volume "clone_volume_ansible"
+    - name: Change provisioning type of Volume "{{ volume_name }} to thin"
       hpe3par_volume: 
         storage_system_ip="{{ storage_system_ip }}"
         storage_system_username="{{ storage_system_username }}"
         storage_system_password="{{ storage_system_password }}"
-        state=present 
-        volume_name="clone_volume_ansible"
+        state=convert_type 
+        volume_name="{{ volume_name }}"
+        type="thin"
         cpg="{{ cpg }}"
-        size="{{ size }}"
-        snap_cpg="{{ cpg }}"
-        
-    - name: Create Clone clone_volume_ansible
-      hpe3par_offline_clone:
+        wait_for_task_to_end="{{ wait_for_task_to_end }}"
+
+    - name: Grow Volume "{{ volume_name }} by 1 {{ size_unit }}"
+      hpe3par_volume: 
         storage_system_ip="{{ storage_system_ip }}"
         storage_system_username="{{ storage_system_username }}"
         storage_system_password="{{ storage_system_password }}"
-        state=present
-        clone_name="clone_volume_ansible"
-        base_volume_name="{{ volume_name }}"
-        dest_cpg="{{ cpg }}"
-        priority="MEDIUM"
+        state=grow 
+        volume_name="{{ volume_name }}"
+        size=1
+        size_unit="{{ size_unit }}"
+
+    - name: Grow Volume "{{ volume_name }} to 5 {{ size_unit }}"
+      hpe3par_volume: 
+        storage_system_ip="{{ storage_system_ip }}"
+        storage_system_username="{{ storage_system_username }}"
+        storage_system_password="{{ storage_system_password }}"
+        state=grow_to_size
+        volume_name="{{ volume_name }}"
+        size=5
+        size_unit="{{ size_unit }}"     
+
+    - name: Rename Volume "{{ volume_name }} to {{ new_name }}"
+      hpe3par_volume: 
+        storage_system_ip="{{ storage_system_ip }}"
+        storage_system_username="{{ storage_system_username }}"
+        storage_system_password="{{ storage_system_password }}"
+        state=modify
+        volume_name="{{ volume_name }}"
+        new_name="{{ new_name }}"
+
+    - name: Delete Volume "{{ volume_name }}"
+      hpe3par_volume:
+        storage_system_ip="{{ storage_system_ip }}"
+        storage_system_username="{{ storage_system_username }}"
+        storage_system_password="{{ storage_system_password }}"
+        state=absent 
+        volume_name="{{ new_name }}"

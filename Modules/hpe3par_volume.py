@@ -367,8 +367,7 @@ null",
                 tdvv = True
             size_in_mib = convert_to_binary_multiple(
                 size, size_unit)
-            optional = {'tpvv': tpvv, 'tdvv': tdvv, 'snapCPG': snap_cpg,
-                        'compression': compression,
+            optional = {'tpvv': tpvv, 'reduce': tdvv, 'snapCPG': snap_cpg,
                         'objectKeyValues': [
                             {'key': 'type', 'value': 'ansible-3par-client'}]}
             client_obj.createVolume(volume_name, cpg, size_in_mib, optional)
@@ -667,7 +666,6 @@ is null",
                 optional = {'userCPG': cpg,
                             'conversionOperation': new_vol_type,
                             'keepVV': keep_vv,
-                            'compression': compression
                             }
 
                 task = client_obj.tuneVolume(volume_name,

@@ -11,21 +11,24 @@
         storage_system_ip="{{ storage_system_ip }}"
         storage_system_username="{{ storage_system_username }}"
         storage_system_password="{{ storage_system_password }}"
-        state=export_volume_to_hostset
-        volume_name="{{ vlun_volume_name }}"
+        state=export_volumeset_to_hostset
+        volume_set_name="{{ volumeset_name }}"
         host_set_name="{{ hostset_name }}"
-        lunid=110
-        autolun=false
-
+        lunid="{{ lunid }}"
+        autolun="{{ autolun }}"
+ 
     - name: Delete VLUN
       hpe3par_vlun:
         storage_system_ip="{{ storage_system_ip }}"
         storage_system_username="{{ storage_system_username }}"
         storage_system_password="{{ storage_system_password }}"
         state=unexport_volume_from_hostset
-        volume_name="{{ vlun_volume_name }}"
+        volume_name="{{ item.volname }}"
         host_set_name="{{ hostset_name }}"
-        autolun=false
-        lunid=110
+        lunid="{{ item.lunval }}"
+      with_items:
+        - { volname: 'volume_ansible_1', lunval: 10 }
+        - { volname: 'volume_ansible_2', lunval: 11 }
+        - { volname: 'volume_ansible_3', lunval: 12 }
 
 - import_playbook: cleanup_vlun.yml

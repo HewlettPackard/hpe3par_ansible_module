@@ -17,7 +17,7 @@
         storage_system_username="{{ storage_system_username }}"
         storage_system_password="{{ storage_system_password }}"
         state=absent
-        volume_name="my_ansible_base_volume_1"
+        volume_name="my_ansible_base_volume"
         
     - name: Load Storage System Vars
       include_vars: 'properties/storage_system_properties.yml'
@@ -35,12 +35,12 @@
         storage_system_password="{{ storage_system_password }}"
         state=absent 
         clone_name="clone_volume_ansible"
-        base_volume_name="{{ volume_name }}"
+        base_volume_name="my_ansible_base_volume"
         
-    - name: Delete volume "{{ volume_name }}"
+    - name: Delete volume "my_ansible_base_volume"
       hpe3par_volume: 
         storage_system_ip="{{ storage_system_ip }}"
         storage_system_username="{{ storage_system_username }}"
         storage_system_password="{{ storage_system_password }}"
         state=absent 
-        volume_name="{{ volume_name }}"
+        volume_name="my_ansible_base_volume"

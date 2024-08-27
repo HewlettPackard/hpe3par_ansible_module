@@ -17,22 +17,19 @@
 
     - name: Create CPG ansible_auto_CreateCPG-001
       hpe3par_cpg: 
-        storage_system_ip="15.212.192.252"
-        storage_system_username="chefsuper"
-        storage_system_password="chefSUPER"
+        storage_system_ip="{{ storage_system_ip }}"
+        storage_system_username="{{ storage_system_username }}"
+        storage_system_password="{{ storage_system_password }}"
         state=present 
         cpg_name="ansible_auto_CreateCPG-001"
-        domain="Chef_Test"
-        growth_increment=32768
-        growth_increment_unit="MiB"
-        growth_limit=65536
-        growth_limit_unit="MiB"
-        growth_warning=51200
-        growth_warning_unit="MiB"
+        growth_increment=8
+        growth_increment_unit="GiB"
+        growth_limit=64
+        growth_limit_unit="GiB"
+        growth_warning=8
+        growth_warning_unit="GiB"
         raid_type="R6"
-        set_size=8
-        high_availability="MAG"
-        disk_type="FC"
+        disk_type="SSD"
         
     - name: Create Volume "{{ volume_name }}"
       hpe3par_volume: 
@@ -43,7 +40,7 @@
         volume_name="{{ volume_name }}"
         cpg="{{ cpg }}"
         size="{{ size }}"
-        snap_cpg="FC_r1"
+        snap_cpg="{{ snap_cpg }}"
       
     - name: Create Volume "{{ volume_name }}"
       hpe3par_volume: 

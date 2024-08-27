@@ -66,7 +66,7 @@ options:
       - "Whether the specified Clone should exist or not. State also provides
        actions to resync clone\n"
     required: true
-  tdvv:
+  reduce:
     description:
       - "Enables (true) or disables (false) whether the online copy is a TDVV."
     required: false
@@ -109,7 +109,7 @@ EXAMPLES = r'''
         base_volume_name="{{ volume_name }}"
         dest_cpg="{{ cpg }}"
         tpvv=False
-        tdvv=False
+        reduce=False
         compression=False
         snap_cpg="{{ cpg }}"
 
@@ -145,7 +145,6 @@ def create_online_clone(
         clone_name,
         dest_cpg,
         tpvv,
-        tdvv,
         snap_cpg,
         compression):
     if storage_system_username is None or storage_system_password is None:
@@ -176,7 +175,6 @@ is null",
         if not client_obj.volumeExists(clone_name):
             optional = {'online': True,
                         'tpvv': tpvv,
-                        'tdvv': tdvv,
                         'snapCPG': snap_cpg
                         }
             if compression:
@@ -337,7 +335,7 @@ def main():
             "required": False,
             "type": "bool",
         },
-        "tdvv": {
+        "reduce": {
             "required": False,
             "type": "bool",
         },
@@ -363,7 +361,7 @@ def main():
     base_volume_name = module.params["base_volume_name"]
     dest_cpg = module.params["dest_cpg"]
     tpvv = module.params["tpvv"]
-    tdvv = module.params["tdvv"]
+    reduce = module.params["reduce"]
     snap_cpg = module.params["snap_cpg"]
     compression = module.params["compression"]
 
@@ -376,7 +374,7 @@ def main():
     if module.params["state"] == "present":
         return_status, changed, msg, issue_attr_dict = create_online_clone(
             client_obj, storage_system_username, storage_system_password,
-            base_volume_name, clone_name, dest_cpg, tpvv, tdvv, snap_cpg,
+            base_volume_name, clone_name, dest_cpg, tpvv, snap_cpg,
             compression)
     elif module.params["state"] == "absent":
         return_status, changed, msg, issue_attr_dict = delete_clone(
