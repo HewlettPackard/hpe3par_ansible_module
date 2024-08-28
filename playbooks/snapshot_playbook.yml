@@ -66,9 +66,9 @@
         snapshot_name: "my_ansible_snapshot_renamed"
 
     - name: Delete Base volume my_ansible_base_volume
-      hpe3par_snapshot: 
+      hpe3par_volume: 
         storage_system_ip: "{{ storage_system_ip }}"
         storage_system_username: "{{ storage_system_username }}"
         storage_system_password: "{{ storage_system_password }}"
         state: absent
-        snapshot_name: "my_ansible_base_volume"
+        volume_name: "my_ansible_base_volume"
