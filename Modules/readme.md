@@ -2,13 +2,13 @@ source
 
 :   hpe3par\_cpg.py
 
-hpe3par\_cpg - Manage HPE Alletra 9000 and Primera and 3PAR CPG
+hpe3par\_cpg - Manage HPE Alletra MP,9000 and Primera and 3PAR CPG
 ================================================================
 
 Synopsis
 --------
 
--   Create and delete CPG on HPE Alletra 9000 and Primera and 3PAR.
+-   Create and delete CPG on HPE Alletra MP, 9000 and Primera and 3PAR.
 
 Parameters
 ----------
@@ -346,6 +346,88 @@ Parameters
                                                                                             </div>
             </td>
         </tr>
+                           <tr class="return-value-column">
+                            <td>
+                <div class="outer-elbow-container">
+                                            <div class="elbow-key">
+                        <b>sdgs</b>
+                                                                            </div>
+                </div>
+            </td>
+                            <td>
+                <div class="cell-border">
+                                                                                                                                                                                                                                                    <br/><div style="color: blue"></div>
+                                        </div>
+            </td>
+                                                            <td>
+                <div class="cell-border">
+                                                                                <div>Specifies the growth increment, the amount of logical disk storage created on each auto-grow operation.</div>
+                                                                                            </div>
+            </td>
+        </tr>
+                                <tr class="return-value-column">
+                            <td>
+                <div class="outer-elbow-container">
+                                            <div class="elbow-key">
+                        <b>sdgw</b>
+                                                                            </div>
+                </div>
+            </td>
+                            <td>
+                <div class="cell-border">
+                                                                                                                                                                                                                                                    <br/><div style="color: blue"></div>
+                                        </div>
+            </td>
+                                                            <td>
+                <div class="cell-border">
+                                                                                <div>Specifies that the threshold of used logical disk space, when exceeded, results in a warning alert.</div>
+                                                                                            </div>
+            </td>
+        </tr>
+                               <tr class="return-value-column">
+                            <td>
+                <div class="outer-elbow-container">
+                                            <div class="elbow-key">
+                        <b>sdgs_unit</b>
+                                                                            </div>
+                </div>
+            </td>
+                            <td>
+            <div class="cell-border">
+                <ul><b>Choices:</b>
+                <li><div style="color: blue"><b>MiB</b>&nbsp;&larr;</div></li>
+                <li>GiB</li>
+                <li>TiB</li>
+                </ul>              
+            </div>                          
+            </td>
+                                                            <td>
+                <div class="cell-border">
+                                                                                <div>"Unit of sdgs."</div>
+                                                                                            </div>
+            </td>
+                                                              <tr class="return-value-column">
+                            <td>
+                <div class="outer-elbow-container">
+                                            <div class="elbow-key">
+                        <b>sdgw_unit</b>
+                                                                            </div>
+                </div>
+            </td>
+                            <td>
+                <div class="cell-border">
+                <ul><b>Choices:</b>
+                <li><div style="color: blue"><b>MiB</b>&nbsp;&larr;</div></li>
+                <li>GiB</li>
+                <li>TiB</li>
+                </ul>              
+            </div>
+            </td>
+                                                            <td>
+                <div class="cell-border">
+                                                                                <div>"Unit of sdgs."</div>
+                                                                                            </div>
+            </td>
                     </table>
 <br/>
 Examples
@@ -378,27 +460,37 @@ Examples
     storage_system_password="{{ storage_system_password }}"
     state=absent
     cpg_name="{{ cpg_name }}"
+
+- name: Create CPG ansible_auto_CreateCPG-001
+    hpe3par_cpg:
+      storage_system_ip="{{ storage_system_ip }}"
+      storage_system_username="{{ storage_system_username }}"
+      storage_system_password="{{ storage_system_password }}"
+      state=present_arcus
+      cpg_name=ansible_auto_CreateCPG-001
+      sdgs=8
+      sdgw=52
 ```
 
 
 ### Author
 
--   Farhan Nomani (@farhan7500)
--   Gautham P Hegde (@gautamphegde)
+-  Sumedha Shenoy K (sumedha.shenoy-k@hpe.com) 
 
 source
 
 :   hpe3par\_flash\_cache.py
 
 
-hpe3par\_flash\_cache - Manage HPE Alletra 9000 and Primera and 3PAR Flash Cache
+hpe3par\_flash\_cache - Manage 3PAR Flash Cache
 ================================================================================
 
 Synopsis
 --------
 
--   On HPE Alletra 9000 and Primera and 3PAR - Create Flash Cache - Delete Flash Cache
-
+-   On 3PAR - Create Flash Cache - Delete Flash Cache
+-   On HPE Alletra MP , 9000 and Primera - Create Flash Cache - Delete Flash Cache functions are unsuppported.
+  
 Parameters
 ----------
 
@@ -551,13 +643,13 @@ source
 :   hpe3par\_host.py
 
 
-hpe3par\_host - Manage HPE Alletra 9000 and Primera and 3PAR Host
+hpe3par\_host - Manage HPE Alletra MP, 9000 and Primera and 3PAR Host
 =================================================================
 
 Synopsis
 --------
 
--   On HPE Alletra 9000 and PRIMERA and 3PAR - Create Host - Delete Host - Add Initiator
+-   On HPE Alletra MP, 9000 and PRIMERA and 3PAR - Create Host - Delete Host - Add Initiator
     Chap - Remove Initiator Chap - Add Target Chap - Remove Target
     Chap - Add FC Path to Host - Remove FC Path from Host - Add ISCSI
     Path to Host - Remove ISCSI Path from Host
@@ -895,20 +987,20 @@ Examples
 
 ### Author
 
--   Farhan Nomani (<nomani@hpe.com>)
+-   Sumedha Shenoy K (<sumedha.shenoy-k@hpe.com>)
 
 source
 
 :   hpe3par\_hostset.py
 
 
-hpe3par\_hostset - Manage HPE Alletra 9000 and Primera and 3PAR Host Set
+hpe3par\_hostset - Manage HPE Alletra MP, 9000 and Primera and 3PAR Host Set
 ========================================================================
 
 Synopsis
 --------
 
--   On HPE Alletra 9000 and PRIMERA and 3PAR  - Create Host Set - Add Hosts to Host Set -
+-   On HPE Alletra MP, 9000 and PRIMERA and 3PAR  - Create Host Set - Add Hosts to Host Set -
     Remove Hosts from Host Set
 
 Parameters
@@ -1097,20 +1189,20 @@ Examples
 
 ### Author
 
--   Farhan Nomani (<nomani@hpe.com>)
+-   Sumedha Shenoy K (<sumedha.shenoy-k@hpe.com>)
 
 source
 
 :   hpe3par\_offline\_clone.py
   
 
-hpe3par\_offline\_clone - Manage HPE Alletra 9000 and Primera and 3PAR Offline Clone
+hpe3par\_offline\_clone - Manage HPE Alletra MP, 9000 and Primera and 3PAR Offline Clone
 ====================================================================================
 
 Synopsis
 --------
 
--   On HPE Alletra 9000 and PRIMERA and 3PAR - Create Offline Clone - Delete Clone -
+-   On HPE Alletra MP, 9000 and PRIMERA and 3PAR - Create Offline Clone - Delete Clone -
     Resync Clone - Stop Cloning
 
 Parameters
@@ -1360,19 +1452,19 @@ Examples
 
 ### Author
 
--   Farhan Nomani (<nomani@hpe.com>)
+-   Sumedha Shenoy K (<sumedha.shenoy-k@hpe.com>)
 
 source
 
 :   hpe3par\_online\_clone.py
 
-hpe3par\_online\_clone - Manage HPE Alletra 9000 and Primera and 3PAR Online Clone
+hpe3par\_online\_clone - Manage HPE Alletra MP, 9000 and Primera and 3PAR Online Clone
 ==================================================================================
 
 Synopsis
 --------
 
--   On HPE Alletra 9000 and Primera and 3PAR - Create Online Clone - Delete Clone -
+-   On HPE Alletra MP, 9000 and Primera and 3PAR - Create Online Clone - Delete Clone -
     Resync Clone
 
 Parameters
@@ -1560,7 +1652,7 @@ Required with action present, absent, stop</div>
                             <td>
                 <div class="outer-elbow-container">
                                             <div class="elbow-key">
-                        <b>tdvv</b>
+                        <b>reduce</b>
                                                                             </div>
                 </div>
             </td>
@@ -1574,7 +1666,7 @@ Required with action present, absent, stop</div>
             </td>
                                                             <td>
                 <div class="cell-border">
-                                                                                <div>Enables (true) or disables (false) whether the online copy is a TDVV.</div>
+                                                                                <div>Indicates that the VV the online copy creates should be a virtual volume using both the dedup and compression technologies.</div>
                                                                                             </div>
             </td>
         </tr>
@@ -1616,8 +1708,7 @@ Examples
     base_volume_name="{{ volume_name }}"
     dest_cpg="{{ cpg }}"
     tpvv=False
-    tdvv=False
-    compression=False
+    reduce=False
     snap_cpg="{{ cpg }}"
 
 - name: sleep for 100 seconds and continue with play
@@ -1636,20 +1727,20 @@ Examples
 
 ### Author
 
--   Farhan Nomani (<nomani@hpe.com>)
+-   Sumedha Shenoy K (<sumedha.shenoy-k@hpe.com>)
 
 source
 
 :   hpe3par\_qos.py
  
 
-hpe3par\_qos - Manage HPE Alletra 9000 and Primera and 3PAR QoS Rules
+hpe3par\_qos - Manage HPE Alletra MP, 9000 and Primera and 3PAR QoS Rules
 =====================================================================
 
 Synopsis
 --------
 
--   On HPE Alletra 9000 and Primera and 3PAR - Create QoS Rule - Delete QoS Rule - Modify
+-   On HPE Alletra MP, 9000 and Primera and 3PAR - Create QoS Rule - Delete QoS Rule - Modify
     QoS Rule
 
 Parameters
@@ -2101,19 +2192,19 @@ Examples
 
 ### Author
 
--   Farhan Nomani (<nomani@hpe.com>)
+-   Sumedha Shenoy K (<sumedha.shenoy-k@hpe.com>)
 
 source
 
 :   hpe3par\_snapshot.py
 
-hpe3par\_snapshot - Manage HPE Alletra 9000 and Primera and 3PAR Snapshots
+hpe3par\_snapshot - Manage HPE Alletra MP, 9000 and Primera and 3PAR Snapshots
 ==========================================================================
 
 Synopsis
 --------
 
--   On HPE Alletra 9000 and Primera and 3PAR - Create Snapshot - Delete Snapshot - Modify
+-   On HPE Alletra MP, 9000 and Primera and 3PAR - Create Snapshot - Delete Snapshot - Modify
     Snapshot - Create Schedule - Modify Schedule - Suspend Schedule -
     Resume Schedule - Delete Schedule
 
@@ -2605,20 +2696,20 @@ Examples
 
 ### Author
 
--   Farhan Nomani (<nomani@hpe.com>)
+-   Sumedha Shenoy K (<sumedha.shenoy-k@hpe.com>)
 
 source
 
 :   hpe3par\_vlun.py
 
 
-hpe3par\_vlun - Manage HPE Alletra 9000 and Primera and 3PAR VLUN
+hpe3par\_vlun - Manage HPE Alletra MP, 9000 and Primera and 3PAR VLUN
 =================================================================
 
 Synopsis
 --------
 
--   On HPE Alletra 9000 and Primera and 3PAR - Export volume to host - Export volumeset
+-   On HPE Alletra MP, 9000 and Primera and 3PAR - Export volume to host - Export volumeset
     to host - Export volume to hostset - Export volumeset to hostset -
     Unexport volume from host - Unexport volumeset from host - Unexport
     volume from hostset - Unexport volumeset from hostset
@@ -2945,20 +3036,20 @@ Examples
 
 ### Author
 
--   Farhan Nomani (<nomani@hpe.com>)
+-   Sumedha Shenoy K (<sumedha.shenoy-k@hpe.com>)
 
 source
 
 :   hpe3par\_volume.py
 
 
-hpe3par\_volume - Manage HPE Alletra 9000 and Primera and 3PAR Volume
+hpe3par\_volume - Manage HPE Alletra MP, 9000 and Primera and 3PAR Volume
 =====================================================================
 
 Synopsis
 --------
 
--   On HPE Alletra 9000 and Primera and 3PAR - Create Volume - Delete Volume - Modify
+-   On HPE Alletra MP, 9000 and Primera and 3PAR - Create Volume - Delete Volume - Modify
     Volume - Grow Volume - Grow Volume to certain size - Change Snap
     CPG - Change User CPG - Convert Provisioning TypeError - Set Snap
     CPG
@@ -3369,20 +3460,20 @@ Examples
 
 ### Author
 
--   Farhan Nomani (<nomani@hpe.com>)
+-   Sumedha Shenoy K (<sumedha.shenoy-k@hpe.com>)
 
 source
 
 :   hpe3par\_volumeset.py
  
 
-hpe3par\_volumeset - Manage HPE Alletra 9000 and Primera and 3PAR Volume Set
+hpe3par\_volumeset - Manage HPE Alletra MP, 9000 and Primera and 3PAR Volume Set
 ============================================================================
 
 Synopsis
 --------
 
--   On HPE Alletra 9000 and Primera and 3PAR Create Volume Set - Add Volumes to Volume
+-   On HPE Alletra MP, 9000 and Primera and 3PAR Create Volume Set - Add Volumes to Volume
     Set - Remove Volumes from Volume Set
 
 Parameters
@@ -3571,19 +3662,19 @@ Examples
 
 ### Author
 
--   Farhan Nomani (<nomani@hpe.com>)
+-   Sumedha Shenoy K (<sumedha.shenoy-k@hpe.com>)
 
 source
 
 :   hpe3par\_remote\_copy.py
 
-hpe3par\_remote\_copy - Manage HPE Alletra 9000 and Primera and 3PAR Remote Copy
+hpe3par\_remote\_copy - Manage HPE Alletra MP, 9000 and Primera and 3PAR Remote Copy
 ================================================================================
 
 Synopsis
 --------
 
--   On HPE Alletra 9000 and Primera and 3PAR - Create Remote Copy Group - Modify Remote
+-   On HPE Alletra MP, 9000 and Primera and 3PAR - Create Remote Copy Group - Modify Remote
     Copy Group - Add Volumes to Remote Copy Group - Remove Volumes from
     Remote Copy Group -Synchronize Remote Copy Group - Delete Remote
     Copy Group - Admit Remote Copy Link - Dismiss Remote Copy Link -
@@ -4400,5 +4491,5 @@ Examples
 
 ### Author
 
--   Arshad Ansari(<arshad.alam.ansari@hpe.com>)
+-   Sumedha Shenoy K (<sumedha.shenoy-k@hpe.com>)
 
