@@ -3,8 +3,8 @@
 The HPE Alletra 9000 ,HPE AlletraMP, HPE Primera and HPE 3PAR modules for Ansible enable automation of storage provisioning for the HPE Alletra 9000 and Primera and 3PAR array. The modules use the HPE Alletra 9000 , HPE AlletraMP, HPE Primera and HPE 3PAR SDK for Python to communicate with the storage array over the WSAPI REST interface.
 
 ## Requirements
-* Ansible ver. 2.5, 2.6, 2.7, 2.8, 2.9
-* [hpe3par_sdk](https://pypi.org/project/hpe3par_sdk/)
+* Ansible ver. 2.5, 2.6, 2.7, 2.8, 2.9, 2.10
+* [hpe3par_sdk](https://pypi.org/project/hpe3par_sdk/) [This internally requires [python-3parclient](https://pypi.org/project/python-3parclient/)]
 * 3PAR OS
   * 3.3.1 MU1, MU2, MU3, T05
   * 3.2.2 MU4, MU6 
