@@ -473,10 +473,6 @@ Examples
 ```
 
 
-### Author
-
--  Sumedha Shenoy K (sumedha.shenoy-k@hpe.com) 
-
 source
 
 :   hpe3par\_flash\_cache.py
@@ -634,9 +630,6 @@ Examples
     state=absent
 ```
 
-### Author
-
--   Farhan Nomani (<nomani@hpe.com>)
 
 source
 
@@ -985,9 +978,6 @@ Examples
     host_name="{{ host_new_name }}"
 ```
 
-### Author
-
--   Sumedha Shenoy K (<sumedha.shenoy-k@hpe.com>)
 
 source
 
@@ -1187,9 +1177,6 @@ Examples
     hostset_name="{{ hostset_name }}"
 ```
 
-### Author
-
--   Sumedha Shenoy K (<sumedha.shenoy-k@hpe.com>)
 
 source
 
@@ -1450,9 +1437,6 @@ Examples
     base_volume_name="{{ volume_name }}"
 ```
 
-### Author
-
--   Sumedha Shenoy K (<sumedha.shenoy-k@hpe.com>)
 
 source
 
@@ -1725,9 +1709,6 @@ Examples
     base_volume_name="{{ volume_name }}"
 ```
 
-### Author
-
--   Sumedha Shenoy K (<sumedha.shenoy-k@hpe.com>)
 
 source
 
@@ -2190,9 +2171,6 @@ Examples
     type="{{ type }}"
 ```
 
-### Author
-
--   Sumedha Shenoy K (<sumedha.shenoy-k@hpe.com>)
 
 source
 
@@ -2694,9 +2672,6 @@ Examples
     schedule_name: my_ansible_sc   
 ```
 
-### Author
-
--   Sumedha Shenoy K (<sumedha.shenoy-k@hpe.com>)
 
 source
 
@@ -3034,9 +3009,6 @@ Examples
     lunid="{{ lunid }}"
 ```
 
-### Author
-
--   Sumedha Shenoy K (<sumedha.shenoy-k@hpe.com>)
 
 source
 
@@ -3458,9 +3430,6 @@ Examples
     volume_name="{{ new_name }}"
 ```
 
-### Author
-
--   Sumedha Shenoy K (<sumedha.shenoy-k@hpe.com>)
 
 source
 
@@ -3660,9 +3629,6 @@ Examples
     volumeset_name="{{ volumeset_name }}"
 ```
 
-### Author
-
--   Sumedha Shenoy K (<sumedha.shenoy-k@hpe.com>)
 
 source
 
@@ -4488,8 +4454,4 @@ Examples
       keep_snap: "false"
       remove_secondary_volume: "true"
 ```
-
-### Author
-
--   Sumedha Shenoy K (<sumedha.shenoy-k@hpe.com>)
 
