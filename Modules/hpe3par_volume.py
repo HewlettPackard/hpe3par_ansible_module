@@ -41,6 +41,18 @@ options:
       - "Specifes whether the compression is on or off."
     required: false
     type: bool
+    staleSS:
+        default: false
+        description:
+            - "Disable stale snapshots policy for the volume."
+        required: false
+        type: bool
+    zeroDetect:
+        default: false
+        description:
+            - "Disable zero detect policy for the volume."
+        required: false
+        type: bool
   cpg:
     description:
       - "Specifies the name of the CPG from which the volume user space will be
@@ -326,7 +338,20 @@ def create_volume(
         size_unit,
         type,
         compression,
-        snap_cpg):
+        snap_cpg,
+        staleSS=None,
+        zeroDetect=None):
+
+    def to_bool(val):
+        if isinstance(val, bool):
+            return val
+        if isinstance(val, str):
+            return val.lower() == 'true'
+        return bool(val)
+
+    staleSS = to_bool(staleSS)
+    zeroDetect = to_bool(zeroDetect)
+
     if storage_system_username is None or storage_system_password is None:
         return (
             False,
@@ -370,6 +395,25 @@ null",
             optional = {'tpvv': tpvv, 'reduce': tdvv, 'snapCPG': snap_cpg,
                         'objectKeyValues': [
                             {'key': 'type', 'value': 'ansible-3par-client'}]}
+            policies = {}
+            if staleSS is None:
+                policies['staleSS'] = True
+            elif staleSS:
+                policies['staleSS'] = True
+            else:
+                policies['staleSS'] = False
+
+            if zeroDetect is None:
+                policies['zeroDetect'] = True
+            elif zeroDetect:
+                policies['zeroDetect'] = True
+            else:
+                policies['zeroDetect'] = False
+            
+            issue_attr_dict = {}
+            if policies:
+                optional['policies'] = policies
+                issue_attr_dict['policies'] = policies
             client_obj.createVolume(volume_name, cpg, size_in_mib, optional)
         else:
             return (True, False, "Volume already present", {})
@@ -378,7 +422,6 @@ null",
     finally:
         client_obj.logout()
     return (True, True, "Created volume %s successfully." % volume_name, {})
-
 
 def delete_volume(
         client_obj,
@@ -407,7 +450,6 @@ null",
     finally:
         client_obj.logout()
     return (True, True, "Deleted volume %s successfully." % volume_name, {})
-
 
 def grow(
         client_obj,
@@ -445,7 +487,6 @@ def grow(
     return (
         True, True, "Grown volume %s by %s %s successfully." %
         (volume_name, size, size_unit), {})
-
 
 def grow_to_size(
         client_obj,
@@ -511,6 +552,7 @@ is null",
     return (
         True, True, "Grown volume %s to %s %s successfully." %
         (volume_name, size, size_unit), {})
+
 
 
 def change_snap_cpg(
@@ -871,6 +913,14 @@ def main():
         },
         "keep_vv": {
             "type": "str",
+        },
+        "staleSS": {
+            "type": "bool",
+            "default": None
+        },
+        "zeroDetect": {
+            "type": "bool",
+            "default": None
         }
     }
 
@@ -906,6 +956,8 @@ def main():
     compression = module.params["compression"]
     keep_vv = module.params["keep_vv"]
     type = module.params["type"]
+    staleSS = module.params["staleSS"]
+    zeroDetect = module.params["zeroDetect"]
 
     port_number = client.HPE3ParClient.getPortNumber(
         storage_system_ip, storage_system_username, storage_system_password)
@@ -916,7 +968,7 @@ def main():
     if module.params["state"] == "present":
         return_status, changed, msg, issue_attr_dict = create_volume(
             client_obj, storage_system_username, storage_system_password,
-            volume_name, cpg, size, size_unit, type, compression, snap_cpg)
+            volume_name, cpg, size, size_unit, type, compression, snap_cpg, staleSS, zeroDetect)
     elif module.params["state"] == "absent":
         return_status, changed, msg, issue_attr_dict = delete_volume(
             client_obj, storage_system_username, storage_system_password,
@@ -967,4 +1019,4 @@ def main():
 
 
 if __name__ == '__main__':
-    main()
+     main()
