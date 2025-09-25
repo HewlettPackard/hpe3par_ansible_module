@@ -381,7 +381,6 @@ def delete_qos_rule(
         client_obj.logout()
     return (True, True, "Deleted QoS successfully.", {})
 
-
 def construct_qos_rules_map(
         bwmin_goal_kb,
         bwmax_limit_kb,
@@ -396,16 +395,8 @@ def construct_qos_rules_map(
         bwmax_limit_op,
         iomin_goal_op,
         iomax_limit_op):
-    qos_rules = {
-        'bwMinGoalKB': bwmin_goal_kb,
-        'bwMaxLimitKB': bwmax_limit_kb,
-        'ioMinGoal': iomin_goal,
-        'ioMaxLimit': iomax_limit,
-        'latencyGoal': latency_goal,
-        'defaultLatency': default_latency,
-        'enable': enable,
-        'latencyGoaluSecs': latency_goal_usecs
-    }
+    
+    qos_rules = {}
     if priority is not None:
         qos_rules['priority'] = getattr(
             client.HPE3ParClient.QOSPriority, priority)
@@ -424,7 +415,6 @@ def construct_qos_rules_map(
         qos_rules['ioMaxLimitOP'] = getattr(
             client.HPE3ParClient, iomax_limit_op)
     return qos_rules
-
 
 def main():
 
@@ -458,12 +448,10 @@ def main():
         },
         "priority": {
             "choices": ['LOW', 'NORMAL', 'HIGH'],
-            "default": 'LOW',
             "type": "str"
         },
         "bwmin_goal_kb": {
-            "type": "int",
-            "default": -1
+            "type": "int"
         },
         "bwmax_limit_kb": {
             "type": "int",
