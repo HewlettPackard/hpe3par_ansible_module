@@ -1723,6 +1723,7 @@ Synopsis
 
 -   On HPE Alletra MP, 9000 and Primera and 3PAR - Create QoS Rule - Delete QoS Rule - Modify
     QoS Rule
+-   On Alletra MP - bwMinGoalKB, ioMinGoal, latencyGoal, priority these parameters are deprecated. 
 
 Parameters
 ----------
