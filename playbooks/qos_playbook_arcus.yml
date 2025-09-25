@@ -33,7 +33,7 @@
         bwmax_limit_op='NOLIMIT'
         type='sys'
         iomax_limit_op='NOLIMIT'
-        iomax_limit=1000
+        iomax_limit=20
 
     - name: Modify QoS
       hpe3par_qos:
@@ -50,7 +50,7 @@
         bwmax_limit_op='NOLIMIT'
         type='sys'
         iomax_limit_op='NOLIMIT'
-        iomax_limit=1000
+        iomax_limit=20
 
     - name: Delete QoS
       hpe3par_qos:

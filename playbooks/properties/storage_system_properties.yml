@@ -1,10 +1,10 @@
 storage_system_ip: "x.x.x.x"
-storage_system_username: "username"
-storage_system_password: "password"
+storage_system_username: "3paradm"
+storage_system_password: "3pardata"
 # ip2 and target_name are for remote_copy functionality.
 storage_system_ip2: "x.x.x.x"
 target_name: "targetname"
-#Add these wwn entries
+# provide wwn and source port entries for rcopy links
 source_port_0: "x:x:x"
 target_wwn_0: "xxx"
 

@@ -36,8 +36,8 @@
         latency_goal_usecs=20
         type='sys'
         iomax_limit_op='NOLIMIT'
-        iomin_goal=1000
-        iomax_limit=1000
+        iomin_goal=20
+        iomax_limit=20
 
     - name: Modify QoS
       hpe3par_qos:
@@ -57,6 +57,9 @@
         latency_goal_usecs=20
         type='sys'
         iomax_limit_op='NOLIMIT'
+        iomin_goal=20
+        iomax_limit=20
+
 
     - name: Delete QoS
       hpe3par_qos:

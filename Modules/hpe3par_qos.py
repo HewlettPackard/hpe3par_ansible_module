@@ -458,12 +458,10 @@ def main():
             "default": -1
         },
         "iomin_goal": {
-            "type": "int",
-            "default": -1
+            "type": "int"
         },
         "iomax_limit": {
-            "type": "int",
-            "default": -1
+            "type": "int"
         },
         "bwmin_goal_op": {
             "type": "str",
