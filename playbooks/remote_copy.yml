@@ -211,10 +211,6 @@
       storage_system_username: "{{ storage_system_username }}"
       state: admit_link
       target_name: "{{ target_name }}"
-        #source_port: 0:3:1
-        #source_port: 0:4:3
-        #target_port_wwn_or_ip: 20430002AC019000
-        #target_port_wwn_or_ip: "{{ storage_system_ip2 }}"
       source_port: "{{ source_port_0 }}"
       target_port_wwn_or_ip: "{{ target_wwn_0 }}"
 
@@ -225,10 +221,6 @@
       storage_system_username: "{{ storage_system_username }}"
       state: admit_link
       target_name: "{{ target_name }}"
-        #source_port: "1:4:3"
-        #target_port_wwn_or_ip: 21430002AC019000
-        #source_port: "1:3:1"
-        #target_port_wwn_or_ip: "{{ storage_system_ip2 }}"
       source_port: "{{ source_port_1 }}"
       target_port_wwn_or_ip: "{{ target_wwn_1 }}"
 
