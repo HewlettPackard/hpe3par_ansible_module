@@ -42,13 +42,13 @@ options:
     required: false
     type: bool
     staleSS:
-        default: false
+        default: true
         description:
             - "Disable stale snapshots policy for the volume."
         required: false
         type: bool
     zeroDetect:
-        default: false
+        default: true
         description:
             - "Disable zero detect policy for the volume."
         required: false
@@ -298,7 +298,6 @@ EXAMPLES = r'''
 
 RETURN = r'''
 '''
-
 from ansible.module_utils.basic import AnsibleModule
 try:
     from hpe3par_sdk import client
@@ -339,8 +338,8 @@ def create_volume(
         type,
         compression,
         snap_cpg,
-        staleSS=None,
-        zeroDetect=None):
+        staleSS,
+        zeroDetect):
 
     def to_bool(val):
         if isinstance(val, bool):
@@ -349,8 +348,14 @@ def create_volume(
             return val.lower() == 'true'
         return bool(val)
 
-    staleSS = to_bool(staleSS)
-    zeroDetect = to_bool(zeroDetect)
+    if staleSS is None:
+        staleSS = True
+    else:
+        staleSS = to_bool(staleSS)
+    if zeroDetect is None:
+        zeroDetect = True if type != 'thin_dedupe' else False
+    else:
+        zeroDetect = to_bool(zeroDetect)
 
     if storage_system_username is None or storage_system_password is None:
         return (
@@ -396,20 +401,10 @@ null",
                         'objectKeyValues': [
                             {'key': 'type', 'value': 'ansible-3par-client'}]}
             policies = {}
-            if staleSS is None:
-                policies['staleSS'] = True
-            elif staleSS:
-                policies['staleSS'] = True
-            else:
-                policies['staleSS'] = False
 
-            if zeroDetect is None:
-                policies['zeroDetect'] = True
-            elif zeroDetect:
-                policies['zeroDetect'] = True
-            else:
-                policies['zeroDetect'] = False
-            
+            policies['staleSS'] = staleSS
+            policies['zeroDetect'] = zeroDetect
+
             issue_attr_dict = {}
             if policies:
                 optional['policies'] = policies
@@ -915,12 +910,10 @@ def main():
             "type": "str",
         },
         "staleSS": {
-            "type": "bool",
-            "default": None
+            "type": "bool"
         },
         "zeroDetect": {
-            "type": "bool",
-            "default": None
+            "type": "bool"
         }
     }
 
