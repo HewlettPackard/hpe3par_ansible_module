@@ -15,13 +15,15 @@
         storage_system_ip="{{ storage_system_ip }}"
         storage_system_username="{{ storage_system_username }}"
         storage_system_password="{{ storage_system_password }}"
-        state=present 
+        state=present
         volume_name="{{ volume_name }}"
         cpg="{{ cpg }}"
         type="{{ type }}"
         size="{{ size }}"
         snap_cpg="{{ snap_cpg }}"
-        
+        staleSS=True
+        zeroDetect=True
+
     - name: Change provisioning type of Volume "{{ volume_name }} to thin"
       hpe3par_volume: 
         storage_system_ip="{{ storage_system_ip }}"
