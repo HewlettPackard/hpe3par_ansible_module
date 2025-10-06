@@ -403,7 +403,9 @@ null",
             policies = {}
 
             policies['staleSS'] = staleSS
-            policies['zeroDetect'] = zeroDetect
+
+            if type != 'thin_dedupe':
+                policies['zeroDetect'] = zeroDetect
 
             issue_attr_dict = {}
             if policies:
