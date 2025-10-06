@@ -3346,6 +3346,38 @@ Required with action convert_type. Full provisioning is not supported on Primera
                                                                     <div>Setting to true makes the resource to wait until a task asynchronous operation, for ex convert type ends.</div>
                                                                             </td>
         </tr>
+
+<tr>
+                                                            <td colspan="1">
+                <b>stale_ss</b>
+                <br/><div style="font-size: small; color: red">bool</div>                                                        </td>
+                            <td>
+
+  <ul><b>Choices:</b>
+                                                                                                                                                            <li><div style="color: blue"><b>true</b>&nbsp;&larr;</div></li>
+                                                                                                                                                                                            <li>false</li>
+                                                                                </ul>
+                                                                        </td>
+                                                            <td>
+                                                                    <div>Specifies that invalid snapshot volumes are permitted. Failure to update snapshot data does not affect the write to the base volume, but the snapshot is considered invalid.</div>
+                                                                            </td>
+        </tr>
+
+<tr>
+                                                            <td colspan="1">
+                <b>zero_detect</b>
+                <br/><div style="font-size: small; color: red">bool</div>                                                        </td>
+                            <td>
+
+  <ul><b>Choices:</b>
+                                                                                                                                                            <li><div style="color: blue"><b>true</b>&nbsp;&larr;</div></li>
+                                                                                                                                                                                            <li>false</li>
+                                                                                </ul>
+                                                                        </td>
+                                                            <td>
+                                                                    <div>Enables the storage system to scan for zeros in the incoming write data. This feature when used during physical copy to a TPVV will avoid allocating space for blocks containing zero. This feature when used with a Thin Persistence license will reclaim allocated space when zero blocks are written to the TPVV. This policy is only applicable for the base TPVV. Thin_dedupe type doesn't support this policy</div>
+                                                                            </td>
+        </tr>
                     </table>
 <br/>
 Examples
@@ -3362,6 +3394,8 @@ Examples
     cpg="{{ cpg }}"
     size="{{ size }}"
     snap_cpg="{{ snap_cpg }}"
+    staleSS=True
+    zeroDetect=True
 
 - name: Change provisioning type of Volume "{{ volume_name }}" to "{{ type }}"
   hpe3par_volume:

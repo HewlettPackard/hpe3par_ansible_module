@@ -207,12 +207,13 @@ null",
 
             if host_persona is not None:
                 optional['persona'] = getattr(
-                    client.HPE3ParClient, host_persona)
+                   client.HPE3ParClient, host_persona)
 
             client_obj.createHost(
                 host_name,
                 host_iscsi_names,
                 host_fc_wwns,
+                None,
                 optional)
         else:
             return (True, False, "Host already present", {})
