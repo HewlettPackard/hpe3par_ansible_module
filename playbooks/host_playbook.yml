@@ -12,7 +12,8 @@
         storage_system_username="{{ storage_system_username }}"
         storage_system_password="{{ storage_system_password }}"
         state=present 
-        host_name="{{ host_name }}"      
+        host_name="{{ host_name }}"
+        host_persona="{{ host_persona }}"      
 
     - name: Modify Host "{{ host_name }}"
       hpe3par_host: 

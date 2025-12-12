@@ -3,4 +3,10 @@ storage_system_username: "username"
 storage_system_password: "password"
 # ip2 and target_name are for remote_copy functionality.
 storage_system_ip2: "x.x.x.x"
-target_name: "s042N-FC"
+target_name: "targetname"
+# provide wwn and source port entries for rcopy links
+source_port_0: "x:x:x"
+target_wwn_0: "xxx"
+
+source_port_1: "x:x:x"
+target_wwn_1: "xxx"

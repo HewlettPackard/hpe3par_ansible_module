@@ -4,6 +4,7 @@ size: 17000
 size_unit: 'GiB'
 wait_for_task_to_end: True
 new_name: "my_ansible_volume_renamed"
+#type thin_dedupe doesn't support zero detect policy
 type: "thin_dedupe"
 snap_cpg: "ansible"
 autolun: False
