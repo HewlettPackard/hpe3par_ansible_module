@@ -15,12 +15,15 @@ The HPE Alletra 9000 ,HPE Alletra MP, HPE Primera and HPE 3PAR modules for Ansib
   * 9.3.0
   * 9.6.0
 * Alletra MP OS
-  * 10.4.0
+  * 10.5.0.x
 * WSAPI service should be enabled on the HPE Alletra MP, HPE Alletra 9000 and Primera and 3PAR storage array.
 
 ## Installation & Configuration
 
+
 #### 1. Install Python Dependencies
+
+Clone the latest HPE 3PAR Ansible module repository from [GitHub](https://github.com/HewlettPackard/hpe3par_ansible_module.git).
 
 Install the required HPE 3PAR SDK packages:
 - [hpe3par_sdk](https://pypi.org/project/hpe3par_sdk/) - HPE 3PAR SDK for Python
@@ -33,8 +36,8 @@ Test that the packages were installed correctly:
 python -c "from hpe3par_sdk import client; print('✓ HPE 3PAR SDK installed successfully')"
 ```
 **Expected outcomes:**
-- ✅ **Success:** Message displays without errors
-- ❌ **Error:** Missing dependencies - reinstall packages and retry
+- **Success:** Message displays without errors
+- **Error:** Missing dependencies - reinstall packages and retry
 
 #### 3. Configure Environment
 
@@ -61,7 +64,7 @@ Create a simple test playbook to verify your setup:
 
 ---
 
-### 📋 Quick Setup Checklist
+### Quick Setup Checklist
 
 - [ ] Python dependencies installed
 - [ ] SDK import test passed
