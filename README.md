@@ -13,16 +13,62 @@ The HPE Alletra 9000 ,HPE Alletra MP, HPE Primera and HPE 3PAR modules for Ansib
 * Alletra 9000 OS
   * 9.6.0
 * Alletra MP OS
-  * 10.4.x
-  * 10.5.x
+  * 10.5.0.x
 * WSAPI service should be enabled on the HPE Alletra MP, HPE Alletra 9000 and Primera and 3PAR storage array.
 
-## Configuration
-* Install Ansible and [hpe3par_sdk](https://pypi.org/project/hpe3par_sdk/)
-* Modify ansible.cfg file to point the library to the Modules folder
+## Installation & Configuration
+
+
+#### 1. Install Python Dependencies
+
+Clone the latest HPE 3PAR Ansible module repository from [GitHub](https://github.com/HewlettPackard/hpe3par_ansible_module.git).
+
+Install the required HPE 3PAR SDK packages:
+- [hpe3par_sdk](https://pypi.org/project/hpe3par_sdk/) - HPE 3PAR SDK for Python
+- [python-3parclient](https://pypi.org/project/python-3parclient/) - HPE 3PAR Client Library
+
+#### 2. Verify Installation
+
+Test that the packages were installed correctly:
+```bash
+python -c "from hpe3par_sdk import client; print('✓ HPE 3PAR SDK installed successfully')"
 ```
-library=/home/user/workspace/hpe3par_ansible/Modules
+**Expected outcomes:**
+- **Success:** Message displays without errors
+- **Error:** Missing dependencies - reinstall packages and retry
+
+#### 3. Configure Environment
+
+Set up the required environment variables in your shell profile:
+```bash
+export PYTHONPATH="/path/to/your/hpe3par_ansible_module:$PYTHONPATH"
+export ANSIBLE_CONFIG="/path/to/your/hpe3par_ansible_module/ansible.cfg"
+export PATH="$HOME/.local/bin:$PATH"
 ```
+**Replace `/path/to/your/` with your actual installation path.**
+
+#### 4. Configure ansible.cfg
+
+Edit the `ansible.cfg` file in your project root directory:
+
+```ini
+library = /path/to/your/hpe3par_ansible_module/Modules
+library = /home/user/workspace/hpe3par_ansible/Modules
+```
+
+#### 5. Validate Configuration
+
+Create a simple test playbook to verify your setup:
+
+---
+
+### Quick Setup Checklist
+
+- [ ] Python dependencies installed
+- [ ] SDK import test passed
+- [ ] Environment variables configured
+- [ ] `ansible.cfg` updated with correct library path
+- [ ] Test playbook executed successfully
 
 ## Modules
 This is developed as a set of modules and example playbooks to provision the following:
