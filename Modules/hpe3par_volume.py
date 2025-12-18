@@ -348,13 +348,9 @@ def create_volume(
             return val.lower() == 'true'
         return bool(val)
 
-    if staleSS is None:
-        staleSS = True
-    else:
+    if staleSS is not None:
         staleSS = to_bool(staleSS)
-    if zeroDetect is None:
-        zeroDetect = True if type != 'thin_dedupe' else False
-    else:
+    if zeroDetect is not None:
         zeroDetect = to_bool(zeroDetect)
 
     if storage_system_username is None or storage_system_password is None:
@@ -402,9 +398,12 @@ null",
                             {'key': 'type', 'value': 'ansible-3par-client'}]}
             policies = {}
 
-            policies['staleSS'] = staleSS
+            # Only add staleSS if explicitly provided in YAML
+            if staleSS is not None:
+                policies['staleSS'] = staleSS
 
-            if type != 'thin_dedupe':
+            # Only add zeroDetect if explicitly provided and not thin_dedupe
+            if zeroDetect is not None and type != 'thin_dedupe':
                 policies['zeroDetect'] = zeroDetect
 
             issue_attr_dict = {}
