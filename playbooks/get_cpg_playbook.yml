@@ -1,0 +1,17 @@
+- hosts: localhost
+  tasks:
+    - name: Load Storage System Vars
+      include_vars: 'properties/storage_system_properties.yml'
+
+    - name: Get All CPGs
+      hpe3par_cpg_facts: 
+        storage_system_ip: "{{ storage_system_ip }}"
+        storage_system_username: "{{ storage_system_username }}"
+        storage_system_password: "{{ storage_system_password }}"
+
+    - name: Get CPG By Name
+      hpe3par_cpg_facts:
+        storage_system_ip: "{{ storage_system_ip }}"
+        storage_system_username: "{{ storage_system_username }}"
+        storage_system_password: "{{ storage_system_password }}"
+        cpg_name: ansible
