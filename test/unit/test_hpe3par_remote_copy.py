@@ -1461,6 +1461,26 @@ class TestHpe3parRemoteCopy(unittest.TestCase):
                                                 False,
                                                 False
                                                 ), (False, False, "Remote Copy Group modification failed. Valid range of snap_frequency is 300-31622400.", {}))
+        self.assertEqual(hpe3par_remote_copy.modify_remote_copy_group(mock_client.HPE3ParClient,
+                                                'USER',
+                                                'PASS',
+                                                'rcg_1',
+                                                'localusrcpg1',
+                                                'snap_cpg1',
+                                                [{'target_name': 'CSSOS-SSA04','remote_user_cpg': 'FC_r1','remote_snap_cpg':'FC_r6','snap_frequency':350,'target_mode':'sync'}],
+                                                False,
+                                                False
+                                                ), (True, True, 'Modify Remote Copy Group rcg_1 successfully.', {}))
+        self.assertEqual(hpe3par_remote_copy.modify_remote_copy_group(mock_client.HPE3ParClient,
+                                                'USER',
+                                                'PASS',
+                                                'rcg_1',
+                                                'localusrcpg1',
+                                                'snap_cpg1',
+                                                [{'target_name': 'CSSOS-SSA04','remote_user_cpg': 'FC_r1','remote_snap_cpg':'FC_r6','snap_frequency':350,'target_mode':'xyz'}],
+                                                False,
+                                                False
+                                                ), (False, False, 'Remote Copy Group modification failed. Target mode is invalid', {}))
 
         self.assertEqual(hpe3par_remote_copy.modify_remote_copy_group(mock_client.HPE3ParClient,
                                                 'USER',
