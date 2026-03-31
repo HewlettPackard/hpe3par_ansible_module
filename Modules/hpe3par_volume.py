@@ -383,6 +383,10 @@ null",
             "Volume creation failed. Volume size_unit is null",
             {})
     try:
+        # Check array version before login (/api is a public endpoint)
+        PRIMERA_MIN_BUILD_VERSION = 40000128
+        array_version = client_obj.getWsApiVersion().get('build', 0)
+
         client_obj.login(storage_system_username, storage_system_password)
         if not client_obj.volumeExists(volume_name):
             tpvv = False
@@ -393,9 +397,14 @@ null",
                 tdvv = True
             size_in_mib = convert_to_binary_multiple(
                 size, size_unit)
-            optional = {'tpvv': tpvv, 'reduce': tdvv, 'snapCPG': snap_cpg,
+            optional = {'tpvv': tpvv, 'snapCPG': snap_cpg,
                         'objectKeyValues': [
                             {'key': 'type', 'value': 'ansible-3par-client'}]}
+            # 'reduce' is used by Primera and above arrays; 3PAR arrays use 'tdvv' instead
+            if array_version >= PRIMERA_MIN_BUILD_VERSION:
+                optional['reduce'] = tdvv
+            else:
+                optional['tdvv'] = tdvv
             policies = {}
 
             # Only add staleSS if explicitly provided in YAML
