@@ -145,6 +145,7 @@ def create_online_clone(
         clone_name,
         dest_cpg,
         tpvv,
+        reduce,
         snap_cpg,
         compression):
     if storage_system_username is None or storage_system_password is None:
@@ -171,12 +172,20 @@ is null",
     if len(base_volume_name) < 1 or len(base_volume_name) > 31:
         return (False, False, "Clone create failed. Base volume name must be atleast 1 character and not more than 31 characters", {})
     try:
+        PRIMERA_MIN_BUILD_VERSION = 40000128
+        array_version = client_obj.getWsApiVersion().get('build', 0)
+
         client_obj.login(storage_system_username, storage_system_password)
         if not client_obj.volumeExists(clone_name):
             optional = {'online': True,
-                        'tpvv': tpvv,
+                        'tpvv': tpvv if tpvv is not None else False,
                         'snapCPG': snap_cpg
                         }
+            # 'reduce' is used by Primera and above arrays; 3PAR arrays use 'tdvv' instead
+            if array_version >= PRIMERA_MIN_BUILD_VERSION:
+                optional['reduce'] = reduce if reduce is not None else False
+            else:
+                optional['tdvv'] = reduce if reduce is not None else False
             if compression:
                 optional['compression'] = compression
             client_obj.copyVolume(
@@ -374,7 +383,7 @@ def main():
     if module.params["state"] == "present":
         return_status, changed, msg, issue_attr_dict = create_online_clone(
             client_obj, storage_system_username, storage_system_password,
-            base_volume_name, clone_name, dest_cpg, tpvv, snap_cpg,
+            base_volume_name, clone_name, dest_cpg, tpvv, reduce, snap_cpg,
             compression)
     elif module.params["state"] == "absent":
         return_status, changed, msg, issue_attr_dict = delete_clone(
