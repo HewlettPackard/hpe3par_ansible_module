@@ -60,7 +60,7 @@ class TestHpe3parOnlineClone(unittest.TestCase):
             "required": False,
             "type": "bool",
         },
-        "tdvv": {
+        "reduce": {
             "required": False,
             "type": "bool",
         },
@@ -88,7 +88,7 @@ class TestHpe3parOnlineClone(unittest.TestCase):
             'base_volume_name': 'base_volume',
             'dest_cpg': 'dest_cpg',
             'tpvv': False,
-            'tdvv': False,
+            'reduce': False,
             'snap_cpg': 'snap_cpg',
             'compression': False,
             'state': 'present'
@@ -116,7 +116,7 @@ class TestHpe3parOnlineClone(unittest.TestCase):
             'base_volume_name': 'base_volume',
             'dest_cpg': 'dest_cpg',
             'tpvv': False,
-            'tdvv': False,
+            'reduce': False,
             'snap_cpg': 'snap_cpg',
             'compression': False,
             'state': 'present'
@@ -150,7 +150,7 @@ class TestHpe3parOnlineClone(unittest.TestCase):
             'base_volume_name': 'base_volume',
             'dest_cpg': None,
             'tpvv': False,
-            'tdvv': False,
+            'reduce': False,
             'snap_cpg': 'snap_cpg',
             'compression': False,
             'state': 'absent'
@@ -184,7 +184,7 @@ class TestHpe3parOnlineClone(unittest.TestCase):
             'base_volume_name': None,
             'dest_cpg': None,
             'tpvv': False,
-            'tdvv': False,
+            'reduce': False,
             'snap_cpg': 'snap_cpg',
             'compression': False,
             'state': 'resync'
@@ -205,6 +205,7 @@ class TestHpe3parOnlineClone(unittest.TestCase):
     @mock.patch('Modules.hpe3par_online_clone.client')
     def test_create_online_clone(self, mock_client):
         mock_client.HPE3ParClient.login.return_value = None
+        mock_client.HPE3ParClient.getWsApiVersion.return_value = {'build': 30201200}
         mock_client.HPE3ParClient.volumeExists.return_value = False
         mock_client.HPE3ParClient.copyVolume.return_value = None
         mock_client.HPE3ParClient.logout.return_value = None
@@ -266,6 +267,64 @@ is null", {}))
                                                                   'snap_cpg',
                                                                   False
                                                                   ), (False, False, "Online clone create failed. Base volume name is null", {}))
+
+    @mock.patch('Modules.hpe3par_online_clone.client')
+    def test_create_online_clone_reduce_primera(self, mock_client):
+        """
+        Test create_online_clone with reduce=True on Primera array (build >= 40000128).
+        Should use optional['reduce'] = True.
+        """
+        mock_client.HPE3ParClient.login.return_value = None
+        mock_client.HPE3ParClient.getWsApiVersion.return_value = {'build': 40000128}
+        mock_client.HPE3ParClient.volumeExists.return_value = False
+        mock_client.HPE3ParClient.copyVolume.return_value = None
+        mock_client.HPE3ParClient.logout.return_value = None
+        self.assertEqual(hpe3par_online_clone.create_online_clone(mock_client.HPE3ParClient,
+                                                                  'USER',
+                                                                  'PASS',
+                                                                  'base_volume',
+                                                                  'test_clone',
+                                                                  'dest_cpg',
+                                                                  False,
+                                                                  True,
+                                                                  'snap_cpg',
+                                                                  False
+                                                                  ), (True, True, "Created Online Clone %s successfully." % 'test_clone', {}))
+        # Verify copyVolume was called with 'reduce' in optional dict
+        call_args = mock_client.HPE3ParClient.copyVolume.call_args
+        optional = call_args[0][3]
+        self.assertIn('reduce', optional)
+        self.assertEqual(optional['reduce'], True)
+        self.assertNotIn('tdvv', optional)
+
+    @mock.patch('Modules.hpe3par_online_clone.client')
+    def test_create_online_clone_reduce_3par(self, mock_client):
+        """
+        Test create_online_clone with reduce=True on 3PAR array (build < 40000128).
+        Should use optional['tdvv'] = True.
+        """
+        mock_client.HPE3ParClient.login.return_value = None
+        mock_client.HPE3ParClient.getWsApiVersion.return_value = {'build': 30201200}
+        mock_client.HPE3ParClient.volumeExists.return_value = False
+        mock_client.HPE3ParClient.copyVolume.return_value = None
+        mock_client.HPE3ParClient.logout.return_value = None
+        self.assertEqual(hpe3par_online_clone.create_online_clone(mock_client.HPE3ParClient,
+                                                                  'USER',
+                                                                  'PASS',
+                                                                  'base_volume',
+                                                                  'test_clone',
+                                                                  'dest_cpg',
+                                                                  False,
+                                                                  True,
+                                                                  'snap_cpg',
+                                                                  False
+                                                                  ), (True, True, "Created Online Clone %s successfully." % 'test_clone', {}))
+        # Verify copyVolume was called with 'tdvv' in optional dict
+        call_args = mock_client.HPE3ParClient.copyVolume.call_args
+        optional = call_args[0][3]
+        self.assertIn('tdvv', optional)
+        self.assertEqual(optional['tdvv'], True)
+        self.assertNotIn('reduce', optional)
 
     @mock.patch('Modules.hpe3par_online_clone.client')
     def test_delete_clone(self, mock_client):

@@ -136,6 +136,12 @@ class TestHpe3parVolume(unittest.TestCase):
         },
         "keep_vv": {
             "type": "str",
+        },
+        "staleSS": {
+            "type": "bool"
+        },
+        "zeroDetect": {
+            "type": "bool"
         }
     }
 
@@ -170,6 +176,8 @@ class TestHpe3parVolume(unittest.TestCase):
             'compression': True,
             'type': 'thin',
             'keep_vv': 'keep_vv',
+            'staleSS': None,
+            'zeroDetect': None,
             'state': 'present'
         }
 
@@ -212,6 +220,8 @@ class TestHpe3parVolume(unittest.TestCase):
             'compression': False,
             'type': 'thin',
             'keep_vv': None,
+            'staleSS': None,
+            'zeroDetect': None,
             'state': 'absent'
         }
         # This creates a instance of the AnsibleModule mock.
@@ -259,6 +269,8 @@ class TestHpe3parVolume(unittest.TestCase):
             'compression': None,
             'type': None,
             'keep_vv': None,
+            'staleSS': None,
+            'zeroDetect': None,
             'state': 'modify'
         }
         # This creates a instance of the AnsibleModule mock.
@@ -306,6 +318,8 @@ class TestHpe3parVolume(unittest.TestCase):
             'compression': None,
             'type': None,
             'keep_vv': None,
+            'staleSS': None,
+            'zeroDetect': None,
             'state': 'grow'
         }
         # This creates a instance of the AnsibleModule mock.
@@ -353,6 +367,8 @@ class TestHpe3parVolume(unittest.TestCase):
             'compression': None,
             'type': None,
             'keep_vv': None,
+            'staleSS': None,
+            'zeroDetect': None,
             'state': 'grow_to_size'
         }
         # This creates a instance of the AnsibleModule mock.
@@ -400,6 +416,8 @@ class TestHpe3parVolume(unittest.TestCase):
             'compression': None,
             'type': None,
             'keep_vv': None,
+            'staleSS': None,
+            'zeroDetect': None,
             'state': 'change_snap_cpg'
         }
         # This creates a instance of the AnsibleModule mock.
@@ -447,6 +465,8 @@ class TestHpe3parVolume(unittest.TestCase):
             'compression': None,
             'type': None,
             'keep_vv': None,
+            'staleSS': None,
+            'zeroDetect': None,
             'state': 'change_user_cpg'
         }
         # This creates a instance of the AnsibleModule mock.
@@ -494,6 +514,8 @@ class TestHpe3parVolume(unittest.TestCase):
             'compression': True,
             'type': 'full',
             'keep_vv': 'keep_vv',
+            'staleSS': None,
+            'zeroDetect': None,
             'state': 'convert_type'
         }
         # This creates a instance of the AnsibleModule mock.
@@ -541,6 +563,8 @@ class TestHpe3parVolume(unittest.TestCase):
             'compression': None,
             'type': None,
             'keep_vv': None,
+            'staleSS': None,
+            'zeroDetect': None,
             'state': 'set_snap_cpg'
         }
         # This creates a instance of the AnsibleModule mock.
@@ -558,6 +582,7 @@ class TestHpe3parVolume(unittest.TestCase):
     @mock.patch('Modules.hpe3par_volume.client')
     def test_create_snapshot(self, mock_client):
         mock_client.HPE3ParClient.login.return_value = None
+        mock_client.HPE3ParClient.getWsApiVersion.return_value = {'build': 30201200}
         mock_client.HPE3ParClient.volumeExists.return_value = False
         mock_client.HPE3ParClient.createVolume.return_value = None
         mock_client.HPE3ParClient.logout.return_value = None
@@ -645,6 +670,64 @@ class TestHpe3parVolume(unittest.TestCase):
                                                       True,
                                                       'snap_cpg'
                                                       ), (False, False, "Volume creation failed. Volume size_unit is null", {}))
+
+    @mock.patch('Modules.hpe3par_volume.client')
+    def test_create_volume_thin_dedupe_primera(self, mock_client):
+        """
+        Test create_volume with type='thin_dedupe' on Primera array (build >= 40000128).
+        Should use optional['reduce'] = True.
+        """
+        mock_client.HPE3ParClient.login.return_value = None
+        mock_client.HPE3ParClient.getWsApiVersion.return_value = {'build': 40000128}
+        mock_client.HPE3ParClient.volumeExists.return_value = False
+        mock_client.HPE3ParClient.createVolume.return_value = None
+        mock_client.HPE3ParClient.logout.return_value = None
+        self.assertEqual(hpe3par_volume.create_volume(mock_client.HPE3ParClient,
+                                                      'USER',
+                                                      'PASS',
+                                                      'test_volume',
+                                                      'test_cpg',
+                                                      2,
+                                                      'GiB',
+                                                      'thin_dedupe',
+                                                      True,
+                                                      'snap_cpg'
+                                                      ), (True, True, "Created volume %s successfully." % 'test_volume', {}))
+        # Verify createVolume was called with 'reduce' in optional dict
+        call_args = mock_client.HPE3ParClient.createVolume.call_args
+        optional = call_args[0][3]
+        self.assertIn('reduce', optional)
+        self.assertEqual(optional['reduce'], True)
+        self.assertNotIn('tdvv', optional)
+
+    @mock.patch('Modules.hpe3par_volume.client')
+    def test_create_volume_thin_dedupe_3par(self, mock_client):
+        """
+        Test create_volume with type='thin_dedupe' on 3PAR array (build < 40000128).
+        Should use optional['tdvv'] = True.
+        """
+        mock_client.HPE3ParClient.login.return_value = None
+        mock_client.HPE3ParClient.getWsApiVersion.return_value = {'build': 30201200}
+        mock_client.HPE3ParClient.volumeExists.return_value = False
+        mock_client.HPE3ParClient.createVolume.return_value = None
+        mock_client.HPE3ParClient.logout.return_value = None
+        self.assertEqual(hpe3par_volume.create_volume(mock_client.HPE3ParClient,
+                                                      'USER',
+                                                      'PASS',
+                                                      'test_volume',
+                                                      'test_cpg',
+                                                      2,
+                                                      'GiB',
+                                                      'thin_dedupe',
+                                                      True,
+                                                      'snap_cpg'
+                                                      ), (True, True, "Created volume %s successfully." % 'test_volume', {}))
+        # Verify createVolume was called with 'tdvv' in optional dict
+        call_args = mock_client.HPE3ParClient.createVolume.call_args
+        optional = call_args[0][3]
+        self.assertIn('tdvv', optional)
+        self.assertEqual(optional['tdvv'], True)
+        self.assertNotIn('reduce', optional)
 
     @mock.patch('Modules.hpe3par_volume.client')
     def test_delete_snapshot(self, mock_client):

@@ -391,7 +391,7 @@ def main():
             storage_system_password, clone_name, base_volume_name)
     elif module.params["state"] == "resync":
         return_status, changed, msg, issue_attr_dict = resync_clone(
-            client_obj, storage_system_ip, storage_system_username,
+            client_obj, storage_system_username,
             storage_system_password, clone_name)
 
     if return_status:
